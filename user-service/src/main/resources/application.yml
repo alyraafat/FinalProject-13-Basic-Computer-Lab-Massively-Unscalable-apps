@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: user-service
+  config:
+    import: "dev.yml"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/user_service
+    username: postgres
+    password: 1234
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+
+server:
+  error:
+    include-message: always
+  port:
+    8080
+
+service_url: "http://localhost:${server.port}"
