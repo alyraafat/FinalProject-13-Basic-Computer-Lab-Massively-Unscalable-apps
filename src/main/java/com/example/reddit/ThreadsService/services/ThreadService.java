@@ -7,10 +7,7 @@ import com.example.reddit.ThreadsService.repositories.ThreadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ThreadService {
@@ -45,7 +42,7 @@ public class ThreadService {
         return threadRepository.findByAuthorId(authorId);
     }
 
-    public List<Thread> getThreadsByTopic(String topic) {
+    public List<Thread> getThreadsByTopic(UUID topic) {
         return threadRepository.findByTopic(topic);
     }
 
@@ -122,6 +119,47 @@ public class ThreadService {
                 .build();
         return threadRepository.save(thread);
     }
+
+    //public List<Thread> recommendThreadsByUpvotes(UUID userId)
+    //{
+
+
+
+        // TODO: PLACE CALL TO ALIS FUNCVTION TO GET LOGS FOR THIS USER AND THIS ACTION TYPE
+
+        // List <Log>  userUpVoteLogs =findLogsForUserByType(userId,ActionType.UPVOTE );
+
+        // Set<UUID> threadIds= new Hashset<>();
+
+
+        // for (Log log : userUpVoteLogs)
+       // {
+        //    threadIds.add(log.getThreadId())
+        //}
+
+
+        // If topic is changed from string to uuid then I need to call the communities microservice through the message queue to get the entire subtopic then I loop on the
+        //returned list of subtopics and get their topics through synchronous communication
+        // List<Subtopic> subTopicsOfInterest = communities service call
+
+        //loop on threads and see which ones have same topic ids like the ids
+
+       // List<Thread> recommendedThreads= new ArrayList<>();
+       // for(SubTopic subtopic: subTopicsOfInterest )
+        //{
+           // List<Thread> threads= this.getThreadsByTopic(subtopic.getId());
+            //recommendedThreads.add(threads);
+        //}
+
+
+
+
+
+
+       // return recommendedThreads;
+
+
+   // }
 
 
 

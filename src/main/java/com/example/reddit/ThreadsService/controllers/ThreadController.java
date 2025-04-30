@@ -54,7 +54,7 @@ public class ThreadController {
     }
 
     @GetMapping("/topic/{topic}")
-    public ResponseEntity<List<Thread>> getThreadsByTopic(@PathVariable String topic) {
+    public ResponseEntity<List<Thread>> getThreadsByTopic(@PathVariable UUID topic) {
         return ResponseEntity.ok(threadService.getThreadsByTopic(topic));
     }
 
@@ -77,6 +77,12 @@ public class ThreadController {
     public ResponseEntity<Thread> downvoteThread(@PathVariable UUID threadId) {
         return ResponseEntity.ok(threadService.downvote(threadId));
     }
+
+//    @PostMapping("/recommendThreads/{userId}")
+//    public ResponseEntity<List<Thread>> recommendThreadsByUpvote(@PathVariable  UUID userId)
+//    {
+//        return ResponseEntity.ok(threadService.recommendThreadsByUpvotes(userId));
+//    }
 
 
 }
