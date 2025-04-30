@@ -1,5 +1,6 @@
 package com.example.reddit.ThreadsService.controllers;
 
+import com.example.reddit.ThreadsService.models.Comment;
 import com.example.reddit.ThreadsService.models.Thread;
 import com.example.reddit.ThreadsService.services.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,8 @@ public class ThreadController {
     }
 
     @PostMapping("/{threadId}/comments/{commentId}")
-    public ResponseEntity<Thread> addComment(@PathVariable UUID threadId, @PathVariable UUID commentId) {
-        return ResponseEntity.ok(threadService.addComment(threadId, commentId));
+    public ResponseEntity<Thread> addComment(@PathVariable UUID threadId, @RequestBody Comment comment) {
+        return ResponseEntity.ok(threadService.addComment(threadId, comment));
     }
 
     @DeleteMapping("/{threadId}/comments/{commentId}")

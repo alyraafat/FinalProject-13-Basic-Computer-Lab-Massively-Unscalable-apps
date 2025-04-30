@@ -34,7 +34,7 @@ public class CommentService {
 
     public Comment createComment(Comment comment) {
         Comment savedComment = commentRepository.save(comment);
-        threadService.addComment(comment.getThreadId(), savedComment.getId());
+        threadService.addComment(comment.getThreadId(), savedComment);
         return savedComment;
     }
 
