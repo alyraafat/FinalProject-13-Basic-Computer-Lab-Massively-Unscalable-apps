@@ -5,5 +5,4 @@ public enum ActionType {
     UPVOTE,
     DOWNVOTE,
     COMMENT,
-    JOINCOMMUNITY
 }

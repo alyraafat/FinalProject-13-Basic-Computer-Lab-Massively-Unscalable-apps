@@ -42,11 +42,18 @@ public class Thread {
     private UUID communityId;
 
     // Default constructor
-    public Thread() {
+    public Thread(String topic , String title , String content , UUID authorId, UUID communityId) {
         this.id = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
         this.upVotes = 0;
         this.downVotes = 0;
+        this.topic=topic;
+        this.title=title;
+        this.content=content;
+        this.authorId=authorId;
+        this.communityId=communityId;
+        this.commentIds= new ArrayList<>();
+
     }
 
     // Getters and Setters

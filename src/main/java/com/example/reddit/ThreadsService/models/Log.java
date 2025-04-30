@@ -21,16 +21,17 @@ public class Log {
     @Field(name = "thread_id")
     private UUID threadId;
 
-    @Field(name = "community_id")
-    private UUID communityId;
-
     @Field(name = "timestamp")
     private LocalDateTime timestamp;
 
     // Default constructor
-    public Log() {
+    public Log(UUID userId, ActionType actionType, UUID threadId) {
         this.id = UUID.randomUUID();
         this.timestamp = LocalDateTime.now();
+        this.userId=userId;
+        this.actionType=actionType;
+        this.threadId=threadId;
+
     }
 
     // Getters and Setters
@@ -64,14 +65,6 @@ public class Log {
 
     public void setThreadId(UUID threadId) {
         this.threadId = threadId;
-    }
-
-    public UUID getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(UUID communityId) {
-        this.communityId = communityId;
     }
 
     public LocalDateTime getTimestamp() {

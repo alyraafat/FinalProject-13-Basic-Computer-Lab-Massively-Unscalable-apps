@@ -17,9 +17,16 @@ public class Comment {
     @Field(name = "thread_id")
     private UUID threadId;
 
+    @Field (name="user_id")
+    private UUID userId;
+
     // Default constructor
-    public Comment() {
+    public Comment(String content , UUID threadId, UUID userId) {
         this.id = UUID.randomUUID();
+        this.content=content;
+        this.threadId=threadId;
+        this.userId=userId;
+
     }
 
     // Getters and Setters
@@ -45,5 +52,13 @@ public class Comment {
 
     public void setThreadId(UUID threadId) {
         this.threadId = threadId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }
