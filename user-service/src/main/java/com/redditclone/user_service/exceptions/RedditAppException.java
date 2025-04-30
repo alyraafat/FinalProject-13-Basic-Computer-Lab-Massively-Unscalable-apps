@@ -1,4 +1,4 @@
-package com.omarahmed.reddit.exception;
+package com.redditclone.user_service.exceptions;
 
 public class RedditAppException extends RuntimeException {
     public RedditAppException(String exceptionMessage) {

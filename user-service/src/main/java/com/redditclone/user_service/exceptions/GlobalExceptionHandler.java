@@ -1,4 +1,4 @@
-package com.omarahmed.reddit.exception;
+package com.redditclone.user_service.exceptions;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
