@@ -26,3 +26,7 @@ server:
     8080
 
 service_url: "http://localhost:${server.port}"
+
+jwt:
+  secret: "key1234"
+  expirationms: 360000000
