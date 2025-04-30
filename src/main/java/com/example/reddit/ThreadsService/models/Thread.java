@@ -42,17 +42,17 @@ public class Thread {
     private UUID communityId;
 
     // Default constructor
-    public Thread(String topic , String title , String content , UUID authorId, UUID communityId) {
-        this.id = UUID.randomUUID();
-        this.createdAt = LocalDateTime.now();
-        this.upVotes = 0;
-        this.downVotes = 0;
-        this.topic=topic;
-        this.title=title;
-        this.content=content;
-        this.authorId=authorId;
-        this.communityId=communityId;
-        this.commentIds= new ArrayList<>();
+    private Thread( Builder builder) {
+        this.id = builder.id;
+        this.createdAt = builder.createdAt;
+        this.upVotes = builder.upVotes;
+        this.downVotes = builder.downVotes;
+        this.topic=builder.topic;
+        this.title=builder.title;
+        this.content=builder.content;
+        this.authorId=builder.authorId;
+        this.communityId= builder.communityId;
+        this.commentIds= builder.commentIds;
 
     }
 
@@ -61,79 +61,128 @@ public class Thread {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+
 
     public String getTopic() {
         return topic;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
+
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+
 
     public UUID getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(UUID authorId) {
-        this.authorId = authorId;
-    }
+
+
 
     public List<UUID> getCommentIds() {
         return commentIds;
     }
 
-    public void setCommentIds(List<UUID> commentIds) {
-        this.commentIds = commentIds;
-    }
+
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+
 
     public Integer getUpVotes() {
         return upVotes;
     }
 
-    public void setUpVotes(Integer upVotes) {
-        this.upVotes = upVotes;
-    }
+
 
     public Integer getDownVotes() {
         return downVotes;
     }
 
-    public void setDownVotes(Integer downVotes) {
-        this.downVotes = downVotes;
-    }
 
     public UUID getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(UUID communityId) {
+
+
+// Static Builder class
+public static class Builder {
+    private UUID id;
+    private String topic;
+    private String title;
+    private String content;
+    private UUID authorId;
+    private List<UUID> commentIds;
+    private LocalDateTime createdAt;
+    private Integer upVotes;
+    private Integer downVotes;
+    private UUID communityId;
+
+    public Builder id(UUID id) {
+        this.id = id;
+        return this;
+    }
+
+    public Builder topic(String topic) {
+        this.topic = topic;
+        return this;
+    }
+
+    public Builder title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public Builder content(String content) {
+        this.content = content;
+        return this;
+    }
+
+    public Builder authorId(UUID authorId) {
+        this.authorId = authorId;
+        return this;
+    }
+
+    public Builder commentIds(List<UUID> commentIds) {
+        this.commentIds = commentIds;
+        return this;
+    }
+
+    public Builder createdAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public Builder upVotes(Integer upVotes) {
+        this.upVotes = upVotes;
+        return this;
+    }
+
+    public Builder downVotes(Integer downVotes) {
+        this.downVotes = downVotes;
+        return this;
+    }
+
+    public Builder communityId(UUID communityId) {
         this.communityId = communityId;
+        return this;
+    }
+
+    public Thread build() {
+        return new Thread(this);
     }
 }
+}
+

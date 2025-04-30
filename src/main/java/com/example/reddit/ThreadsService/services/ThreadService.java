@@ -50,6 +50,18 @@ public class ThreadService {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
         thread.getCommentIds().add(commentId);
+        thread = new Thread.Builder()
+                .id(thread.getId())
+                .topic(thread.getTopic())
+                .title(thread.getTitle())
+                .content(thread.getContent())
+                .authorId(thread.getAuthorId())
+                .createdAt(thread.getCreatedAt())
+                .upVotes(thread.getUpVotes() )
+                .downVotes(thread.getDownVotes())
+                .communityId(thread.getCommunityId())
+                .commentIds(thread.getCommentIds())
+                .build();
         return threadRepository.save(thread);
     }
 
@@ -57,20 +69,54 @@ public class ThreadService {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
         thread.getCommentIds().remove(commentId);
+        thread = new Thread.Builder()
+                .id(thread.getId())
+                .topic(thread.getTopic())
+                .title(thread.getTitle())
+                .content(thread.getContent())
+                .authorId(thread.getAuthorId())
+                .createdAt(thread.getCreatedAt())
+                .upVotes(thread.getUpVotes() )
+                .downVotes(thread.getDownVotes())
+                .communityId(thread.getCommunityId())
+                .commentIds(thread.getCommentIds())
+                .build();
         return threadRepository.save(thread);
     }
 
     public Thread upvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
-        thread.setUpVotes(thread.getUpVotes() + 1);
+        thread = new Thread.Builder()
+                .id(thread.getId())
+                .topic(thread.getTopic())
+                .title(thread.getTitle())
+                .content(thread.getContent())
+                .authorId(thread.getAuthorId())
+                .createdAt(thread.getCreatedAt())
+                .upVotes(thread.getUpVotes() + 1)
+                .downVotes(thread.getDownVotes())
+                .communityId(thread.getCommunityId())
+                .commentIds(thread.getCommentIds())
+                .build();
         return threadRepository.save(thread);
     }
 
     public Thread downvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
-        thread.setDownVotes(thread.getDownVotes() + 1);
+        thread = new Thread.Builder()
+                .id(thread.getId())
+                .topic(thread.getTopic())
+                .title(thread.getTitle())
+                .content(thread.getContent())
+                .authorId(thread.getAuthorId())
+                .createdAt(thread.getCreatedAt())
+                .upVotes(thread.getUpVotes() )
+                .downVotes(thread.getDownVotes() + 1 )
+                .communityId(thread.getCommunityId())
+                .commentIds(thread.getCommentIds())
+                .build();
         return threadRepository.save(thread);
     }
 }
