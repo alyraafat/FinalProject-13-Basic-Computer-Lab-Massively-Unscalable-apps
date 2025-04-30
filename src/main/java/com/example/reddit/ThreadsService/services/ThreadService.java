@@ -1,10 +1,13 @@
 package com.example.reddit.ThreadsService.services;
 
+import com.example.reddit.ThreadsService.models.ActionType;
+import com.example.reddit.ThreadsService.models.Comment;
 import com.example.reddit.ThreadsService.models.Thread;
 import com.example.reddit.ThreadsService.repositories.ThreadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,10 +49,10 @@ public class ThreadService {
         return threadRepository.findByTopic(topic);
     }
 
-    public Thread addComment(UUID threadId, UUID commentId) {
+    public Thread addComment(UUID threadId, Comment comment) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
-        thread.getCommentIds().add(commentId);
+        thread.getCommentIds().add(comment);
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -60,7 +63,7 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes())
                 .communityId(thread.getCommunityId())
-                .commentIds(thread.getCommentIds())
+                .comments(thread.getCommentIds())
                 .build();
         return threadRepository.save(thread);
     }
@@ -79,7 +82,7 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes())
                 .communityId(thread.getCommunityId())
-                .commentIds(thread.getCommentIds())
+                .comments(thread.getCommentIds())
                 .build();
         return threadRepository.save(thread);
     }
@@ -97,7 +100,7 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() + 1)
                 .downVotes(thread.getDownVotes())
                 .communityId(thread.getCommunityId())
-                .commentIds(thread.getCommentIds())
+                .comments(thread.getCommentIds())
                 .build();
         return threadRepository.save(thread);
     }
@@ -115,8 +118,11 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes() + 1 )
                 .communityId(thread.getCommunityId())
-                .commentIds(thread.getCommentIds())
+                .comments(thread.getCommentIds())
                 .build();
         return threadRepository.save(thread);
     }
+
+
+
 }

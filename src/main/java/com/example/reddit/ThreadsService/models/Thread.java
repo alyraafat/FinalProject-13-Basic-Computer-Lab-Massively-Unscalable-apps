@@ -1,5 +1,6 @@
 package com.example.reddit.ThreadsService.models;
 
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Document(collection = "threads")
 public class Thread {
     @Id
-    private UUID id;
+    private UUID id; // todo: check if it should be uuid or string like the object id of mongo
 
     @Field(name = "topic")
     private String topic;
@@ -27,7 +28,7 @@ public class Thread {
     private UUID authorId;
 
     @Field(name = "comment_ids")
-    private List<UUID> commentIds = new ArrayList<>();
+    private List<Comment > comments = new ArrayList<>();
 
     @Field(name = "created_at")
     private LocalDateTime createdAt;
@@ -52,7 +53,7 @@ public class Thread {
         this.content=builder.content;
         this.authorId=builder.authorId;
         this.communityId= builder.communityId;
-        this.commentIds= builder.commentIds;
+        this.comments= builder.comments;
 
     }
 
@@ -86,10 +87,8 @@ public class Thread {
     }
 
 
-
-
-    public List<UUID> getCommentIds() {
-        return commentIds;
+    public List<Comment> getCommentIds() {
+        return comments;
     }
 
 
@@ -124,7 +123,7 @@ public static class Builder {
     private String title;
     private String content;
     private UUID authorId;
-    private List<UUID> commentIds;
+    private List<Comment> comments;
     private LocalDateTime createdAt;
     private Integer upVotes;
     private Integer downVotes;
@@ -155,8 +154,8 @@ public static class Builder {
         return this;
     }
 
-    public Builder commentIds(List<UUID> commentIds) {
-        this.commentIds = commentIds;
+    public Builder comments(List<Comment> comments) {
+        this.comments = comments;
         return this;
     }
 

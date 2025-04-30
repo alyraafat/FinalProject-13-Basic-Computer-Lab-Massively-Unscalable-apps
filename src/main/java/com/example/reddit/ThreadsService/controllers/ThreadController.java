@@ -76,4 +76,6 @@ public class ThreadController {
     public ResponseEntity<Thread> downvoteThread(@PathVariable UUID threadId) {
         return ResponseEntity.ok(threadService.downvote(threadId));
     }
+
+
 }
