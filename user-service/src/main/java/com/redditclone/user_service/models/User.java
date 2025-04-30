@@ -21,7 +21,7 @@ import java.util.Collection;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
     @NotBlank(message = "Username is required")
     private String username;
     @NotBlank(message = "Password is required")
