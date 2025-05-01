@@ -22,7 +22,7 @@ public class CommunityService {
         return communityRepository.findAll();
     }
 
-    public Optional<Community> getCommunityById(UUID id) {
+    public Optional<Community> getCommunityById(String id) {
         return communityRepository.findById(id);
     }
 
@@ -33,62 +33,74 @@ public class CommunityService {
         return communityRepository.save(community);
     }
 
-    public void deleteCommunity(UUID id) {
+    public void deleteCommunity(String id) {
         communityRepository.deleteById(id);
     }
 
-    public List<Community> getCommunitiesByTopic(UUID topicId) {
-        return communityRepository.findByTopicId(topicId);
+
+    public List<Community> getCommunitiesByTopicId(String topicId) {
+        return communityRepository.findByTopic_Id(topicId);
     }
 
-    public List<Community> getCommunitiesByModerator(UUID moderatorId) {
-        return communityRepository.findByModeratorIdsContaining(moderatorId);
+    public List<Community> getCommunitiesByModeratorId(String moderatorId) {
+        return communityRepository.findByModerators_Id(moderatorId);
     }
 
-    public List<Community> getCommunitiesByMember(UUID memberId) {
-        return communityRepository.findByMemberIdsContaining(memberId);
+    public List<Community> getCommunitiesByMemberId(String memberId) {
+        return communityRepository.findByMembers_Id(memberId);
     }
 
-    public Community addModerator(UUID communityId, UUID userId) {
-        Community community = communityRepository.findById(communityId)
-            .orElseThrow(() -> new RuntimeException("Community not found"));
-        community.getModeratorIds().add(userId);
-        return communityRepository.save(community);
-    }
 
-    public Community removeModerator(UUID communityId, UUID userId) {
-        Community community = communityRepository.findById(communityId)
-            .orElseThrow(() -> new RuntimeException("Community not found"));
-        community.getModeratorIds().remove(userId);
-        return communityRepository.save(community);
-    }
 
-    public Community addMember(UUID communityId, UUID userId) {
-        Community community = communityRepository.findById(communityId)
-            .orElseThrow(() -> new RuntimeException("Community not found"));
-        community.getMemberIds().add(userId);
-        return communityRepository.save(community);
-    }
 
-    public Community removeMember(UUID communityId, UUID userId) {
-        Community community = communityRepository.findById(communityId)
-            .orElseThrow(() -> new RuntimeException("Community not found"));
-        community.getMemberIds().remove(userId);
-        return communityRepository.save(community);
-    }
-
-    public Community banUser(UUID communityId, UUID userId) {
-        Community community = communityRepository.findById(communityId)
-            .orElseThrow(() -> new RuntimeException("Community not found"));
-        community.getBannedUserIds().add(userId);
-        community.getMemberIds().remove(userId);
-        return communityRepository.save(community);
-    }
-
-    public Community unbanUser(UUID communityId, UUID userId) {
-        Community community = communityRepository.findById(communityId)
-            .orElseThrow(() -> new RuntimeException("Community not found"));
-        community.getBannedUserIds().remove(userId);
-        return communityRepository.save(community);
-    }
+//    public List<Community> getCommunitiesByModerator(UUID moderatorId) {
+//        return communityRepository.findByModeratorIdsContaining(moderatorId);
+//    }
+//
+//    public List<Community> getCommunitiesByMember(UUID memberId) {
+//        return communityRepository.findByMemberIdsContaining(memberId);
+//    }
+//
+//    public Community addModerator(UUID communityId, UUID userId) {
+//        Community community = communityRepository.findById(communityId)
+//            .orElseThrow(() -> new RuntimeException("Community not found"));
+//        community.getModeratorIds().add(userId);
+//        return communityRepository.save(community);
+//    }
+//
+//    public Community removeModerator(UUID communityId, UUID userId) {
+//        Community community = communityRepository.findById(communityId)
+//            .orElseThrow(() -> new RuntimeException("Community not found"));
+//        community.getModeratorIds().remove(userId);
+//        return communityRepository.save(community);
+//    }
+//
+//    public Community addMember(UUID communityId, UUID userId) {
+//        Community community = communityRepository.findById(communityId)
+//            .orElseThrow(() -> new RuntimeException("Community not found"));
+//        community.getMemberIds().add(userId);
+//        return communityRepository.save(community);
+//    }
+//
+//    public Community removeMember(UUID communityId, UUID userId) {
+//        Community community = communityRepository.findById(communityId)
+//            .orElseThrow(() -> new RuntimeException("Community not found"));
+//        community.getMemberIds().remove(userId);
+//        return communityRepository.save(community);
+//    }
+//
+//    public Community banUser(UUID communityId, UUID userId) {
+//        Community community = communityRepository.findById(communityId)
+//            .orElseThrow(() -> new RuntimeException("Community not found"));
+//        community.getBannedUserIds().add(userId);
+//        community.getMemberIds().remove(userId);
+//        return communityRepository.save(community);
+//    }
+//
+//    public Community unbanUser(UUID communityId, UUID userId) {
+//        Community community = communityRepository.findById(communityId)
+//            .orElseThrow(() -> new RuntimeException("Community not found"));
+//        community.getBannedUserIds().remove(userId);
+//        return communityRepository.save(community);
+//    }
 }

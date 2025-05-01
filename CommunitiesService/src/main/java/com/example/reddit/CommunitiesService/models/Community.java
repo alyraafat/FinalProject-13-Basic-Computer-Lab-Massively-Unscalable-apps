@@ -1,59 +1,135 @@
 package com.example.reddit.CommunitiesService.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Document(collection = "communities")
 public class Community {
     @Id
-    private UUID id;
+    private String id;
 
-    @Field(name = "name")
     private String name;
 
-    @Field(name = "topic_id")
-    private UUID topicId;
+    @DBRef
+    @JsonIgnore
+    private Topic topic;
 
-    @Field(name = "description")
     private String description;
 
-    @Field(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Field(name = "created_by")
-    private UUID createdBy;
+    // Reference to the user who created this community
+    private User createdBy;
 
-    @Field(name = "moderator_ids")
-    private Set<UUID> moderatorIds = new HashSet<>();
+    // References to the users in various roles, now as lists
+    private List<User> moderators;
 
-    @Field(name = "member_ids")
-    private Set<UUID> memberIds = new HashSet<>();
+    @DBRef
+    private List<User> members;
 
-    @Field(name = "banned_user_ids")
-    private Set<UUID> bannedUserIds = new HashSet<>();
+    @DBRef
+    private List<User> bannedUsers;
 
-    @Field(name = "thread_ids")
-    private List<UUID> threadIds;
+    // Embedded list of threads
+    private List<Thread> threads;
 
-    // Default constructor
-    public Community() {
-        this.id = UUID.randomUUID();
-        this.createdAt = LocalDateTime.now();
+
+    private Community(Builder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.topic = builder.topic;
+        this.description = builder.description;
+        this.createdAt = builder.createdAt;
+        this.createdBy = builder.createdBy;
+        this.moderators = builder.moderators;
+        this.members = builder.members;
+        this.bannedUsers = builder.bannedUsers;
+        this.threads = builder.threads;
     }
 
-    // Getters and Setters
-    public UUID getId() {
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String id;
+        private String name;
+        private Topic topic;
+        private String description;
+        private LocalDateTime createdAt = LocalDateTime.now();
+        private User createdBy;
+        private List<User> moderators = new ArrayList<>();
+        private List<User> members = new ArrayList<>();
+        private List<User> bannedUsers = new ArrayList<>();
+        private List<Thread> threads = new ArrayList<>();
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder topic(Topic topic) {
+            this.topic = topic;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder createdBy(User createdBy) {
+            this.createdBy = createdBy;
+            return this;
+        }
+
+        public Builder moderators(List<User> moderators) {
+            this.moderators = moderators;
+            return this;
+        }
+
+        public Builder members(List<User> members) {
+            this.members = members;
+            return this;
+        }
+
+        public Builder bannedUsers(List<User> bannedUsers) {
+            this.bannedUsers = bannedUsers;
+            return this;
+        }
+
+        public Builder threads(List<Thread> threads) {
+            this.threads = threads;
+            return this;
+        }
+
+        public Community build() {
+            return new Community(this);
+        }
+    }
+
+
+    // Generate getter and setter methods for all fields
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -65,12 +141,12 @@ public class Community {
         this.name = name;
     }
 
-    public UUID getTopicId() {
-        return topicId;
+    public Topic getTopic() {
+        return topic;
     }
 
-    public void setTopicId(UUID topicId) {
-        this.topicId = topicId;
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 
     public String getDescription() {
@@ -89,43 +165,51 @@ public class Community {
         this.createdAt = createdAt;
     }
 
-    public UUID getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(UUID createdBy) {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Set<UUID> getModeratorIds() {
-        return moderatorIds;
+    public List<User> getModerators() {
+        return moderators;
     }
 
-    public void setModeratorIds(Set<UUID> moderatorIds) {
-        this.moderatorIds = moderatorIds;
+    public void setModerators(List<User> moderators) {
+        this.moderators = moderators;
     }
 
-    public Set<UUID> getMemberIds() {
-        return memberIds;
+    public List<User> getMembers() {
+        return members;
     }
 
-    public void setMemberIds(Set<UUID> memberIds) {
-        this.memberIds = memberIds;
+    public void setMembers(List<User> members) {
+        this.members = members;
     }
 
-    public Set<UUID> getBannedUserIds() {
-        return bannedUserIds;
+    public List<User> getBannedUsers() {
+        return bannedUsers;
     }
 
-    public void setBannedUserIds(Set<UUID> bannedUserIds) {
-        this.bannedUserIds = bannedUserIds;
+    public void setBannedUsers(List<User> bannedUsers) {
+        this.bannedUsers = bannedUsers;
     }
 
-    public List<UUID> getThreadIds() {
-        return threadIds;
+    public List<Thread> getThreads() {
+        return threads;
     }
 
-    public void setThreadIds(List<UUID> threadIds) {
-        this.threadIds = threadIds;
+    public void setThreads(List<Thread> threads) {
+        this.threads = threads;
     }
+
 }
+
+
+
+
+    
+
+

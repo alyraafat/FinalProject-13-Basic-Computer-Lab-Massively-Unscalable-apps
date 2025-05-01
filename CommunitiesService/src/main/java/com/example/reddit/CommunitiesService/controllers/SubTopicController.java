@@ -25,32 +25,32 @@ public class SubTopicController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubTopic> getSubTopicById(@PathVariable UUID id) {
+    public ResponseEntity<SubTopic> getSubTopicById(@PathVariable String id) {
         return subTopicService.getSubTopicById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/topic/{topicId}")
-    public ResponseEntity<List<SubTopic>> getSubTopicsByTopic(@PathVariable UUID topicId) {
+    public ResponseEntity<List<SubTopic>> getSubTopicsByTopic(@PathVariable String topicId) {
         return ResponseEntity.ok(subTopicService.getSubTopicsByTopic(topicId));
     }
 
-    @PostMapping
-    public ResponseEntity<SubTopic> createSubTopic(@RequestBody SubTopic subTopic) {
-        return ResponseEntity.ok(subTopicService.createSubTopic(subTopic));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<SubTopic> updateSubTopic(
-            @PathVariable UUID id,
-            @RequestBody SubTopic subTopicDetails) {
-        return ResponseEntity.ok(subTopicService.updateSubTopic(id, subTopicDetails));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSubTopic(@PathVariable UUID id) {
-        subTopicService.deleteSubTopic(id);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping
+//    public ResponseEntity<SubTopic> createSubTopic(@RequestBody SubTopic subTopic) {
+//        return ResponseEntity.ok(subTopicService.createSubTopic(subTopic));
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<SubTopic> updateSubTopic(
+//            @PathVariable UUID id,
+//            @RequestBody SubTopic subTopicDetails) {
+//        return ResponseEntity.ok(subTopicService.updateSubTopic(id, subTopicDetails));
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteSubTopic(@PathVariable UUID id) {
+//        subTopicService.deleteSubTopic(id);
+//        return ResponseEntity.ok().build();
+//    }
 }

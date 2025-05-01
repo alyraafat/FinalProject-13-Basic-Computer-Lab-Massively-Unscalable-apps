@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface SubTopicRepository extends MongoRepository<SubTopic, UUID> {
-    List<SubTopic> findByTopicId(UUID topicId);
-    boolean existsByNameAndTopicId(String name, UUID topicId);
+public interface SubTopicRepository extends MongoRepository<SubTopic, String> {
+    List<SubTopic> findByTopicId(String topicId);
+    boolean existsByNameAndTopicId(String name, String topicId);
 }

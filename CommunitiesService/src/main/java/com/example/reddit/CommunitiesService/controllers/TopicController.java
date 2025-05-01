@@ -25,7 +25,7 @@ public class TopicController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Topic> getTopicById(@PathVariable UUID id) {
+    public ResponseEntity<Topic> getTopicById(@PathVariable String id) {
         return topicService.getTopicById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -37,30 +37,30 @@ public class TopicController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTopic(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteTopic(@PathVariable String id) {
         topicService.deleteTopic(id);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{topicId}/communities/{communityId}")
-    public ResponseEntity<Topic> addCommunity(@PathVariable UUID topicId, @PathVariable UUID communityId) {
-        return ResponseEntity.ok(topicService.addCommunity(topicId, communityId));
-    }
-
-    @DeleteMapping("/{topicId}/communities/{communityId}")
-    public ResponseEntity<Topic> removeCommunity(@PathVariable UUID topicId, @PathVariable UUID communityId) {
-        return ResponseEntity.ok(topicService.removeCommunity(topicId, communityId));
-    }
-
-    @PostMapping("/{topicId}/subtopics/{subtopicId}")
-    public ResponseEntity<Topic> addSubtopic(@PathVariable UUID topicId, @PathVariable UUID subtopicId) {
-        return ResponseEntity.ok(topicService.addSubtopic(topicId, subtopicId));
-    }
-
-    @DeleteMapping("/{topicId}/subtopics/{subtopicId}")
-    public ResponseEntity<Topic> removeSubtopic(@PathVariable UUID topicId, @PathVariable UUID subtopicId) {
-        return ResponseEntity.ok(topicService.removeSubtopic(topicId, subtopicId));
-    }
+//    @PostMapping("/{topicId}/communities/{communityId}")
+//    public ResponseEntity<Topic> addCommunity(@PathVariable UUID topicId, @PathVariable UUID communityId) {
+//        return ResponseEntity.ok(topicService.addCommunity(topicId, communityId));
+//    }
+//
+//    @DeleteMapping("/{topicId}/communities/{communityId}")
+//    public ResponseEntity<Topic> removeCommunity(@PathVariable UUID topicId, @PathVariable UUID communityId) {
+//        return ResponseEntity.ok(topicService.removeCommunity(topicId, communityId));
+//    }
+//
+//    @PostMapping("/{topicId}/subtopics/{subtopicId}")
+//    public ResponseEntity<Topic> addSubtopic(@PathVariable UUID topicId, @PathVariable UUID subtopicId) {
+//        return ResponseEntity.ok(topicService.addSubtopic(topicId, subtopicId));
+//    }
+//
+//    @DeleteMapping("/{topicId}/subtopics/{subtopicId}")
+//    public ResponseEntity<Topic> removeSubtopic(@PathVariable UUID topicId, @PathVariable UUID subtopicId) {
+//        return ResponseEntity.ok(topicService.removeSubtopic(topicId, subtopicId));
+//    }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Topic> getTopicByName(@PathVariable String name) {
@@ -69,7 +69,7 @@ public class TopicController {
     }
 
     @GetMapping("/community/{communityId}")
-    public ResponseEntity<Topic> getTopicByCommunity(@PathVariable UUID communityId) {
+    public ResponseEntity<Topic> getTopicByCommunity(@PathVariable String communityId) {
         Topic topic = topicService.getTopicByCommunity(communityId);
         return topic != null ? ResponseEntity.ok(topic) : ResponseEntity.notFound().build();
     }

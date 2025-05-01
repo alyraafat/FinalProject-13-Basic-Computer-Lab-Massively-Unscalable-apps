@@ -24,40 +24,40 @@ public class SubTopicService {
         return subTopicRepository.findAll();
     }
 
-    public Optional<SubTopic> getSubTopicById(UUID id) {
+    public Optional<SubTopic> getSubTopicById(String id) {
         return subTopicRepository.findById(id);
     }
 
-    public List<SubTopic> getSubTopicsByTopic(UUID topicId) {
+    public List<SubTopic> getSubTopicsByTopic(String topicId) {
         return subTopicRepository.findByTopicId(topicId);
     }
 
-    public SubTopic createSubTopic(SubTopic subTopic) {
-        if (subTopicRepository.existsByNameAndTopicId(subTopic.getName(), subTopic.getTopicId())) {
-            throw new RuntimeException("SubTopic name already exists in this topic");
-        }
-        SubTopic savedSubTopic = subTopicRepository.save(subTopic);
-        topicService.addSubtopic(subTopic.getTopicId(), savedSubTopic.getId());
-        return savedSubTopic;
-    }
-
-    public void deleteSubTopic(UUID id) {
-        SubTopic subTopic = subTopicRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("SubTopic not found"));
-        topicService.removeSubtopic(subTopic.getTopicId(), id);
-        subTopicRepository.deleteById(id);
-    }
-
-    public SubTopic updateSubTopic(UUID id, SubTopic subTopicDetails) {
-        SubTopic subTopic = subTopicRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("SubTopic not found"));
-        
-        if (!subTopic.getName().equals(subTopicDetails.getName()) &&
-            subTopicRepository.existsByNameAndTopicId(subTopicDetails.getName(), subTopic.getTopicId())) {
-            throw new RuntimeException("SubTopic name already exists in this topic");
-        }
-
-        subTopic.setName(subTopicDetails.getName());
-        return subTopicRepository.save(subTopic);
-    }
+//    public SubTopic createSubTopic(SubTopic subTopic) {
+//        if (subTopicRepository.existsByNameAndTopicId(subTopic.getName(), subTopic.getTopicId())) {
+//            throw new RuntimeException("SubTopic name already exists in this topic");
+//        }
+//        SubTopic savedSubTopic = subTopicRepository.save(subTopic);
+//        topicService.addSubtopic(subTopic.getTopicId(), savedSubTopic.getId());
+//        return savedSubTopic;
+//    }
+//
+//    public void deleteSubTopic(UUID id) {
+//        SubTopic subTopic = subTopicRepository.findById(id)
+//            .orElseThrow(() -> new RuntimeException("SubTopic not found"));
+//        topicService.removeSubtopic(subTopic.getTopicId(), id);
+//        subTopicRepository.deleteById(id);
+//    }
+//
+//    public SubTopic updateSubTopic(UUID id, SubTopic subTopicDetails) {
+//        SubTopic subTopic = subTopicRepository.findById(id)
+//            .orElseThrow(() -> new RuntimeException("SubTopic not found"));
+//
+//        if (!subTopic.getName().equals(subTopicDetails.getName()) &&
+//            subTopicRepository.existsByNameAndTopicId(subTopicDetails.getName(), subTopic.getTopicId())) {
+//            throw new RuntimeException("SubTopic name already exists in this topic");
+//        }
+//
+//        subTopic.setName(subTopicDetails.getName());
+//        return subTopicRepository.save(subTopic);
+//    }
 }

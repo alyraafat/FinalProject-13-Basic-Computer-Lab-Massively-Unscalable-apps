@@ -1,33 +1,70 @@
 package com.example.reddit.CommunitiesService.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.UUID;
 
 @Document(collection = "subtopics")
 public class SubTopic {
     @Id
-    private UUID id;
+    private String id;
 
-    @Field(name = "name")
     private String name;
 
-    @Field(name = "topic_id")
-    private UUID topicId;
+    @DBRef
+    @JsonIgnore 
+    private Topic topic;
 
-    // Default constructor
-    public SubTopic() {
-        this.id = UUID.randomUUID();
+
+    // Private constructor used by Builder
+    private SubTopic(Builder builder) {
+        this.id = builder.id; 
+        this.name = builder.name;
+        this.topic = builder.topic;
     }
 
+    // Start a new builder
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    // The Builder
+    public static class Builder {
+        private String id;
+        private String name;
+        private Topic topic;
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder topic(Topic topic) {
+            this.topic = topic;
+            return this;
+        }
+
+        public SubTopic build() {
+            return new SubTopic(this);
+        }
+    }
+
+
     // Getters and Setters
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,11 +76,11 @@ public class SubTopic {
         this.name = name;
     }
 
-    public UUID getTopicId() {
-        return topicId;
+    public Topic getTopic() {
+        return topic;
     }
 
-    public void setTopicId(UUID topicId) {
-        this.topicId = topicId;
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface TopicRepository extends MongoRepository<Topic, UUID> {
+public interface TopicRepository extends MongoRepository<Topic, String> {
     boolean existsByName(String name);
     Topic findByName(String name);
-    Topic findByCommunityIdsContaining(UUID communityId);
+    Topic findByCommunities_Id(String communityId);
 }
