@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users/{userId}/block")
@@ -22,8 +23,8 @@ public class BlockController {
 
     @PostMapping("/{blockedId}")
     public ResponseEntity<Void> blockUser(
-            @PathVariable Long userId,
-            @PathVariable Long blockedId
+            @PathVariable UUID userId,
+            @PathVariable UUID blockedId
     ) {
         try {
             blockService.blockUser(userId, blockedId);
@@ -35,8 +36,8 @@ public class BlockController {
 
     @DeleteMapping("/{blockedId}")
     public ResponseEntity<Void> unblockUser(
-            @PathVariable Long userId,
-            @PathVariable Long blockedId
+            @PathVariable UUID userId,
+            @PathVariable UUID blockedId
     ) {
         try {
             blockService.unblockUser(userId, blockedId);
@@ -48,8 +49,8 @@ public class BlockController {
 
     @GetMapping("/{blockedId}")
     public ResponseEntity<Boolean> isBlocked(
-            @PathVariable Long userId,
-            @PathVariable Long blockedId
+            @PathVariable UUID userId,
+            @PathVariable UUID blockedId
     ) {
         try {
             boolean blocked = blockService.isBlocked(userId, blockedId);
@@ -61,7 +62,7 @@ public class BlockController {
 
     @GetMapping
     public ResponseEntity<List<User>> getBlockedUsers(
-            @PathVariable Long userId
+            @PathVariable UUID userId
     ) {
         try {
             List<User> blocked = blockService.getBlockedUsers(userId);
