@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### Docker Volumes ###
+/volumes/*
+
+### Dev Configuration ###
+src/main/resources/dev.yml

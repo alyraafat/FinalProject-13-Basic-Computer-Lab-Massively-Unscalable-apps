@@ -1,0 +1,37 @@
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: APIGateway
+  config:
+    import: "dev.yml"
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:8080
+#          change to http://user-service later when using kubernetes
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+            - JwtClaims
+        - id: dummy-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/dummy/**
+          filters:
+            - StripPrefix=1
+            - JwtClaims
+
+
+server:
+  error:
+    include-message: always
+  port: 8081
+
+jwt:
+  secret: "key1234"
+
+
+
