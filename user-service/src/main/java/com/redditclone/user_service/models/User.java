@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -22,14 +23,25 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @NotBlank(message = "Username is required")
     private String username;
+
     @NotBlank(message = "Password is required")
     private String password;
+
     @NotBlank(message = "Email is required")
     private String email;
     private Instant createdAt;
     private boolean activated;
+
+    public User(String username, String password, String email, Instant createdAt, boolean activated) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.activated = activated;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -59,6 +71,15 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return activated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+
+        if (!username.equals(user.username)) return false;
+        return email.equals(user.email);
     }
 
 }

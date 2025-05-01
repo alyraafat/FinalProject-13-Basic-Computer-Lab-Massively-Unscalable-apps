@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface BlockRepository extends JpaRepository<Block, Long> {
     boolean existsByBlockerAndBlocked(User blocker, User blocked);
     void deleteByBlockerAndBlocked(User blocker, User blocked);
     @Query("SELECT b.blocked FROM Block b WHERE b.blocker.id = :blockerId")
-    List<User> findBlockedUsersByBlockerId(@Param("blockerId") Long blockerId);
+    List<User> findBlockedUsersByBlockerId(@Param("blockerId") UUID blockerId);
 }
 
