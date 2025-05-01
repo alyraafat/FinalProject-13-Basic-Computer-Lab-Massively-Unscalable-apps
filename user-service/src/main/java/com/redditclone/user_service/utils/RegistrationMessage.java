@@ -1,12 +1,12 @@
 package com.redditclone.user_service.utils;
 
 
-public class RegisterationMessage {
+public class RegistrationMessage {
 
     private final String serviceUrl;
     private final String token;
 
-    public RegisterationMessage(String serviceUrl, String token) {
+    public RegistrationMessage(String serviceUrl, String token) {
         this.serviceUrl = serviceUrl;
         this.token = token;
     }

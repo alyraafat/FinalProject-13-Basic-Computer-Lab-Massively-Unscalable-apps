@@ -9,7 +9,7 @@ import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.models.VerificationToken;
 import com.redditclone.user_service.repositories.UserRepository;
 import com.redditclone.user_service.repositories.VerificationTokenRepository;
-import com.redditclone.user_service.utils.RegisterationMessage;
+import com.redditclone.user_service.utils.RegistrationMessage;
 import com.redditclone.user_service.validation.UserValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +52,7 @@ public class AuthService {
         mailService.sendMail(new NotificationEmail(
                 "Reddit App Account Activation",
                 user.getEmail(),
-                new RegisterationMessage(serviceUrl, token).toString()
+                new RegistrationMessage(serviceUrl, token).toString()
         ));
     }
 
