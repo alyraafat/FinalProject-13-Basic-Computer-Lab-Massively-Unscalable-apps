@@ -12,7 +12,6 @@ public class RegistrationMessage {
     }
 
     public String toString() {
-        System.out.println("serviceUrl = " + serviceUrl);
         return "Thank you for signing up to Reddit Replica. " +
                 "Please click <a href=\""
                 + serviceUrl
