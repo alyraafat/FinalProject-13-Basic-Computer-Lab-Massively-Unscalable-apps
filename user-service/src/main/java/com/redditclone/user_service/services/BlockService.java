@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BlockService {
@@ -23,7 +24,7 @@ public class BlockService {
     }
 
     @Transactional
-    public void blockUser(Long userId, Long blockedId) {
+    public void blockUser(UUID userId, UUID blockedId) {
         User[] users = getBlockerAndBlocked(userId, blockedId);
         User blocker = users[0];
         User blocked = users[1];
@@ -33,7 +34,7 @@ public class BlockService {
     }
 
     @Transactional
-    public void unblockUser(Long userId, Long blockedId) {
+    public void unblockUser(UUID userId, UUID blockedId) {
         User[] users = getBlockerAndBlocked(userId, blockedId);
         User blocker = users[0];
         User blocked = users[1];
@@ -45,7 +46,7 @@ public class BlockService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isBlocked(Long userId, Long blockedId) {
+    public boolean isBlocked(UUID userId, UUID blockedId) {
         User[] users = getBlockerAndBlocked(userId, blockedId);
         User blocker = users[0];
         User blocked = users[1];
@@ -53,17 +54,17 @@ public class BlockService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> getBlockedUsers(Long userId) {
+    public List<User> getBlockedUsers(UUID userId) {
         User user = findUser(userId, "User not found");
         return blockRepository.findBlockedUsersByBlockerId(user.getId());
     }
 
-    public User findUser(Long userId, String errorMessage){
+    public User findUser(UUID userId, String errorMessage){
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(errorMessage));
     }
 
-    public User[] getBlockerAndBlocked(Long userId, Long blockedId) {
+    public User[] getBlockerAndBlocked(UUID userId, UUID blockedId) {
         User blocker = findUser(userId, "User not found");
         User blocked = findUser(blockedId, "User to block not found");
         return new User[] {blocker, blocked};
