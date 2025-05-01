@@ -12,4 +12,5 @@ public interface ThreadRepository extends MongoRepository<Thread, UUID> {
     List<Thread> findByCommunityId(UUID communityId);
     List<Thread> findByAuthorId(UUID authorId);
     List<Thread> findByTopic(String topic);
+    List<Thread> findTop3ByOrderByUpVotesDesc();
 }

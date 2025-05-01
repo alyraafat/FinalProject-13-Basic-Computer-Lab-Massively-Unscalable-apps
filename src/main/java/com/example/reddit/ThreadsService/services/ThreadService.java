@@ -5,6 +5,9 @@ import com.example.reddit.ThreadsService.models.Comment;
 import com.example.reddit.ThreadsService.models.Thread;
 import com.example.reddit.ThreadsService.repositories.ThreadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class ThreadService {
     public Thread createThread(Thread thread) {
         return threadRepository.save(thread);
     }
-
+    @CacheEvict(value = "thread", allEntries = true)
     public void deleteThread(UUID id) {
         threadRepository.deleteById(id);
     }
@@ -48,7 +51,7 @@ public class ThreadService {
     public List<Thread> getThreadsByTopic(String topic) {
         return threadRepository.findByTopic(topic);
     }
-
+    @CachePut(value = "thread", key = "#threadId")
     public Thread addComment(UUID threadId, Comment comment) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -67,7 +70,7 @@ public class ThreadService {
                 .build();
         return threadRepository.save(thread);
     }
-
+    @CachePut(value = "thread", key = "#threadId")
     public Thread removeComment(UUID threadId, UUID commentId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -86,7 +89,7 @@ public class ThreadService {
                 .build();
         return threadRepository.save(thread);
     }
-
+    @CachePut(value = "thread", key = "#threadId")
     public Thread upvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -121,6 +124,10 @@ public class ThreadService {
                 .comments(thread.getCommentIds())
                 .build();
         return threadRepository.save(thread);
+    }
+    @Cacheable(value = "thread", key = "'trending'")
+    public List<Thread> getTrendingThreads (){
+        return threadRepository.findTop3ByOrderByUpVotesDesc();
     }
 
 
