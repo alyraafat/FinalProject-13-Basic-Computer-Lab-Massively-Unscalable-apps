@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +35,7 @@ public class ThreadService {
     public Thread createThread(Thread thread) {
         return threadRepository.save(thread);
     }
-    @CacheEvict(value = "thread", allEntries = true)
+    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
     public void deleteThread(UUID id) {
         threadRepository.deleteById(id);
     }
@@ -51,7 +51,6 @@ public class ThreadService {
     public List<Thread> getThreadsByTopic(String topic) {
         return threadRepository.findByTopic(topic);
     }
-    @CachePut(value = "thread", key = "#threadId")
     public Thread addComment(UUID threadId, Comment comment) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -70,7 +69,7 @@ public class ThreadService {
                 .build();
         return threadRepository.save(thread);
     }
-    @CachePut(value = "thread", key = "#threadId")
+    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
     public Thread removeComment(UUID threadId, UUID commentId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -89,8 +88,8 @@ public class ThreadService {
                 .build();
         return threadRepository.save(thread);
     }
-    @CachePut(value = "thread", key = "#threadId")
-    public Thread upvote(UUID threadId) {
+
+    @CacheEvict(value = "trending_cache", key = "#thread.communityId")    public Thread upvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
         thread = new Thread.Builder()
@@ -107,7 +106,7 @@ public class ThreadService {
                 .build();
         return threadRepository.save(thread);
     }
-
+    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
     public Thread downvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -125,11 +124,16 @@ public class ThreadService {
                 .build();
         return threadRepository.save(thread);
     }
-    @Cacheable(value = "thread", key = "'trending'")
-    public List<Thread> getTrendingThreads (){
-        return threadRepository.findTop3ByOrderByUpVotesDesc();
+    @Cacheable(value = "trending_cache", key = "#communityId")
+    public List<Thread> getTrendingThreads(UUID communityId) {
+        List<Thread> communityThreads = threadRepository.findByCommunityId(communityId);
+
+        return communityThreads.stream()
+                .sorted((t1, t2) -> t2.getUpVotes().compareTo(t1.getUpVotes()))
+                .limit(5)
+                .collect(Collectors.toList());
     }
 
 
 
-}
+    }
