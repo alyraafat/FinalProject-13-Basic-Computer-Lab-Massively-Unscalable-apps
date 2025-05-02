@@ -34,6 +34,49 @@ public class TopicService {
         return topicRepository.save(topic);
     }
 
+    public Topic addTopic(String name) {
+        Topic topic = Topic.builder()
+                .id(UUID.randomUUID())
+                .name(name)
+                .build();
+
+        return topicRepository.save(topic);
+    }
+
+    public Topic updateTopic(UUID id, String name) {
+        // Retrieve the existing topic
+        Topic existingTopic = topicRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Topic not found"));
+
+        // Check if name already exists (if name is being updated)
+        if (name != null && !name.equals(existingTopic.getName()) &&
+                topicRepository.existsByName(name)) {
+            throw new RuntimeException("Topic name already exists");
+        }
+
+        // Using the builder to create an updated version of the topic
+        Topic updatedTopic = Topic.builder()
+                .id(existingTopic.getId())
+                .name(name != null ? name : existingTopic.getName())
+                .subtopics(existingTopic.getSubtopics())
+                .communities(existingTopic.getCommunities())
+                .build();
+
+        // Save and return the updated topic
+        return topicRepository.save(updatedTopic);
+    }
+
+    // Creating a topic with subtopics
+    public Topic createTopicWithSubtopics(String name, List<UUID> subtopicIds) {
+        Topic topic = Topic.builder()
+                .id(UUID.randomUUID())
+                .name(name)
+                .subtopics(subtopicIds)
+                .build();
+
+        return topicRepository.save(topic);
+    }
+
     public void deleteTopic(UUID id) {
         topicRepository.deleteById(id);
     }
@@ -52,14 +95,14 @@ public class TopicService {
        return topicRepository.save(topic);
    }
 
-   public Topic addSubtopic(UUID topicId, SubTopic subtopicId) {
+   public Topic addSubtopic(UUID topicId, UUID subtopicId) {
        Topic topic = topicRepository.findById(topicId)
            .orElseThrow(() -> new RuntimeException("Topic not found"));
        topic.getSubtopics().add(subtopicId);
        return topicRepository.save(topic);
    }
 
-   public Topic removeSubtopic(UUID topicId, SubTopic subtopicId) {
+   public Topic removeSubtopic(UUID topicId, UUID subtopicId) {
        Topic topic = topicRepository.findById(topicId)
            .orElseThrow(() -> new RuntimeException("Topic not found"));
        topic.getSubtopics().remove(subtopicId);

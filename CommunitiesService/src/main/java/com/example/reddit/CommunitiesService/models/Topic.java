@@ -1,7 +1,6 @@
 package com.example.reddit.CommunitiesService.models;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -15,11 +14,8 @@ public class Topic {
 
     private String name;
 
-    //—EMBEDDED list of SubTopics
-    private List<SubTopic> subtopics;
+    private List<UUID> subtopics;
 
-    //—REFERENCING the communities under this topic
-    @DBRef
     private List<UUID> communities;
 
 
@@ -37,7 +33,7 @@ public class Topic {
     public static class Builder {
         private UUID id;
         private String name;
-        private List<SubTopic> subtopics = new ArrayList<>();
+        private List<UUID> subtopics = new ArrayList<>();
         private List<UUID> communities = new ArrayList<>();
 
         public Builder id(UUID id) {
@@ -50,7 +46,7 @@ public class Topic {
             return this;
         }
 
-        public Builder subtopics(List<SubTopic> subtopics) {
+        public Builder subtopics(List<UUID> subtopics) {
             this.subtopics = subtopics;
             return this;
         }
@@ -82,11 +78,11 @@ public class Topic {
         this.name = name;
     }
 
-    public List<SubTopic> getSubtopics() {
+    public List<UUID> getSubtopics() {
         return subtopics;
     }
 
-    public void setSubtopics(List<SubTopic> subtopics) {
+    public void setSubtopics(List<UUID> subtopics) {
         this.subtopics = subtopics;
     }
 

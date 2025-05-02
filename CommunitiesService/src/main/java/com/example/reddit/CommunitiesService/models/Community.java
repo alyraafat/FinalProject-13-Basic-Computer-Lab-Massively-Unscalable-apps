@@ -2,7 +2,6 @@ package com.example.reddit.CommunitiesService.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -15,9 +14,7 @@ public class Community {
 
     private String name;
 
-    @DBRef
-    @JsonIgnore
-    private Topic topic;
+    private UUID topic;
 
     private String description;
 
@@ -26,16 +23,12 @@ public class Community {
     // Reference to the user who created this community
     private UUID createdBy;
 
-    // References to the users in various roles, now as lists
     private List<UUID> moderators;
 
-    @DBRef
     private List<UUID> members;
 
-    @DBRef
     private List<UUID> bannedUsers;
 
-    // Embedded list of threads
     private List<UUID> threads;
 
 
@@ -59,7 +52,7 @@ public class Community {
     public static class Builder {
         private UUID id;
         private String name;
-        private Topic topic;
+        private UUID topic;
         private String description;
         private LocalDateTime createdAt = LocalDateTime.now();
         private UUID createdBy;
@@ -78,7 +71,7 @@ public class Community {
             return this;
         }
 
-        public Builder topic(Topic topic) {
+        public Builder topic(UUID topic) {
             this.topic = topic;
             return this;
         }
@@ -141,11 +134,11 @@ public class Community {
         this.name = name;
     }
 
-    public Topic getTopic() {
+    public UUID getTopic() {
         return topic;
     }
 
-    public void setTopic(Topic topic) {
+    public void setTopic(UUID topic) {
         this.topic = topic;
     }
 

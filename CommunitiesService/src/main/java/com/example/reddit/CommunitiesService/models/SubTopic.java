@@ -1,23 +1,19 @@
 package com.example.reddit.CommunitiesService.models;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.UUID;
 
 @Document(collection = "subtopics")
 public class SubTopic {
     @Id
-    private String id;
+    private UUID id;
 
     private String name;
 
-    @DBRef
-    @JsonIgnore 
-    private Topic topic;
+    private UUID topic;
 
 
     // Private constructor used by Builder
@@ -34,11 +30,11 @@ public class SubTopic {
 
     // The Builder
     public static class Builder {
-        private String id;
+        private UUID id;
         private String name;
-        private Topic topic;
+        private UUID topic;
 
-        public Builder id(String id) {
+        public Builder id(UUID id) {
             this.id = id;
             return this;
         }
@@ -48,7 +44,7 @@ public class SubTopic {
             return this;
         }
 
-        public Builder topic(Topic topic) {
+        public Builder topic(UUID topic) {
             this.topic = topic;
             return this;
         }
@@ -60,11 +56,11 @@ public class SubTopic {
 
 
     // Getters and Setters
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -76,11 +72,11 @@ public class SubTopic {
         this.name = name;
     }
 
-    public Topic getTopic() {
+    public UUID getTopic() {
         return topic;
     }
 
-    public void setTopic(Topic topic) {
+    public void setTopic(UUID topic) {
         this.topic = topic;
     }
 }

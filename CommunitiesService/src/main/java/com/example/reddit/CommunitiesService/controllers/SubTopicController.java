@@ -3,6 +3,7 @@ package com.example.reddit.CommunitiesService.controllers;
 import com.example.reddit.CommunitiesService.models.SubTopic;
 import com.example.reddit.CommunitiesService.services.SubTopicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,32 +26,42 @@ public class SubTopicController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubTopic> getSubTopicById(@PathVariable String id) {
+    public ResponseEntity<SubTopic> getSubTopicById(@PathVariable UUID id) {
         return subTopicService.getSubTopicById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/topic/{topicId}")
-    public ResponseEntity<List<SubTopic>> getSubTopicsByTopic(@PathVariable String topicId) {
+    public ResponseEntity<List<SubTopic>> getSubTopicsByTopic(@PathVariable UUID topicId) {
         return ResponseEntity.ok(subTopicService.getSubTopicsByTopic(topicId));
     }
 
-//    @PostMapping
-//    public ResponseEntity<SubTopic> createSubTopic(@RequestBody SubTopic subTopic) {
-//        return ResponseEntity.ok(subTopicService.createSubTopic(subTopic));
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<SubTopic> updateSubTopic(
-//            @PathVariable UUID id,
-//            @RequestBody SubTopic subTopicDetails) {
-//        return ResponseEntity.ok(subTopicService.updateSubTopic(id, subTopicDetails));
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteSubTopic(@PathVariable UUID id) {
-//        subTopicService.deleteSubTopic(id);
-//        return ResponseEntity.ok().build();
-//    }
+    @PostMapping
+    public ResponseEntity<SubTopic> createSubTopic(@RequestBody SubTopic subTopic) {
+        return ResponseEntity.ok(subTopicService.createSubTopic(subTopic));
+    }
+
+    @PostMapping
+    public ResponseEntity<SubTopic> addSubTopic(
+            @RequestParam String name,
+            @RequestParam UUID topicId) {
+        SubTopic subTopic = subTopicService.addSubTopic(name, topicId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(subTopic);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SubTopic> updateSubTopic(
+            @PathVariable UUID id,
+            @RequestParam(required = true) String name) {
+
+        SubTopic updatedSubTopic = subTopicService.updateSubTopic(id, name);
+        return ResponseEntity.ok(updatedSubTopic);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSubTopic(@PathVariable UUID id) {
+        subTopicService.deleteSubTopic(id);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -4,6 +4,7 @@ import com.example.reddit.CommunitiesService.models.SubTopic;
 import com.example.reddit.CommunitiesService.models.Topic;
 import com.example.reddit.CommunitiesService.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,30 @@ public class TopicController {
         return ResponseEntity.ok(topicService.createTopic(topic));
     }
 
+    @PostMapping
+    public ResponseEntity<Topic> addTopic(@RequestParam String name) {
+        Topic topic = topicService.addTopic(name);
+        return ResponseEntity.status(HttpStatus.CREATED).body(topic);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Topic> updateTopic(
+            @PathVariable UUID id,
+            @RequestParam(required = true) String name) {
+
+        Topic updatedTopic = topicService.updateTopic(id, name);
+        return ResponseEntity.ok(updatedTopic);
+    }
+
+    @PostMapping("/with-subtopics")
+    public ResponseEntity<Topic> createTopicWithSubtopics(
+            @RequestParam String name,
+            @RequestParam List<UUID> subtopicIds) {
+        Topic topic = topicService.createTopicWithSubtopics(name, subtopicIds);
+        return ResponseEntity.status(HttpStatus.CREATED).body(topic);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTopic(@PathVariable UUID id) {
         topicService.deleteTopic(id);
@@ -54,12 +79,12 @@ public class TopicController {
    }
 
    @PostMapping("/{topicId}/subtopics/{subtopicId}")
-   public ResponseEntity<Topic> addSubtopic(@PathVariable UUID topicId, @PathVariable SubTopic subtopicId) {
+   public ResponseEntity<Topic> addSubtopic(@PathVariable UUID topicId, @PathVariable UUID subtopicId) {
        return ResponseEntity.ok(topicService.addSubtopic(topicId, subtopicId));
    }
 
    @DeleteMapping("/{topicId}/subtopics/{subtopicId}")
-   public ResponseEntity<Topic> removeSubtopic(@PathVariable UUID topicId, @PathVariable SubTopic subtopicId) {
+   public ResponseEntity<Topic> removeSubtopic(@PathVariable UUID topicId, @PathVariable UUID subtopicId) {
        return ResponseEntity.ok(topicService.removeSubtopic(topicId, subtopicId));
    }
 

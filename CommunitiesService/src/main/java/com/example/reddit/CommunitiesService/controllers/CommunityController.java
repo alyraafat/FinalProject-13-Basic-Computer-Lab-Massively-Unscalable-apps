@@ -3,6 +3,7 @@ package com.example.reddit.CommunitiesService.controllers;
 import com.example.reddit.CommunitiesService.models.Community;
 import com.example.reddit.CommunitiesService.services.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,28 @@ public class CommunityController {
         return ResponseEntity.ok(communityService.createCommunity(community));
     }
 
+    @PostMapping
+    public ResponseEntity<Community> addCommunity(
+            @RequestParam String name,
+            @RequestParam UUID topic,
+            @RequestParam String description,
+            @RequestParam UUID userId) {
+
+        Community community = communityService.addCommunity(name, topic, description, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(community);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Community> updateCommunity(
+            @PathVariable UUID id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) UUID topic) {
+
+        Community updatedCommunity = communityService.updateCommunity(id, name, description, topic);
+        return ResponseEntity.ok(updatedCommunity);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCommunity(@PathVariable UUID id) {
         communityService.deleteCommunity(id);
@@ -56,6 +79,7 @@ public class CommunityController {
     public ResponseEntity<List<Community>> getCommunitiesByMemberId(@PathVariable UUID memberId) {
         return ResponseEntity.ok(communityService.getCommunitiesByMemberId(memberId));
     }
+
 
    @PostMapping("/{communityId}/moderators/{userId}")
    public ResponseEntity<Community> addModerator(@PathVariable UUID communityId, @PathVariable UUID userId) {

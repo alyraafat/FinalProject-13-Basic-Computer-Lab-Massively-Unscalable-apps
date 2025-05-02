@@ -13,9 +13,6 @@ public interface CommunityRepository extends MongoRepository<Community, UUID> {
     List<Community> findByModeratorIdsContaining(UUID moderatorId);
     List<Community> findByMemberIdsContaining(UUID memberId);
     boolean existsByName(String name);
-
-
-    // “topic” is a DBRef → look inside its “id” property
-    List<Community> findByTopic_Id(UUID topicId);
+    List<Community> findByTopicId(UUID topicId);
 
 }

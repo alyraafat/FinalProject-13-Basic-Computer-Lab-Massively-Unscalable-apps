@@ -5,6 +5,7 @@ import com.example.reddit.CommunitiesService.repositories.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,13 +34,60 @@ public class CommunityService {
         return communityRepository.save(community);
     }
 
+    public Community addCommunity(String name, UUID topic, String description, UUID createdBy) {
+        if (communityRepository.existsByName(name)) {
+            throw new RuntimeException("Community name already exists");
+        }
+
+        Community community = Community.builder()
+                .id(UUID.randomUUID())
+                .name(name)
+                .topic(topic)
+                .description(description)
+                .createdBy(createdBy)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        return communityRepository.save(community);
+    }
+
+    public Community updateCommunity(UUID id, String name, String description, UUID topic) {
+        // Retrieve the existing community
+        Community existingCommunity = communityRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+
+        // Check if name already exists (if name is being updated)
+        if (name != null && !name.equals(existingCommunity.getName()) &&
+                communityRepository.existsByName(name)) {
+            throw new RuntimeException("Community name already exists");
+        }
+
+        // Using the builder to create an updated version of the community
+        Community updatedCommunity = Community.builder()
+                .id(existingCommunity.getId())
+                .name(name != null ? name : existingCommunity.getName())
+                .description(description != null ? description : existingCommunity.getDescription())
+                .topic(topic != null ? topic : existingCommunity.getTopic())
+                .createdAt(existingCommunity.getCreatedAt())  // Preserve creation timestamp
+                .createdBy(existingCommunity.getCreatedBy())  // Preserve creator
+                .moderators(existingCommunity.getModerators())
+                .members(existingCommunity.getMembers())
+                .bannedUsers(existingCommunity.getBannedUsers())
+                .threads(existingCommunity.getThreads())
+                .build();
+
+        // Save and return the updated community
+        return communityRepository.save(updatedCommunity);
+    }
+
+
     public void deleteCommunity(UUID id) {
         communityRepository.deleteById(id);
     }
 
 
     public List<Community> getCommunitiesByTopicId(UUID topicId) {
-        return communityRepository.findByTopic_Id(topicId);
+        return communityRepository.findByTopicId(topicId);
     }
 
     public List<Community> getCommunitiesByModeratorId(UUID moderatorId) {
