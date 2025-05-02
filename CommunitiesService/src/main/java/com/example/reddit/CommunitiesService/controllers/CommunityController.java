@@ -110,4 +110,36 @@ public class CommunityController {
    public ResponseEntity<Community> unbanUser(@PathVariable UUID communityId, @PathVariable UUID userId) {
        return ResponseEntity.ok(communityService.unbanUser(communityId, userId));
    }
+
+
+    /**
+     * GET /communities/by-members
+     * Returns all communities sorted by member count (descending).
+     */
+    @GetMapping("/by-members")
+    public ResponseEntity<List<Community>> byMemberCount() {
+        List<Community> sorted = communityService.getCommunitiesByMemberCountDesc();
+        return ResponseEntity.ok(sorted);
+    }
+
+    /**
+     * GET /communities/{id}/threads/newest
+     * Returns all threads for the community, sorted by creation date (newest first).
+     */
+    @GetMapping("/{id}/threads/newest")
+    public ResponseEntity<List<ThreadDto>> getThreadsNewest(@PathVariable("id") UUID communityId) {
+        List<ThreadDto> threads = communityService.getCommunityThreadsByDate(communityId);
+        return ResponseEntity.ok(threads);
+    }
+
+    /**
+     * GET /communities/{id}/threads/top
+     * Returns all threads for the community, sorted by upvotes (highest first).
+     */
+    @GetMapping("/{id}/threads/top")
+    public ResponseEntity<List<ThreadDto>> getThreadsTop(@PathVariable("id") UUID communityId) {
+        List<ThreadDto> threads = communityService.getCommunityThreadsByTop(communityId);
+        return ResponseEntity.ok(threads);
+    }
+
 }
