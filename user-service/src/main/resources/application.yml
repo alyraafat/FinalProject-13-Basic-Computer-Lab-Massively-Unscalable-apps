@@ -47,4 +47,7 @@ service_url: "http://localhost:${server.port}"
 jwt:
   secret: "key1234"
   expirationms: 360000000
+  refresh-token:
+    secret: "key1234"
+    expirationms: 720000000
 
