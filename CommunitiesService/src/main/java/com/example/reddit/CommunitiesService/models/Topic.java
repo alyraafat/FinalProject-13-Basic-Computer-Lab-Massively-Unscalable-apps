@@ -11,7 +11,7 @@ import java.util.UUID;
 @Document(collection = "topics")
 public class Topic {
     @Id
-    private String id;
+    private UUID id;
 
     private String name;
 
@@ -20,7 +20,7 @@ public class Topic {
 
     //—REFERENCING the communities under this topic
     @DBRef
-    private List<Community> communities;
+    private List<UUID> communities;
 
 
     private Topic(Builder builder) {
@@ -35,12 +35,12 @@ public class Topic {
     }
 
     public static class Builder {
-        private String id;
+        private UUID id;
         private String name;
         private List<SubTopic> subtopics = new ArrayList<>();
-        private List<Community> communities = new ArrayList<>();
+        private List<UUID> communities = new ArrayList<>();
 
-        public Builder id(String id) {
+        public Builder id(UUID id) {
             this.id = id;
             return this;
         }
@@ -55,7 +55,7 @@ public class Topic {
             return this;
         }
 
-        public Builder communities(List<Community> communities) {
+        public Builder communities(List<UUID> communities) {
             this.communities = communities;
             return this;
         }
@@ -66,11 +66,11 @@ public class Topic {
     }
 
     // Getters and Setters
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -90,11 +90,11 @@ public class Topic {
         this.subtopics = subtopics;
     }
 
-    public List<Community> getCommunities() {
+    public List<UUID> getCommunities() {
         return communities;
     }
 
-    public void setCommunities(List<Community> communities) {
+    public void setCommunities(List<UUID> communities) {
         this.communities = communities;
     }
 }

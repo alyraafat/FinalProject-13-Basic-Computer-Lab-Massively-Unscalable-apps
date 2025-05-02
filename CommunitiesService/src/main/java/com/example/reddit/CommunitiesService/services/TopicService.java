@@ -1,5 +1,6 @@
 package com.example.reddit.CommunitiesService.services;
 
+import com.example.reddit.CommunitiesService.models.SubTopic;
 import com.example.reddit.CommunitiesService.models.Topic;
 import com.example.reddit.CommunitiesService.repositories.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class TopicService {
         return topicRepository.findAll();
     }
 
-    public Optional<Topic> getTopicById(String id) {
+    public Optional<Topic> getTopicById(UUID id) {
         return topicRepository.findById(id);
     }
 
@@ -33,43 +34,43 @@ public class TopicService {
         return topicRepository.save(topic);
     }
 
-    public void deleteTopic(String id) {
+    public void deleteTopic(UUID id) {
         topicRepository.deleteById(id);
     }
 
-//    public Topic addCommunity(UUID topicId, UUID communityId) {
-//        Topic topic = topicRepository.findById(topicId)
-//            .orElseThrow(() -> new RuntimeException("Topic not found"));
-//        topic.getCommunityIds().add(communityId);
-//        return topicRepository.save(topic);
-//    }
-//
-//    public Topic removeCommunity(UUID topicId, UUID communityId) {
-//        Topic topic = topicRepository.findById(topicId)
-//            .orElseThrow(() -> new RuntimeException("Topic not found"));
-//        topic.getCommunityIds().remove(communityId);
-//        return topicRepository.save(topic);
-//    }
-//
-//    public Topic addSubtopic(UUID topicId, UUID subtopicId) {
-//        Topic topic = topicRepository.findById(topicId)
-//            .orElseThrow(() -> new RuntimeException("Topic not found"));
-//        topic.getSubtopicIds().add(subtopicId);
-//        return topicRepository.save(topic);
-//    }
-//
-//    public Topic removeSubtopic(UUID topicId, UUID subtopicId) {
-//        Topic topic = topicRepository.findById(topicId)
-//            .orElseThrow(() -> new RuntimeException("Topic not found"));
-//        topic.getSubtopicIds().remove(subtopicId);
-//        return topicRepository.save(topic);
-//    }
+   public Topic addCommunity(UUID topicId, UUID communityId) {
+       Topic topic = topicRepository.findById(topicId)
+           .orElseThrow(() -> new RuntimeException("Topic not found"));
+       topic.getCommunities().add(communityId);
+       return topicRepository.save(topic);
+   }
+
+   public Topic removeCommunity(UUID topicId, UUID communityId) {
+       Topic topic = topicRepository.findById(topicId)
+           .orElseThrow(() -> new RuntimeException("Topic not found"));
+       topic.getCommunities().remove(communityId);
+       return topicRepository.save(topic);
+   }
+
+   public Topic addSubtopic(UUID topicId, SubTopic subtopicId) {
+       Topic topic = topicRepository.findById(topicId)
+           .orElseThrow(() -> new RuntimeException("Topic not found"));
+       topic.getSubtopics().add(subtopicId);
+       return topicRepository.save(topic);
+   }
+
+   public Topic removeSubtopic(UUID topicId, SubTopic subtopicId) {
+       Topic topic = topicRepository.findById(topicId)
+           .orElseThrow(() -> new RuntimeException("Topic not found"));
+       topic.getSubtopics().remove(subtopicId);
+       return topicRepository.save(topic);
+   }
 
     public Topic getTopicByName(String name) {
         return topicRepository.findByName(name);
     }
 
-    public Topic getTopicByCommunity(String communityId) {
-        return topicRepository.findByCommunities_Id(communityId);
+    public Topic getTopicByCommunity(UUID communityId) {
+        return topicRepository.findByCommunityIdsContaining(communityId);
     }
 }
