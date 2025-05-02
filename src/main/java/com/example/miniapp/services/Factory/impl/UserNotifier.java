@@ -4,5 +4,6 @@ import org.springframework.stereotype.Component;
 
 // should implement Notifier
 @Component
-public class ThreadNotifier {
+public class UserNotifier {
+
 }

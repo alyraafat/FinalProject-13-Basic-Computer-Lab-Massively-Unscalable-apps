@@ -1,5 +1,7 @@
 package com.example.miniapp.services.strategy;
 
+import com.example.miniapp.models.NotificationRequest;
+
 public interface DeliveryStrategy {
-    void deliver(String userId, String message);
+    void deliver(NotificationRequest request);
 }

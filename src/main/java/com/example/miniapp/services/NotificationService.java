@@ -1,24 +1,35 @@
 package com.example.miniapp.services;
 
-import com.example.miniapp.models.NotificationRequest;
-import com.example.miniapp.services.Factory.Notifier;
-import com.example.miniapp.services.Factory.NotifierFactory;
-import com.example.miniapp.services.strategy.DeliveryStrategy;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class NotificationService {
-    private final NotifierFactory factory;
-    private final PreferenceService preferenceService;
+    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
-    public NotificationService(NotifierFactory factory, PreferenceService preferenceService) {
-        this.factory = factory;
-        this.preferenceService = preferenceService;
+    // For push notifications
+    public boolean sendPush(String formattedPayload) {
+        try {
+            logger.info("Sending push notification: {}", formattedPayload);
+            System.out.println("[PUSH] " + formattedPayload);
+            return true; // Assume success for demo
+        } catch (Exception e) {
+            logger.error("Failed to send push notification", e);
+            return false;
+        }
     }
 
-    public void process(NotificationRequest request) {
-        DeliveryStrategy strategy = preferenceService.getStrategy(request.getUserId());
-        Notifier notifier = factory.create(request.getType(), strategy);
-        notifier.notify(request);
+    // For email notifications
+    public boolean sendEmail(String emailContent) {
+        try {
+            logger.info("Sending email notification");
+            System.out.println("[EMAIL]\n" + emailContent);
+            return true; // Assume success for demo
+        } catch (Exception e) {
+            logger.error("Failed to send email notification", e);
+            return false;
+        }
     }
+
 }
