@@ -3,6 +3,8 @@ package com.example.moderator.model;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(
         name = "moderators",
@@ -15,42 +17,42 @@ public class Moderator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private UUID userId;
 
     @Column(name = "community_id", nullable = false)
-    private Long communityId;
+    private UUID communityId;
 
     // any extra fields (e.g. role, assignedAt) go here...
 
     public Moderator() {}
 
-    public Moderator(Long userId, Long communityId) {
+    public Moderator(UUID userId, UUID communityId) {
         this.userId = userId;
         this.communityId = communityId;
     }
 
     // --- getters & setters ---
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
-    public void setUserId(Long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
-    public Long getCommunityId() {
+    public UUID getCommunityId() {
         return communityId;
     }
-    public void setCommunityId(Long communityId) {
+    public void setCommunityId(UUID communityId) {
         this.communityId = communityId;
     }
 }
