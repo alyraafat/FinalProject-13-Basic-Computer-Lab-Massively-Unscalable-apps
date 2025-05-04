@@ -30,7 +30,7 @@ spring:
     protocol: smtp
     username: xyz@gmail.com
     password: abc
-    test-connection: true
+    test-connection: false
     properties:
       "mail.smtp.auth": true
       "mail.smtp.starttls.enable": true
