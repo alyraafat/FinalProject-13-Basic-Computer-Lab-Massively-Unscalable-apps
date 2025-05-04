@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService{
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final BlockService blockService;
@@ -63,12 +63,9 @@ public class UserService{
         return userRepository.searchUsersExcludingBlocked(keyword, blockedUserIds);
     }
 
-    public UserDetailsService userDetailsService() throws UsernameNotFoundException {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
-            }
-        };
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
     }
 }
