@@ -92,8 +92,8 @@ public class CommunityController {
    }
 
    @PostMapping("/{communityId}/members/{userId}")
-   public ResponseEntity<Community> addMember(@PathVariable UUID communityId, @PathVariable UUID userId) {
-       return ResponseEntity.ok(communityService.addMember(communityId, userId));
+   public ResponseEntity<Community> addMember(@PathVariable UUID communityId, @PathVariable UUID userId, @RequestParam String username) {
+       return ResponseEntity.ok(communityService.addMember(communityId, userId, username));
    }
 
    @DeleteMapping("/{communityId}/members/{userId}")

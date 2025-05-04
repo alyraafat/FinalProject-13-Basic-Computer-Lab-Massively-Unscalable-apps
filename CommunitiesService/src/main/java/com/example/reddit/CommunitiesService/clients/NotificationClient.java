@@ -17,22 +17,24 @@ public class NotificationClient {
         this.rest = rest;
     }
 
-    public void notifyMemberAdded(UUID communityId, UUID userId) {
+    public void notifyMemberAdded(String type, UUID communityId, String message) {
         // You can send a full payload object if your Notification API expects JSON
         String url = base + "/community-member-added";
         rest.postForEntity(
                 url,
-                new NotificationRequest(communityId, userId),
+                new NotificationRequest(type, communityId, message),
                 Void.class
         );
     }
 
     private static class NotificationRequest {
+        public String type;
         public UUID communityId;
-        public UUID userId;
-        public NotificationRequest(UUID communityId, UUID userId) {
+        public String message;
+        public NotificationRequest(String type, UUID communityId, String message) {
+            this.type = type;
             this.communityId = communityId;
-            this.userId = userId;
+            this.message = message;
         }
     }
 }

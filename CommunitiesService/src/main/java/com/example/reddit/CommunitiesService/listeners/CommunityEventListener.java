@@ -19,8 +19,9 @@ public class CommunityEventListener {
     @EventListener
     public void onMemberAdded(CommunityMemberAddedEvent evt) {
         notifier.notifyMemberAdded(
+                evt.getType(),
                 evt.getCommunityId(),
-                evt.getUserId()
+                evt.getMessage()
         );
     }
 }
