@@ -3,8 +3,8 @@ package com.example.reddit.ThreadsService.models;
 import java.util.UUID;
 
 public class PostLog extends Log{
-    public PostLog(UUID userId, ActionType actionType, UUID threadId) {
-        super(userId, actionType, threadId);
+    public PostLog(UUID userId,UUID threadId) {
+        super(userId, ActionType.POST, threadId);
     }
 
     @Override
