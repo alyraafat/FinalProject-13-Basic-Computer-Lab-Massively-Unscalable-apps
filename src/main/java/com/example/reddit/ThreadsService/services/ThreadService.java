@@ -48,6 +48,7 @@ public class ThreadService {
     public List<Thread> getThreadsByTopic(UUID topic) {
         return threadRepository.findByTopic(topic);
     }
+    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
     public Thread addComment(UUID threadId, Comment comment) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -86,7 +87,8 @@ public class ThreadService {
         return threadRepository.save(thread);
     }
 
-    @CacheEvict(value = "trending_cache", key = "#thread.communityId")    public Thread upvote(UUID threadId) {
+    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
+    public Thread upvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
         thread = new Thread.Builder()
