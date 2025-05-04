@@ -30,10 +30,10 @@
 //    }
 //
 //
-//    public void setPrimaryChannel(DeliveryChannel deliveryChannel) {
-//    }
-//
-//    public DeliveryChannel getPrimaryChannel() {
-//        return primaryChannel;
-//    }
+////    public void setPrimaryChannel(DeliveryChannel deliveryChannel) {
+////    }
+////
+////    public DeliveryChannel getPrimaryChannel() {
+////        return primaryChannel;
+////    }
 //}
