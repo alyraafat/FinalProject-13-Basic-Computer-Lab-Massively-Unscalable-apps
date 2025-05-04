@@ -47,7 +47,7 @@ services:
 
   # Spring Boot Application
   app:
-    build: .
+    build: ..
     container_name: notification_service
     depends_on:
       - postgres
