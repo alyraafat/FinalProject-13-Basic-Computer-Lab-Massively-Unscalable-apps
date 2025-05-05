@@ -24,7 +24,7 @@ public class VerificationToken {
     public VerificationToken(String token, User user) {
         this.token = token;
         this.user = user;
-        expiryDate = Instant.now().plusSeconds(2); // 2 hours
+        expiryDate = Instant.now().plusSeconds(7200); // 2 hours
     }
 
 
