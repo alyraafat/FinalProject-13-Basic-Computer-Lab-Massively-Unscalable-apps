@@ -14,16 +14,15 @@ public class Topic {
 
     private String name;
 
-    private List<UUID> subtopics;
+    private List<UUID> subtopicIds;
 
-    private List<UUID> communities;
-
+    private List<UUID> communityIds;
 
     private Topic(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.subtopics = builder.subtopics;
-        this.communities = builder.communities;
+        this.subtopicIds = builder.subtopicIds;
+        this.communityIds = builder.communityIds;
     }
 
     public static Builder builder() {
@@ -33,8 +32,8 @@ public class Topic {
     public static class Builder {
         private UUID id;
         private String name;
-        private List<UUID> subtopics = new ArrayList<>();
-        private List<UUID> communities = new ArrayList<>();
+        private List<UUID> subtopicIds = new ArrayList<>();
+        private List<UUID> communityIds = new ArrayList<>();
 
         public Builder id(UUID id) {
             this.id = id;
@@ -46,13 +45,13 @@ public class Topic {
             return this;
         }
 
-        public Builder subtopics(List<UUID> subtopics) {
-            this.subtopics = subtopics;
+        public Builder subtopicIds(List<UUID> subtopics) {
+            this.subtopicIds = subtopics;
             return this;
         }
 
-        public Builder communities(List<UUID> communities) {
-            this.communities = communities;
+        public Builder communityIds(List<UUID> communities) {
+            this.communityIds = communities;
             return this;
         }
 
@@ -78,19 +77,19 @@ public class Topic {
         this.name = name;
     }
 
-    public List<UUID> getSubtopics() {
-        return subtopics;
+    public List<UUID> getSubtopicIds() {
+        return subtopicIds;
     }
 
-    public void setSubtopics(List<UUID> subtopics) {
-        this.subtopics = subtopics;
+    public void setSubtopicIds(List<UUID> subtopics) {
+        this.subtopicIds = subtopics;
     }
 
-    public List<UUID> getCommunities() {
-        return communities;
+    public List<UUID> getCommunityIds() {
+        return communityIds;
     }
 
-    public void setCommunities(List<UUID> communities) {
-        this.communities = communities;
+    public void setCommunityIds(List<UUID> communities) {
+        this.communityIds = communities;
     }
 }

@@ -1,6 +1,6 @@
 package com.example.reddit.CommunitiesService.services;
 
-import com.example.reddit.CommunitiesService.clients.ThreadClient;
+//import com.example.reddit.CommunitiesService.clients.ThreadClient;
 import com.example.reddit.CommunitiesService.events.CommunityMemberAddedEvent;
 import com.example.reddit.CommunitiesService.models.Community;
 import com.example.reddit.CommunitiesService.repositories.CommunityRepository;
@@ -18,14 +18,20 @@ import java.util.stream.Collectors;
 @Service
 public class CommunityService {
     private final CommunityRepository communityRepository;
-    private final ThreadClient threadClient;
+    // private final ThreadClient threadClient;
     private final ApplicationEventPublisher events;
 
+    // @Autowired
+    // public CommunityService(CommunityRepository communityRepository, ThreadClient
+    // threadClient, ApplicationEventPublisher events) {
+    // this.communityRepository = communityRepository;
+    // this.threadClient = threadClient;
+    // this.events = events;
+    // }
 
     @Autowired
-    public CommunityService(CommunityRepository communityRepository, ThreadClient threadClient, ApplicationEventPublisher events) {
+    public CommunityService(CommunityRepository communityRepository, ApplicationEventPublisher events) {
         this.communityRepository = communityRepository;
-        this.threadClient = threadClient;
         this.events = events;
     }
 
@@ -52,7 +58,7 @@ public class CommunityService {
         Community community = Community.builder()
                 .id(UUID.randomUUID())
                 .name(name)
-                .topic(topic)
+                .topicId(topic)
                 .description(description)
                 .createdBy(createdBy)
                 .createdAt(LocalDateTime.now())
@@ -77,24 +83,22 @@ public class CommunityService {
                 .id(existingCommunity.getId())
                 .name(name != null ? name : existingCommunity.getName())
                 .description(description != null ? description : existingCommunity.getDescription())
-                .topic(topic != null ? topic : existingCommunity.getTopic())
-                .createdAt(existingCommunity.getCreatedAt())  // Preserve creation timestamp
-                .createdBy(existingCommunity.getCreatedBy())  // Preserve creator
-                .moderators(existingCommunity.getModerators())
-                .members(existingCommunity.getMembers())
-                .bannedUsers(existingCommunity.getBannedUsers())
-                .threads(existingCommunity.getThreads())
+                .topicId(topic != null ? topic : existingCommunity.getTopicId())
+                .createdAt(existingCommunity.getCreatedAt()) // Preserve creation timestamp
+                .createdBy(existingCommunity.getCreatedBy()) // Preserve creator
+                .moderatorIds(existingCommunity.getModeratorIds())
+                .memberIds(existingCommunity.getMemberIds())
+                .bannedUserIds(existingCommunity.getBannedUserIds())
+                .threadIds(existingCommunity.getThreadIds())
                 .build();
 
         // Save and return the updated community
         return communityRepository.save(updatedCommunity);
     }
 
-
     public void deleteCommunity(UUID id) {
         communityRepository.deleteById(id);
     }
-
 
     public List<Community> getCommunitiesByTopicId(UUID topicId) {
         return communityRepository.findByTopicId(topicId);
@@ -108,43 +112,40 @@ public class CommunityService {
         return communityRepository.findByMemberIdsContaining(memberId);
     }
 
+    public List<Community> getCommunitiesByModerator(UUID moderatorId) {
+        return communityRepository.findByModeratorIdsContaining(moderatorId);
+    }
 
+    public List<Community> getCommunitiesByMember(UUID memberId) {
+        return communityRepository.findByMemberIdsContaining(memberId);
+    }
 
+    public Community addModerator(UUID communityId, UUID userId) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+        community.getModeratorIds().add(userId);
+        return communityRepository.save(community);
+    }
 
-   public List<Community> getCommunitiesByModerator(UUID moderatorId) {
-       return communityRepository.findByModeratorIdsContaining(moderatorId);
-   }
+    public Community removeModerator(UUID communityId, UUID userId) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+        community.getModeratorIds().remove(userId);
+        return communityRepository.save(community);
+    }
 
-   public List<Community> getCommunitiesByMember(UUID memberId) {
-       return communityRepository.findByMemberIdsContaining(memberId);
-   }
-
-   public Community addModerator(UUID communityId, UUID userId) {
-       Community community = communityRepository.findById(communityId)
-           .orElseThrow(() -> new RuntimeException("Community not found"));
-       community.getModerators().add(userId);
-       return communityRepository.save(community);
-   }
-
-   public Community removeModerator(UUID communityId, UUID userId) {
-       Community community = communityRepository.findById(communityId)
-           .orElseThrow(() -> new RuntimeException("Community not found"));
-       community.getModerators().remove(userId);
-       return communityRepository.save(community);
-   }
-
-//   public Community addMember(UUID communityId, UUID userId) {
-//       Community community = communityRepository.findById(communityId)
-//           .orElseThrow(() -> new RuntimeException("Community not found"));
-//       community.getMembers().add(userId);
-//       return communityRepository.save(community);
-//   }
+    // public Community addMember(UUID communityId, UUID userId) {
+    // Community community = communityRepository.findById(communityId)
+    // .orElseThrow(() -> new RuntimeException("Community not found"));
+    // community.getMembers().add(userId);
+    // return communityRepository.save(community);
+    // }
 
     public Community addMember(UUID communityId, UUID userId, String username) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
 
-        community.getMembers().add(userId);
+        community.getMemberIds().add(userId);
         Community saved = communityRepository.save(community);
 
         String message = String.format("User %s has joined the community %s", username, community.getName());
@@ -157,70 +158,67 @@ public class CommunityService {
         return saved;
     }
 
-   public Community removeMember(UUID communityId, UUID userId) {
-       Community community = communityRepository.findById(communityId)
-           .orElseThrow(() -> new RuntimeException("Community not found"));
-       community.getMembers().remove(userId);
-       return communityRepository.save(community);
-   }
+    public Community removeMember(UUID communityId, UUID userId) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+        community.getMemberIds().remove(userId);
+        return communityRepository.save(community);
+    }
 
-   public Community banUser(UUID communityId, UUID userId) {
-       Community community = communityRepository.findById(communityId)
-           .orElseThrow(() -> new RuntimeException("Community not found"));
-       community.getBannedUsers().add(userId);
-       community.getMembers().remove(userId);
-       return communityRepository.save(community);
-   }
+    public Community banUser(UUID communityId, UUID userId) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+        community.getBannedUserIds().add(userId);
+        community.getMemberIds().remove(userId);
+        return communityRepository.save(community);
+    }
 
-   public Community unbanUser(UUID communityId, UUID userId) {
-       Community community = communityRepository.findById(communityId)
-           .orElseThrow(() -> new RuntimeException("Community not found"));
-       community.getBannedUsers().remove(userId);
-       return communityRepository.save(community);
-   }
-
+    public Community unbanUser(UUID communityId, UUID userId) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+        community.getBannedUserIds().remove(userId);
+        return communityRepository.save(community);
+    }
 
     /**
      * Return all communities, sorted descending by the number of members.
      */
     public List<Community> getCommunitiesByMemberCountDesc() {
         return communityRepository.findAll().stream()
-                .sorted(Comparator.comparingInt((Community c) ->
-                                c.getMembers() != null ? c.getMembers().size() : 0
-                        ).reversed()
-                )
-                .collect(Collectors.toList());
-    }
-
-
-    /**
-     * Fetch all threads for the given community, sort by creation date descending.
-     */
-    public List<ThreadDto> getCommunityThreadsByDate(UUID communityId) {
-        Community c = communityRepository.findById(communityId)
-                .orElseThrow(() -> new RuntimeException("Community not found"));
-
-        return c.getThreads().stream()
-                .map(threadClient::getById)            // Optional<ThreadDto>
-                .flatMap(Optional::stream)             // drop missing
-                .sorted(Comparator.comparing(ThreadDto::getCreatedAt)
+                .sorted(Comparator.comparingInt((Community c) -> c.getMemberIds() != null ? c.getMemberIds().size() : 0)
                         .reversed())
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Fetch all threads for the given community, sort by upvotes descending.
-     */
-    public List<ThreadDto> getCommunityThreadsByTop(UUID communityId) {
-        Community c = communityRepository.findById(communityId)
-                .orElseThrow(() -> new RuntimeException("Community not found"));
-
-        return c.getThreads().stream()
-                .map(threadClient::getById)            // Optional<ThreadDto>
-                .flatMap(Optional::stream)             // drop missing
-                .sorted(Comparator.comparing(ThreadDto::getUpvotes)
-                        .reversed())
-                .collect(Collectors.toList());
-    }
+    // /**
+    // * Fetch all threads for the given community, sort by creation date
+    // descending.
+    // */
+    // public List<ThreadModel> getCommunityThreadsByDate(UUID communityId) {
+    // Community c = communityRepository.findById(communityId)
+    // .orElseThrow(() -> new RuntimeException("Community not found"));
+    //
+    // return c.getThreads().stream()
+    // .map(threadClient::getById) // Optional<ThreadDto>
+    // .flatMap(Optional::stream) // drop missing
+    // .sorted(Comparator.comparing(ThreadModel::getCreatedAt)
+    // .reversed())
+    // .collect(Collectors.toList());
+    // }
+    //
+    // /**
+    // * Fetch all threads for the given community, sort by upvotes descending.
+    // */
+    // public List<ThreadModel> getCommunityThreadsByTop(UUID communityId) {
+    // Community c = communityRepository.findById(communityId)
+    // .orElseThrow(() -> new RuntimeException("Community not found"));
+    //
+    // return c.getThreads().stream()
+    // .map(threadClient::getById) // Optional<ThreadDto>
+    // .flatMap(Optional::stream) // drop missing
+    // .sorted(Comparator.comparing(ThreadModel::getUpvotes)
+    // .reversed())
+    // .collect(Collectors.toList());
+    // }
 
 }

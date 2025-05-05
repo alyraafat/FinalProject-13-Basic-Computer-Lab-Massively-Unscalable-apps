@@ -33,10 +33,10 @@ public class TopicController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Topic> createTopic(@RequestBody Topic topic) {
-        return ResponseEntity.ok(topicService.createTopic(topic));
-    }
+    // @PostMapping
+    // public ResponseEntity<Topic> createTopic(@RequestBody Topic topic) {
+    //     return ResponseEntity.ok(topicService.createTopic(topic));
+    // }
 
     @PostMapping
     public ResponseEntity<Topic> addTopic(@RequestParam String name) {

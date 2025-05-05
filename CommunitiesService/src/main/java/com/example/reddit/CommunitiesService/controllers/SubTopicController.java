@@ -37,10 +37,10 @@ public class SubTopicController {
         return ResponseEntity.ok(subTopicService.getSubTopicsByTopic(topicId));
     }
 
-    @PostMapping
-    public ResponseEntity<SubTopic> createSubTopic(@RequestBody SubTopic subTopic) {
-        return ResponseEntity.ok(subTopicService.createSubTopic(subTopic));
-    }
+    // @PostMapping
+    // public ResponseEntity<SubTopic> createSubTopic(@RequestBody SubTopic subTopic) {
+    //     return ResponseEntity.ok(subTopicService.createSubTopic(subTopic));
+    // }
 
     @PostMapping
     public ResponseEntity<SubTopic> addSubTopic(

@@ -14,7 +14,7 @@ public class Community {
 
     private String name;
 
-    private UUID topic;
+    private UUID topicId;
 
     private String description;
 
@@ -23,26 +23,25 @@ public class Community {
     // Reference to the user who created this community
     private UUID createdBy;
 
-    private List<UUID> moderators;
+    private List<UUID> moderatorIds;
 
-    private List<UUID> members;
+    private List<UUID> memberIds;
 
-    private List<UUID> bannedUsers;
+    private List<UUID> bannedUserIds;
 
-    private List<UUID> threads;
-
+    private List<UUID> threadIds;
 
     private Community(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.topic = builder.topic;
+        this.topicId = builder.topicId;
         this.description = builder.description;
         this.createdAt = builder.createdAt;
         this.createdBy = builder.createdBy;
-        this.moderators = builder.moderators;
-        this.members = builder.members;
-        this.bannedUsers = builder.bannedUsers;
-        this.threads = builder.threads;
+        this.moderatorIds = builder.moderatorIds;
+        this.memberIds = builder.memberIds;
+        this.bannedUserIds = builder.bannedUserIds;
+        this.threadIds = builder.threadIds;
     }
 
     public static Builder builder() {
@@ -52,14 +51,14 @@ public class Community {
     public static class Builder {
         private UUID id;
         private String name;
-        private UUID topic;
+        private UUID topicId;
         private String description;
         private LocalDateTime createdAt = LocalDateTime.now();
         private UUID createdBy;
-        private List<UUID> moderators = new ArrayList<>();
-        private List<UUID> members = new ArrayList<>();
-        private List<UUID> bannedUsers = new ArrayList<>();
-        private List<UUID> threads = new ArrayList<>();
+        private List<UUID> moderatorIds = new ArrayList<>();
+        private List<UUID> memberIds = new ArrayList<>();
+        private List<UUID> bannedUserIds = new ArrayList<>();
+        private List<UUID> threadIds = new ArrayList<>();
 
         public Builder id(UUID id) {
             this.id = id;
@@ -71,8 +70,8 @@ public class Community {
             return this;
         }
 
-        public Builder topic(UUID topic) {
-            this.topic = topic;
+        public Builder topicId(UUID topic) {
+            this.topicId = topic;
             return this;
         }
 
@@ -91,23 +90,23 @@ public class Community {
             return this;
         }
 
-        public Builder moderators(List<UUID> moderators) {
-            this.moderators = moderators;
+        public Builder moderatorIds(List<UUID> moderators) {
+            this.moderatorIds = moderators;
             return this;
         }
 
-        public Builder members(List<UUID> members) {
-            this.members = members;
+        public Builder memberIds(List<UUID> members) {
+            this.memberIds = members;
             return this;
         }
 
-        public Builder bannedUsers(List<UUID> bannedUsers) {
-            this.bannedUsers = bannedUsers;
+        public Builder bannedUserIds(List<UUID> bannedUsers) {
+            this.bannedUserIds = bannedUsers;
             return this;
         }
 
-        public Builder threads(List<UUID> threads) {
-            this.threads = threads;
+        public Builder threadIds(List<UUID> threads) {
+            this.threadIds = threads;
             return this;
         }
 
@@ -115,7 +114,6 @@ public class Community {
             return new Community(this);
         }
     }
-
 
     // Generate getter and setter methods for all fields
     public UUID getId() {
@@ -134,12 +132,12 @@ public class Community {
         this.name = name;
     }
 
-    public UUID getTopic() {
-        return topic;
+    public UUID getTopicId() {
+        return topicId;
     }
 
-    public void setTopic(UUID topic) {
-        this.topic = topic;
+    public void setTopicId(UUID topic) {
+        this.topicId = topic;
     }
 
     public String getDescription() {
@@ -166,36 +164,36 @@ public class Community {
         this.createdBy = createdBy;
     }
 
-    public List<UUID> getModerators() {
-        return moderators;
+    public List<UUID> getModeratorIds() {
+        return moderatorIds;
     }
 
-    public void setModerators(List<UUID> moderators) {
-        this.moderators = moderators;
+    public void setModeratorIds(List<UUID> moderators) {
+        this.moderatorIds = moderators;
     }
 
-    public List<UUID> getMembers() {
-        return members;
+    public List<UUID> getMemberIds() {
+        return memberIds;
     }
 
-    public void setMembers(List<UUID> members) {
-        this.members = members;
+    public void setMemberIds(List<UUID> members) {
+        this.memberIds = members;
     }
 
-    public List<UUID> getBannedUsers() {
-        return bannedUsers;
+    public List<UUID> getBannedUserIds() {
+        return bannedUserIds;
     }
 
-    public void setBannedUsers(List<UUID> bannedUsers) {
-        this.bannedUsers = bannedUsers;
+    public void setBannedUserIds(List<UUID> bannedUsers) {
+        this.bannedUserIds = bannedUsers;
     }
 
-    public List<UUID> getThreads() {
-        return threads;
+    public List<UUID> getThreadIds() {
+        return threadIds;
     }
 
-    public void setThreads(List<UUID> threads) {
-        this.threads = threads;
+    public void setThreadIds(List<UUID> threads) {
+        this.threadIds = threads;
     }
 
 }
