@@ -48,10 +48,14 @@ public class AuthService {
         boolean userExists = userValidation.validateUserNonExistent(registerObject.getUsername(), registerObject.getEmail());
         String encodedPassword = passwordEncoder.encode(registerObject.getPassword());
         User user = new User(registerObject.getUsername(), encodedPassword, registerObject.getEmail(), Instant.now(), false);
+        String token = "";
         if (!userExists) {
             userRepository.save(user);
+            token = generateVerificationToken(user);
+        } else {
+            user = userRepository.findByUsername(registerObject.getUsername()).orElseThrow(() -> new RedditAppException("User Not Found with name: " + registerObject.getUsername()));
+            token = updateVerificationToken(user);
         }
-        String token = generateVerificationToken(user);
         mailService.sendMail(new NotificationEmail(
                 "Reddit App Account Activation",
                 user.getEmail(),
@@ -65,6 +69,19 @@ public class AuthService {
         verificationTokenRepository.save(verificationToken);
         return token;
     }
+
+    private String updateVerificationToken(User user) {
+        String token = UUID.randomUUID().toString();
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByUser(user);
+        if (verificationToken.isEmpty()) {
+            throw new RedditAppException("Cannot access activation right now!");
+        }
+        VerificationToken updatedVerificationToken = new VerificationToken(token, verificationToken.get().getUser());
+        updatedVerificationToken.setId(verificationToken.get().getId());
+        verificationTokenRepository.save(updatedVerificationToken);
+        return token;
+    }
+
 
     @Transactional
     public void activateAccount(String token) {
@@ -123,7 +140,7 @@ public class AuthService {
     }
 
     private void expireToken(RefreshToken refreshToken) {
-        if(refreshToken == null) {
+        if (refreshToken == null) {
             return;
         }
         refreshToken.setExpired(true);
