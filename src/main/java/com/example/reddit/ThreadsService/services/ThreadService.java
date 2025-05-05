@@ -2,7 +2,9 @@ package com.example.reddit.ThreadsService.services;
 
 import com.example.reddit.ThreadsService.models.ActionType;
 import com.example.reddit.ThreadsService.models.Comment;
+import com.example.reddit.ThreadsService.models.Log;
 import com.example.reddit.ThreadsService.models.Thread;
+import com.example.reddit.ThreadsService.repositories.LogRepository;
 import com.example.reddit.ThreadsService.repositories.ThreadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -14,11 +16,14 @@ import java.util.*;
 
 @Service
 public class ThreadService {
+    @Autowired
     private final ThreadRepository threadRepository;
+    private final LogRepository logRepository;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository) {
+    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository) {
         this.threadRepository = threadRepository;
+        this.logRepository=logRepository;
     }
 
     public List<Thread> getAllThreads() {
@@ -133,22 +138,24 @@ public class ThreadService {
                 .collect(Collectors.toList());
     }
 
-    //public List<Thread> recommendThreadsByUpvotes(UUID userId)
-    //{
+
+
+    public List<Thread> recommendThreadsByUpvotes(UUID userId)
+    {
 
 
 
         // TODO: PLACE CALL TO ALIS FUNCVTION TO GET LOGS FOR THIS USER AND THIS ACTION TYPE
 
-        // List <Log>  userUpVoteLogs =findLogsForUserByType(userId,ActionType.UPVOTE );
+         List <Log>  userUpVoteLogs = logRepository.findByUserIdAndActionType(userId,ActionType.UPVOTE);
 
-        // Set<UUID> threadIds= new Hashset<>();
+        Set<UUID> threadIds= new HashSet<>();
 
 
-        // for (Log log : userUpVoteLogs)
-       // {
-        //    threadIds.add(log.getThreadId())
-        //}
+         for (Log log : userUpVoteLogs)
+        {
+            threadIds.add(log.getThreadId());
+        }
 
 
         // If topic is changed from string to uuid then I need to call the communities microservice through the message queue to get the entire subtopic then I loop on the
@@ -157,63 +164,35 @@ public class ThreadService {
 
         //loop on threads and see which ones have same topic ids like the ids
 
-       // List<Thread> recommendedThreads= new ArrayList<>();
-       // for(SubTopic subtopic: subTopicsOfInterest )
-        //{
-           // List<Thread> threads= this.getThreadsByTopic(subtopic.getId());
-            //recommendedThreads.add(threads);
-        //}
+        List<Thread> recommendedThreads= new ArrayList<>();
+
+        Set<UUID> topicIds= new HashSet<>();
+        for(UUID threadId : threadIds)
+        {
+            Optional<Thread> thread= threadRepository.findById(threadId);
+            if(!thread.isEmpty())
+            {
+                topicIds.add(thread.get().getTopic());
+            }
+
+        }
+
+
+        for(UUID topicId: topicIds )
+        {
+            List<Thread> threads2= this.getThreadsByTopic(topicId);
+            recommendedThreads.add((Thread) threads2);
+        }
 
 
 
 
 
 
-       // return recommendedThreads;
+        return recommendedThreads;
 
 
-   // }
-
-    //public List<Thread> recommendThreadsByUpvotes(UUID userId)
-    //{
-
-
-
-        // TODO: PLACE CALL TO ALIS FUNCVTION TO GET LOGS FOR THIS USER AND THIS ACTION TYPE
-
-        // List <Log>  userUpVoteLogs =findLogsForUserByType(userId,ActionType.UPVOTE );
-
-        // Set<UUID> threadIds= new Hashset<>();
-
-
-        // for (Log log : userUpVoteLogs)
-       // {
-        //    threadIds.add(log.getThreadId())
-        //}
-
-
-        // If topic is changed from string to uuid then I need to call the communities microservice through the message queue to get the entire subtopic then I loop on the
-        //returned list of subtopics and get their topics through synchronous communication
-        // List<Subtopic> subTopicsOfInterest = communities service call
-
-        //loop on threads and see which ones have same topic ids like the ids
-
-       // List<Thread> recommendedThreads= new ArrayList<>();
-       // for(SubTopic subtopic: subTopicsOfInterest )
-        //{
-           // List<Thread> threads= this.getThreadsByTopic(subtopic.getId());
-            //recommendedThreads.add(threads);
-        //}
-
-
-
-
-
-
-       // return recommendedThreads;
-
-
-   // }
+    }
 
 
 

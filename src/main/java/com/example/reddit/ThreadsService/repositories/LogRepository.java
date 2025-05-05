@@ -12,7 +12,6 @@ import java.util.UUID;
 public interface LogRepository extends MongoRepository<Log, UUID> {
     List<Log> findByUserId(UUID userId);
     List<Log> findByThreadId(UUID threadId);
-    List<Log> findByCommunityId(UUID communityId);
     List<Log> findByActionType(ActionType actionType);
     List<Log> findByUserIdAndActionType(UUID userId, ActionType actionType);
 }
