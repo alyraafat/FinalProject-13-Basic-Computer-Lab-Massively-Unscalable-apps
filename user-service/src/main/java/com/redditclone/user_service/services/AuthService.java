@@ -11,6 +11,7 @@ import com.redditclone.user_service.repositories.UserRepository;
 import com.redditclone.user_service.repositories.VerificationTokenRepository;
 import com.redditclone.user_service.utils.RegistrationMessage;
 import com.redditclone.user_service.validation.UserValidation;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,15 +33,36 @@ public class AuthService {
     @Value("${service_url}")
     private String serviceUrl;
 
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
+
+    @Value("${jwt.expirationms}")
+    private Long EXPIRATION_MS; // 1 hour
+
+    @Value("${jwt.refresh-token.secret}")
+    private String REFRESH_TOKEN_SECRET_KEY;
+
+    @Value("${jwt.refresh-token.expirationms}")
+    private Long REFRESH_TOKEN_EXPIRATION_MS;
+
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
     private final UserValidation userValidation;
     private final RefreshTokenRepository refreshTokenRepository;
+    private JwtService jwtService;
 
+    @PostConstruct
+    private void initJwtService() {
+        this.jwtService = JwtService.getInstance(
+                SECRET_KEY,
+                EXPIRATION_MS,
+                REFRESH_TOKEN_SECRET_KEY,
+                REFRESH_TOKEN_EXPIRATION_MS
+        );
+    }
 
     @Transactional
     public void signup(RegisterObject registerObject) {
@@ -48,7 +70,7 @@ public class AuthService {
         boolean userExists = userValidation.validateUserNonExistent(registerObject.getUsername(), registerObject.getEmail());
         String encodedPassword = passwordEncoder.encode(registerObject.getPassword());
         User user = new User(registerObject.getUsername(), encodedPassword, registerObject.getEmail(), Instant.now(), false);
-        String token = "";
+        String token;
         if (!userExists) {
             userRepository.save(user);
             token = generateVerificationToken(user);

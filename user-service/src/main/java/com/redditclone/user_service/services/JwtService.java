@@ -5,9 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -16,19 +14,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@Service
 public class JwtService {
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    private final String secretKey;
 
-    @Value("${jwt.expirationms}")
-    private Long EXPIRATION_MS;
+    private final Long expirationMs;
 
-    @Value("${jwt.refresh-token.secret}")
-    private String REFRESH_TOKEN_SECRET_KEY;
+    private final String refreshTokenSecretKey;
 
-    @Value("${jwt.refresh-token.expirationms}")
-    private Long REFRESH_TOKEN_EXPIRATION_MS;
+    private final Long refreshTokenExpirationMs;
+
+    private static JwtService jwtService;
+
+    private JwtService(String secretKey, Long expirationMs, String refreshTokenSecretKey, Long refreshTokenExpirationMs) {
+        this.secretKey = secretKey;
+        this.expirationMs = expirationMs;
+        this.refreshTokenSecretKey = refreshTokenSecretKey;
+        this.refreshTokenExpirationMs = refreshTokenExpirationMs;
+    }
+
+    public static JwtService getInstance(String secretKey, Long expirationMs, String refreshTokenSecretKey, Long refreshTokenExpirationMs) {
+        if (jwtService == null) {
+            jwtService = new JwtService(secretKey, expirationMs, refreshTokenSecretKey, refreshTokenExpirationMs);
+        }
+        return jwtService;
+    }
 
     private Key getSigningKey(String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -36,7 +45,7 @@ public class JwtService {
     }
 
     public String generateToken(User user) {
-        return prepareClaims(user, EXPIRATION_MS, SECRET_KEY);
+        return prepareClaims(user, expirationMs, secretKey);
     }
 
     private String prepareClaims(User user, Long expirationMs, String secretKey) {
@@ -45,10 +54,6 @@ public class JwtService {
         claims.put("username", user.getUsername());
         claims.put("email", user.getEmail());
         return createToken(claims, userId, expirationMs, secretKey);
-    }
-
-    private String generateToken(Map<String, Object> claims, String userId) {
-        return createToken(claims, userId, EXPIRATION_MS, SECRET_KEY);
     }
 
     private String createToken(Map<String, Object> claims, String userId, Long expirationMs, String secretKey) {
@@ -65,15 +70,11 @@ public class JwtService {
     }
 
     public String generateRefreshToken(User user) {
-        return prepareClaims(user, REFRESH_TOKEN_EXPIRATION_MS, REFRESH_TOKEN_SECRET_KEY);
-    }
-
-    public String generateRefreshToken(Map<String, Object> claims, String userId) {
-        return createToken(claims, userId, REFRESH_TOKEN_EXPIRATION_MS, REFRESH_TOKEN_SECRET_KEY);
+        return prepareClaims(user, refreshTokenExpirationMs, refreshTokenSecretKey);
     }
 
     public String extractUsername(String token, String tokenType) {
-        String secretKey = tokenType.equals("refresh") ? REFRESH_TOKEN_SECRET_KEY : SECRET_KEY;
+        String secretKey = tokenType.equals("refresh") ? refreshTokenSecretKey : this.secretKey;
         return extractClaim(
                 token,
                 claims -> claims.get("username", String.class),
@@ -92,7 +93,7 @@ public class JwtService {
     }
 
     public boolean isTokenExpired(String token, String tokenType) {
-        String secretKey = tokenType.equals("refresh") ? REFRESH_TOKEN_SECRET_KEY : SECRET_KEY;
+        String secretKey = tokenType.equals("refresh") ? refreshTokenSecretKey : this.secretKey;
         return extractExpiration(token, secretKey).before(new Date());
     }
 
