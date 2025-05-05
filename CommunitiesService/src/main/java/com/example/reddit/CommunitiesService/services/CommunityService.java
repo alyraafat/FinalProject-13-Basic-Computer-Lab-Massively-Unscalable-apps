@@ -1,8 +1,9 @@
 package com.example.reddit.CommunitiesService.services;
 
-//import com.example.reddit.CommunitiesService.clients.ThreadClient;
+import com.example.reddit.CommunitiesService.clients.ThreadClient;
 import com.example.reddit.CommunitiesService.events.CommunityMemberAddedEvent;
 import com.example.reddit.CommunitiesService.models.Community;
+import com.example.reddit.CommunitiesService.models.CommunityThread;
 import com.example.reddit.CommunitiesService.repositories.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,20 +19,14 @@ import java.util.stream.Collectors;
 @Service
 public class CommunityService {
     private final CommunityRepository communityRepository;
-    // private final ThreadClient threadClient;
+    private final ThreadClient threadClient;
     private final ApplicationEventPublisher events;
 
-    // @Autowired
-    // public CommunityService(CommunityRepository communityRepository, ThreadClient
-    // threadClient, ApplicationEventPublisher events) {
-    // this.communityRepository = communityRepository;
-    // this.threadClient = threadClient;
-    // this.events = events;
-    // }
-
     @Autowired
-    public CommunityService(CommunityRepository communityRepository, ApplicationEventPublisher events) {
+    public CommunityService(CommunityRepository communityRepository, ThreadClient threadClient,
+            ApplicationEventPublisher events) {
         this.communityRepository = communityRepository;
+        this.threadClient = threadClient;
         this.events = events;
     }
 
@@ -134,13 +129,6 @@ public class CommunityService {
         return communityRepository.save(community);
     }
 
-    // public Community addMember(UUID communityId, UUID userId) {
-    // Community community = communityRepository.findById(communityId)
-    // .orElseThrow(() -> new RuntimeException("Community not found"));
-    // community.getMembers().add(userId);
-    // return communityRepository.save(community);
-    // }
-
     public Community addMember(UUID communityId, UUID userId, String username) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
@@ -190,35 +178,39 @@ public class CommunityService {
                 .collect(Collectors.toList());
     }
 
-    // /**
-    // * Fetch all threads for the given community, sort by creation date
-    // descending.
-    // */
-    // public List<ThreadModel> getCommunityThreadsByDate(UUID communityId) {
-    // Community c = communityRepository.findById(communityId)
-    // .orElseThrow(() -> new RuntimeException("Community not found"));
-    //
-    // return c.getThreads().stream()
-    // .map(threadClient::getById) // Optional<ThreadDto>
-    // .flatMap(Optional::stream) // drop missing
-    // .sorted(Comparator.comparing(ThreadModel::getCreatedAt)
-    // .reversed())
-    // .collect(Collectors.toList());
-    // }
-    //
-    // /**
-    // * Fetch all threads for the given community, sort by upvotes descending.
-    // */
-    // public List<ThreadModel> getCommunityThreadsByTop(UUID communityId) {
-    // Community c = communityRepository.findById(communityId)
-    // .orElseThrow(() -> new RuntimeException("Community not found"));
-    //
-    // return c.getThreads().stream()
-    // .map(threadClient::getById) // Optional<ThreadDto>
-    // .flatMap(Optional::stream) // drop missing
-    // .sorted(Comparator.comparing(ThreadModel::getUpvotes)
-    // .reversed())
-    // .collect(Collectors.toList());
-    // }
+    /**
+     * Fetch all threads for the given community, sort by creation date
+     * descending.
+     */
+    public List<CommunityThread> getCommunityThreadsByDate(UUID communityId) {
+        Community c = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+
+        return c.getThreadIds().stream()
+                .map(threadClient::getById) // Optional<ThreadDto>
+                .flatMap(Optional::stream) // drop missing
+                .sorted(Comparator.comparing(
+                        CommunityThread::getCreatedAt)
+                        .reversed())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Fetch all threads for the given community, sort by top descending.
+     */
+    public List<CommunityThread> getCommunityThreadsByTop(UUID communityId) {
+        Community c = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+
+        return c.getThreadIds().stream()
+                .map(threadClient::getById)
+                .flatMap(Optional::stream)
+                .sorted(Comparator
+                        .comparingInt((CommunityThread t) -> t.getUpVotes()
+                                - (t.getDownVotes() != null ? t.getDownVotes() : 0))
+                        .reversed()
+                )
+                .collect(Collectors.toList());
+    }
 
 }

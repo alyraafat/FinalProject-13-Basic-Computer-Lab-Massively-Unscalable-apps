@@ -1,11 +1,14 @@
 package com.example.reddit.CommunitiesService.controllers;
 
 import com.example.reddit.CommunitiesService.models.Community;
+import com.example.reddit.CommunitiesService.models.CommunityThread;
 import com.example.reddit.CommunitiesService.services.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.reddit.CommunitiesService.models.CommunityThread;
 
 import java.util.List;
 import java.util.UUID;
@@ -122,24 +125,24 @@ public class CommunityController {
         return ResponseEntity.ok(sorted);
     }
 
-//    /**
-//     * GET /communities/{id}/threads/newest
-//     * Returns all threads for the community, sorted by creation date (newest first).
-//     */
-//    @GetMapping("/{id}/threads/newest")
-//    public ResponseEntity<List<ThreadModel>> getThreadsNewest(@PathVariable("id") UUID communityId) {
-//        List<ThreadModel> threads = communityService.getCommunityThreadsByDate(communityId);
-//        return ResponseEntity.ok(threads);
-//    }
+    /**
+     * GET /communities/{id}/threads/newest
+     * Returns all threads for the community, sorted by creation date (newest first).
+     */
+    @GetMapping("/{id}/threads/newest")
+    public ResponseEntity<List<CommunityThread>> getThreadsNewest(@PathVariable("id") UUID communityId) {
+        List<CommunityThread> threads = communityService.getCommunityThreadsByDate(communityId);
+        return ResponseEntity.ok(threads);
+    }
 
-//    /**
-//     * GET /communities/{id}/threads/top
-//     * Returns all threads for the community, sorted by upvotes (highest first).
-//     */
-//    @GetMapping("/{id}/threads/top")
-//    public ResponseEntity<List<ThreadModel>> getThreadsTop(@PathVariable("id") UUID communityId) {
-//        List<ThreadModel> threads = communityService.getCommunityThreadsByTop(communityId);
-//        return ResponseEntity.ok(threads);
-//    }
+    /**
+     * GET /communities/{id}/threads/top
+     * Returns all threads for the community, sorted by upvotes (highest first).
+     */
+    @GetMapping("/{id}/threads/top")
+    public ResponseEntity<List<CommunityThread>> getThreadsTop(@PathVariable("id") UUID communityId) {
+        List<CommunityThread> threads = communityService.getCommunityThreadsByTop(communityId);
+        return ResponseEntity.ok(threads);
+    }
 
 }
