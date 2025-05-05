@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,6 +36,7 @@ public class SecurityConfig {
 
     private final UserService userService;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -44,7 +46,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/test_permit",
                                 "/api/auth/login",
                                 "/api/auth/signup",
-                                "/api/auth/activateAccount/**").permitAll()
+                                "/api/auth/activateAccount/**",
+                                "/api/auth/refresh-token",
+                                "/api/auth/logout").permitAll()
                         .requestMatchers("/api/auth/test_auth").authenticated()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
@@ -56,14 +60,17 @@ public class SecurityConfig {
     public JwtDecoder jwtDecoder() {
         byte[] secretBytes = Decoders.BASE64.decode(SECRET_KEY);
         SecretKey secretKey = Keys.hmacShaKeyFor(secretBytes);
-        return NimbusJwtDecoder.withSecretKey(secretKey).build();
+        return NimbusJwtDecoder
+                .withSecretKey(secretKey)
+                .macAlgorithm(MacAlgorithm.HS512)
+                .build();
     }
 
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService.userDetailsService());
+        authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
