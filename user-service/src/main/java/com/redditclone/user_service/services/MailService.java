@@ -7,7 +7,9 @@ import com.redditclone.user_service.exceptions.RedditAppException;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,12 +20,15 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class MailService {
 
     private final TemplateEngine templateEngine;
     private final JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String sender;
 
     String build(String message) {
         Context context = new Context();
@@ -35,6 +40,7 @@ public class MailService {
     public void sendMail(NotificationEmail notificationEmail) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            mimeMessage.setSender(new InternetAddress(sender));
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(notificationEmail.getRecipient()));
             mimeMessage.setSubject(notificationEmail.getSubject());
             messageHelper.setText(build(notificationEmail.getBody()), true);

@@ -25,15 +25,15 @@ spring:
 
 # mail configuration
   mail:
-    host: smtp.gmail.com
-    port: 465
+    host: smtp.mailersend.net
+    port: 587
     protocol: smtp
-    username: xyz@gmail.com
-    password: abc
+    username: mail.com
+    password: 1234
     test-connection: false
     properties:
-      "mail.smtp.auth": true
-      "mail.smtp.starttls.enable": true
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
       "mail.smtp.starttls.required": true
       "mail.smtp.socketFactory.class": javax.net.ssl.SSLSocketFactory
       "mail.debug": true
