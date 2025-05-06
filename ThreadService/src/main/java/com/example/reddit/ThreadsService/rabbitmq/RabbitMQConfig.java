@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Configuration
 public class RabbitMQConfig {
-    public static final String EXCHANGE = "thread-exchange";
+    public static final String EXCHANGE = "thread_exchange";
 
     @Bean
     public TopicExchange exchange() {
