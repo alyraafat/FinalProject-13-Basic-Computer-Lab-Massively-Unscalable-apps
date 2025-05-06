@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/moderator-app
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "17531:8080"  # Uncommon external port mapped to app's internal 8080
+    depends_on:
+      - db
+
+    networks:
+      - spring-network
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: postgres
+      POSTGRES_DB: moderator-app
+    ports:
+      - "16543:5432"  # Uncommon external port mapped to internal 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - spring-network
+
+volumes:
+  pgdata:
+
+networks:
+  spring-network:
+    driver: bridge

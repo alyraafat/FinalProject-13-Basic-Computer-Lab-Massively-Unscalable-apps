@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Moderator {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "user_id", nullable = false)

@@ -2,6 +2,7 @@ package com.example.moderator.repository;
 
 import com.example.moderator.model.Moderator;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,8 +17,10 @@ public interface ModeratorRepository extends JpaRepository<Moderator, UUID> {
     // Find all moderators for a specific community
     List<Moderator> findByCommunityId(UUID communityId);
 
-//    // Find all communities moderated by a specific user
-//    List<Community> findByUserId(UUID userId);
+    //Find communities that a moderator moderates
+    @Query("SELECT m.communityId FROM Moderator m WHERE m.userId = :userId")
+    List<UUID> findCommunityIdsByUserId(UUID userId);
+
 
     // Check if a specific user moderates a specific community
     boolean existsByUserIdAndCommunityId(UUID userId, UUID communityId);

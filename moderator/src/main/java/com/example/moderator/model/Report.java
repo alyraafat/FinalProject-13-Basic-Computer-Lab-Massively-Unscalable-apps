@@ -7,18 +7,13 @@ import java.util.UUID;
 @Table(name = "reports")
 public class Report {
 
-    public enum ItemType {
-        THREAD,
-        COMMENT
-    }
-
     public enum Status {
         HANDLED,
         UNHANDLED
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;  // primary key
 
     @Column(name = "user_reporting", nullable = false)
@@ -28,27 +23,33 @@ public class Report {
     private UUID itemReported;  // UUID of the item being reported
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "item_type", nullable = false)
-    private ItemType itemType;  // whether it's a thread or comment
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status = Status.UNHANDLED;  // default to UNHANDLED
 
     @Column(name = "report_description", length = 1000)
     private String reportDescription;  // description of the report
 
+    @Column(name = "community_id")
+    private UUID communityId;
+
     // Constructors
     public Report() {
     }
 
-    public Report(UUID userReporting, UUID itemReported, ItemType itemType, String reportDescription) {
-        this.id = UUID.randomUUID();
+    public Report(UUID userReporting, UUID itemReported, String reportDescription, UUID communityId) {
         this.userReporting = userReporting;
-        this.itemReported = itemReported;
-        this.itemType = itemType;
+        this.itemReported = itemReported;;
         this.reportDescription = reportDescription;
         this.status = Status.UNHANDLED; // default status
+        this.communityId = communityId;
+    }
+
+    public UUID getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(UUID communityId) {
+        this.communityId = communityId;
     }
 
     // Getters and Setters
@@ -76,13 +77,6 @@ public class Report {
         this.itemReported = itemReported;
     }
 
-    public ItemType getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(ItemType itemType) {
-        this.itemType = itemType;
-    }
 
     public Status getStatus() {
         return status;
@@ -106,7 +100,7 @@ public class Report {
                 "id=" + id +
                 ", userReporting=" + userReporting +
                 ", itemReported=" + itemReported +
-                ", itemType=" + itemType +
+                ", community_id=" + communityId +
                 ", status=" + status +
                 ", reportDescription='" + reportDescription + '\'' +
                 '}';

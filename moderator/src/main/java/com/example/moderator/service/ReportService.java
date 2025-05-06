@@ -2,7 +2,6 @@ package com.example.moderator.service;
 
 import com.example.moderator.model.Report;
 import com.example.moderator.model.Report.Status;
-import com.example.moderator.model.Report.ItemType;
 import com.example.moderator.repository.ReportRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +22,8 @@ public class ReportService {
 
     // Create a new report
     @Transactional
-    public Report createReport(UUID reportingUserId, UUID itemReported, ItemType itemType, String description) {
-        Report report = new Report(reportingUserId, itemReported, itemType, description);
+    public Report createReport(UUID reportingUserId, UUID itemReported, String description, UUID community_ID) {
+        Report report = new Report(reportingUserId, itemReported, description, community_ID);
         return reportRepository.save(report);
     }
 
@@ -34,54 +33,46 @@ public class ReportService {
                 .orElseThrow(() -> new ReportNotFoundException(reportId));
     }
 
-    // Get all reports with pagination
-    public List<Report> getAllReports() {
-        return reportRepository.findAll();
+    public List<Report> getAllReportsByCommunityIds(List<UUID> communityIds){
+        return  reportRepository.findByCommunityIdIn(communityIds);
     }
 
-    // Get reports by status (handled/unhandled)
-    public List<Report> getReportsByStatus(Status status) {
-        return reportRepository.findByStatus(status);
+
+    // Get reports for a specific item
+    public List<UUID> getReportsForItem(UUID itemId) {
+        return reportRepository.findIdsByItemReported(itemId);
     }
 
-    // Get reports for a specific item (thread/comment)
-    public List<Report> getReportsForItem(UUID itemId) {
-        return reportRepository.findByItemReported(itemId);
-    }
 
-    // Get reports by type (thread/comment)
-    public List<Report> getReportsByType(ItemType itemType) {
-        return reportRepository.findByItemType(itemType);
-    }
 
-    // Get unhandled reports by type
-    public List<Report> getUnhandledReportsByType(ItemType itemType) {
-        return reportRepository.findByItemTypeAndStatus(itemType, Status.UNHANDLED);
-    }
 
-    // Get reports made by a specific user
-    public List<Report> getReportsByUser(UUID userId) {
-        return reportRepository.findByUserReporting(userId);
-    }
+//    // Get reports made by a specific user
+//    public List<Report> getReportsByUser(UUID userId) {
+//        return reportRepository.findByUserReporting(userId);
+//    }
+//
+//    // Count reports by status
+//    public long countReportsByStatus(Status status) {
+//        return reportRepository.countByStatus(status);
+//    }
+//
+//    // Mark a report as handled
+//    @Transactional
+//    public void markReportAsHandled(UUID reportId) {
+//        int updatedCount = reportRepository.markReportAsHandled(reportId);
+//        if (updatedCount == 0) {
+//            throw new ReportNotFoundException(reportId);
+//        }
+//    }
 
-    // Count reports by status
-    public long countReportsByStatus(Status status) {
-        return reportRepository.countByStatus(status);
-    }
-
-    // Mark a report as handled
     @Transactional
-    public void markReportAsHandled(UUID reportId) {
-        int updatedCount = reportRepository.markReportAsHandled(reportId);
+    public void markReportAsHandledMultiple(List<UUID> reportId) {
+        int updatedCount = reportRepository.markReportsAsHandledMultiple(reportId);
         if (updatedCount == 0) {
-            throw new ReportNotFoundException(reportId);
+            throw new ReportNotFoundException(reportId.get(0));
         }
     }
 
-    // Get reports for multiple items
-    public List<Report> getReportsForItems(List<UUID> itemIds) {
-        return reportRepository.findByItemReportedIn(itemIds);
-    }
 
     // In ReportService.java
     @Transactional
