@@ -10,20 +10,19 @@ spring:
       routes:
         - id: user-service
           uri: http://localhost:8080
-#          change to http://user-service later when using kubernetes
+#          change to lb://user-service later when using kubernetes
           predicates:
-            - Path=/user/**
+            - Path=/api/user/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=2
             - JwtClaims
         - id: dummy-service
           uri: http://localhost:8082
           predicates:
-            - Path=/dummy/**
+            - Path=/api/dummy/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=2
             - JwtClaims
-
 
 server:
   error:
@@ -32,6 +31,3 @@ server:
 
 jwt:
   secret: "key1234"
-
-
-

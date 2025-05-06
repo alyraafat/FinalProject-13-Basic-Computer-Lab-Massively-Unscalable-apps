@@ -14,17 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/public")
 public class AuthController {
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;
-    }
-
-    @GetMapping("/test_auth")
-    public ResponseEntity<Object> testAuth() {
-        return ResponseHandler.generateResponse("Test Auth", HttpStatus.OK, null);
     }
 
     @GetMapping("/test_permit")

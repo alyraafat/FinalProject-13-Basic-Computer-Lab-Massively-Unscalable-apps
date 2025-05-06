@@ -5,14 +5,17 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
@@ -25,17 +28,23 @@ public class SecurityConfig {
     private String SECRET_KEY;
 
     @Bean
+    @Order(1)
+    public SecurityWebFilterChain publicSecurityFilterChain(ServerHttpSecurity http) {
+        return http
+                .securityMatcher(ServerWebExchangeMatchers.pathMatchers("/api/user/public/**"))
+                .authorizeExchange(exchanges -> exchanges.anyExchange().permitAll())
+                .build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/dummy/test_dummy").permitAll()
-                        .pathMatchers("/dummy/test_dummy/auth").authenticated()
-                        .anyExchange().authenticated()
-                )
+                        .anyExchange().authenticated())
                 .exceptionHandling(exceptionHandling ->
-                                exceptionHandling
-                                        .authenticationEntryPoint(unauthorizedHandler())  // handle missing/invalid JWT
-//                                .accessDeniedHandler(accessDeniedHandler())       // handle 403 forbidden
+                                exceptionHandling.authenticationEntryPoint(unauthorizedHandler())  // handle missing/invalid JWT
+                        //                .accessDeniedHandler(accessDeniedHandler())       // handle 403 forbidden
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2
                         .jwt(Customizer.withDefaults())
@@ -47,7 +56,7 @@ public class SecurityConfig {
     public ReactiveJwtDecoder jwtDecoder() {
         byte[] secretBytes = Decoders.BASE64.decode(SECRET_KEY);
         SecretKey secretKey = Keys.hmacShaKeyFor(secretBytes);
-        return NimbusReactiveJwtDecoder.withSecretKey(secretKey).build();
+        return NimbusReactiveJwtDecoder.withSecretKey(secretKey).macAlgorithm(MacAlgorithm.HS512).build();
     }
 
     @Bean
