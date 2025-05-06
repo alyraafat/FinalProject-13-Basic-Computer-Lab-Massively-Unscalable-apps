@@ -3,7 +3,9 @@ package com.redditclone.user_service.controllers;
 import com.redditclone.user_service.dtos.UserDTO;
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.services.UserService;
+import com.redditclone.user_service.utils.ResponseHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,6 +63,11 @@ public class UserController {
                 .map(UserDTO::fromEntity)
                 .toList();
         return ResponseEntity.ok(results);
+    }
+
+    @GetMapping("/test_auth")
+    public ResponseEntity<Object> testAuth() {
+        return ResponseHandler.generateResponse("Test Auth", HttpStatus.OK, null);
     }
 
 }
