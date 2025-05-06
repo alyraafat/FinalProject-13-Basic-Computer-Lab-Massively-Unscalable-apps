@@ -45,22 +45,6 @@ services:
     networks:
       - app-network
 
-  # Spring Boot Application
-  app:
-    build: ..
-    container_name: notification_service
-    depends_on:
-      - postgres
-      - mongodb
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/notification_service_pg
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongodb:27017/notification_service_mongo?authSource=admin
-    networks:
-      - app-network
 
 volumes:
   postgres_data:
