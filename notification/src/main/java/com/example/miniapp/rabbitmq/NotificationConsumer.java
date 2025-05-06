@@ -18,7 +18,9 @@ public class NotificationConsumer {
 
     @RabbitHandler
     public void onMemberAdded(MemberDTO memberDTO) {
+
         System.out.println("Member added: " + memberDTO.getId());
+        // TODO: Add code to handle notification when new member is added
     }
 
 }
