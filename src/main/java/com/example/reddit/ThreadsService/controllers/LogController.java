@@ -53,10 +53,6 @@ public class LogController {
         return ResponseEntity.ok(logService.getLogsByThread(threadId));
     }
 
-    @GetMapping("/community/{communityId}")
-    public ResponseEntity<List<Log>> getLogsByCommunity(@PathVariable UUID communityId) {
-        return ResponseEntity.ok(logService.getLogsByCommunity(communityId));
-    }
 
     @GetMapping("/action/{actionType}")
     public ResponseEntity<List<Log>> getLogsByActionType(@PathVariable ActionType actionType) {

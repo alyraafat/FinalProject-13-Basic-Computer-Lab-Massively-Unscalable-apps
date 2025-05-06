@@ -34,6 +34,10 @@ public class Log {
 
     }
 
+    public String getLogType(){
+        return "";
+    }
+
     // Getters and Setters
     public UUID getId() {
         return id;

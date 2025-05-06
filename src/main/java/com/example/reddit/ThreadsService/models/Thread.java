@@ -16,7 +16,7 @@ public class Thread {
     private UUID id; // todo: check if it should be uuid or string like the object id of mongo
 
     @Field(name = "topic")
-    private String topic;
+    private UUID topic;
 
     @Field(name = "title")
     private String title;
@@ -64,7 +64,7 @@ public class Thread {
 
 
 
-    public String getTopic() {
+    public UUID getTopic() {
         return topic;
     }
 
@@ -119,7 +119,7 @@ public class Thread {
 // Static Builder class
 public static class Builder {
     private UUID id;
-    private String topic;
+    private UUID topic;
     private String title;
     private String content;
     private UUID authorId;
@@ -134,7 +134,7 @@ public static class Builder {
         return this;
     }
 
-    public Builder topic(String topic) {
+    public Builder topic(UUID topic) {
         this.topic = topic;
         return this;
     }

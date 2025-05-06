@@ -43,9 +43,7 @@ public class LogService {
         return logRepository.findByThreadId(threadId);
     }
 
-    public List<Log> getLogsByCommunity(UUID communityId) {
-        return logRepository.findByCommunityId(communityId);
-    }
+
 
     public List<Log> getLogsByActionType(ActionType actionType) {
         return logRepository.findByActionType(actionType);
