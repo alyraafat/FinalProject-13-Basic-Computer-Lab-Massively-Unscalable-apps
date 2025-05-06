@@ -1,11 +1,9 @@
 package com.example.miniapp.services.Factory;
 
 
-import com.example.miniapp.models.NotificationType;
 import com.example.miniapp.services.Factory.impl.CommunityNotifier;
 import com.example.miniapp.services.Factory.impl.ThreadNotifier;
 import com.example.miniapp.services.Factory.impl.UserNotifier;
-import com.example.miniapp.services.strategy.DeliveryStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

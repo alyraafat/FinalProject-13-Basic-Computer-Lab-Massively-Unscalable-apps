@@ -1,6 +1,6 @@
 package com.example.miniapp.services.strategy.impl;
 
-import com.example.miniapp.models.NotificationRequest;
+import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.services.NotificationService;
 import com.example.miniapp.services.strategy.DeliveryStrategy;
 import org.springframework.stereotype.Component;

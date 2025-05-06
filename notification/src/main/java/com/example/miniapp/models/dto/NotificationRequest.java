@@ -1,5 +1,6 @@
-package com.example.miniapp.models;
+package com.example.miniapp.models.dto;
 
+import com.example.miniapp.models.enums.NotificationType;
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.Objects;
@@ -29,11 +30,6 @@ public class NotificationRequest {
     @Column(nullable = false)
     private NotificationType type;
 
-    // DELIVERY CONTROL
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UrgencyLevel urgency;
-
     @Column(nullable = false, updatable = false, name = "created_at")
     private Instant createdAt;
 
@@ -48,13 +44,11 @@ public class NotificationRequest {
                                UUID receiverId,
                                String originSystem,
                                NotificationType type,
-                               UrgencyLevel urgency,
                                String actorUserId) {
         this.rawMessage = validateMessage(rawMessage);
         this.receiverId = Objects.requireNonNull(receiverId);
         this.originSystem = validateSystem(originSystem);
         this.type = Objects.requireNonNull(type);
-        this.urgency = Objects.requireNonNull(urgency);
         this.createdAt = Instant.now();
         this.actorUserId = actorUserId;
     }
@@ -80,7 +74,6 @@ public class NotificationRequest {
     public UUID getReceiverId() { return receiverId; }
     public String getOriginSystem() { return originSystem; }
     public NotificationType getType() { return type; }
-    public UrgencyLevel getUrgency() { return urgency; }
     public Instant getCreatedAt() { return createdAt; }
     public String getActorUserId() { return actorUserId; }
 }
