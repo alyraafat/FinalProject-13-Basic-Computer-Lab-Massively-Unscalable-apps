@@ -1,6 +1,7 @@
 package com.example.miniapp.services.strategy.impl;
 
 import com.example.miniapp.models.dto.NotificationRequest;
+import com.example.miniapp.models.entity.Notification;
 import com.example.miniapp.services.NotificationService;
 import com.example.miniapp.services.strategy.DeliveryStrategy;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class PushStrategy implements DeliveryStrategy {
     }
 
     @Override
-    public void deliver(NotificationRequest request) {
+    public void deliver(Notification request) {
         try {
             String formattedPayload = formatPushNotification(request);
 
@@ -33,10 +34,10 @@ public class PushStrategy implements DeliveryStrategy {
         }
     }
 
-    private String formatPushNotification(NotificationRequest request) {
+    private String formatPushNotification(Notification request) {
         return String.format("%s|%s|%s",
                 request.getType(),
-                request.getRawMessage(),
+                request.getMessage(),
                 request.getCreatedAt());
     }
 }

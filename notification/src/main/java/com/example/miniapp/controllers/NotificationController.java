@@ -41,7 +41,7 @@ public class NotificationController {
 
         // Save to database
 //        YOUR PREVIOUS COMMIT
-        Notification notification = mapRequestToEntity(request);
+//        Notification notification = mapRequestToEntity(request);
 //        notificationRepository.save(notification);
 
         notificationService.process(request);
@@ -78,13 +78,13 @@ public class NotificationController {
         return new NotificationResponse();
     }
 
-    private String generateTitleFromType(NotificationType type) {
-        switch(type) {
-            case COMMUNITY: return "Community Update";
-            case THREAD: return "New Thread Activity";
-            case USER_SPECIFIC: return "User Notification";
-            default: return "Notification";
-        }
-    }
+//    private String generateTitleFromType(NotificationType type) {
+//        switch(type) {
+//            case COMMUNITY: return "Community Update";
+//            case THREAD: return "New Thread Activity";
+//            case USER_SPECIFIC: return "User Notification";
+//            default: return "Notification";
+//        }
+//    }
 
 }

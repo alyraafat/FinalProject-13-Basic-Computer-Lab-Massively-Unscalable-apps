@@ -5,15 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="model,controller,repositories updated">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/miniapp.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/Notification.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/Notifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/Notifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/NotifierFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/NotifierFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/CommunityNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/CommunityNotifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/UserNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/UserNotifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/DeliveryStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/DeliveryStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/PushStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/PushStrategy.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,8 +122,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
+        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
       </set>
     </attachedChunks>
   </component>
@@ -144,6 +145,7 @@
       <workItem from="1746394527999" duration="1318000" />
       <workItem from="1746539204933" duration="870000" />
       <workItem from="1746550072077" duration="6761000" />
+      <workItem from="1746637257152" duration="4433000" />
     </task>
     <task id="LOCAL-00001" summary="Strategy progress">
       <option name="closed" value="true" />

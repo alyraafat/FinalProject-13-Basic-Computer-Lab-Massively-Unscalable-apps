@@ -3,6 +3,7 @@ package com.example.miniapp.models.entity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "notifications")
@@ -15,6 +16,11 @@ public class Notification {
     private String title;
     private String message;
     private Instant createdAt;
+    private UUID receiverId;
+
+    public UUID getReceiverId() { return receiverId; }
+
+    public void setReceiverId(UUID receiverId) { this.receiverId = receiverId; }
 
     public String getId() {
         return id;

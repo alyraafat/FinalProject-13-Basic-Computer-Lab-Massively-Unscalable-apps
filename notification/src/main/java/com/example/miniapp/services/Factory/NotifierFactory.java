@@ -26,18 +26,15 @@ public class NotifierFactory {
         this.threadNotifier = threadNotifier;
     }
 
-    public Notifier create(NotificationType type, DeliveryChannel strategy) {
+    public Notifier create(NotificationType type) {
         return switch (type) {
             case USER_SPECIFIC -> {
-                userNotifier.setDeliveryStrategy(strategy);
                 yield userNotifier;
             }
             case COMMUNITY -> {
-                communityNotifier.setDeliveryStrategy(strategy);
                 yield communityNotifier;
             }
             case THREAD -> {
-                threadNotifier.setDeliveryStrategy(strategy);
                 yield threadNotifier;
             }
             default -> throw new IllegalArgumentException("Unknown notification type: " + type);

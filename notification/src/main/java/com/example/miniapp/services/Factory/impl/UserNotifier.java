@@ -15,13 +15,4 @@ public class UserNotifier implements Notifier {
 
     }
 
-    public void setDeliveryStrategy(DeliveryChannel strategy) {
-        this.deliveryChannel = strategy;
-    }
-
-    public DeliveryChannel getDeliveryChannel() {
-        return deliveryChannel;
-    }
-
-
 }
