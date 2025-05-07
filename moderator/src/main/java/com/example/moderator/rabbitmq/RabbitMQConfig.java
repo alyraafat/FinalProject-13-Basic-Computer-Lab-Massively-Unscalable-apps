@@ -1,5 +1,6 @@
 package com.example.moderator.rabbitmq;
 
+import com.example.moderator.dto.BanRequest;
 import com.example.moderator.dto.DeleteCommentRequest;
 import com.example.moderator.dto.ReportRequest;
 import org.springframework.amqp.core.Binding;
@@ -27,6 +28,11 @@ public class RabbitMQConfig {
 
     public static final String DELETE_COMMENT_REQUEST_ROUTING_KEY = "moderator.deleteCommentRequest";
 
+    // Community Service
+    public static final String COMMUNITY_EXCHANGE = "community_exchange";
+    public static final String COMMUNITY_BAN_ROUTING    = "community.banUser";
+    public static final String COMMUNITY_UNBAN_ROUTING  = "community.unbanUser";
+
     @Bean
     public Queue reportQueue() {
         return new Queue(REPORT_QUEUE);
@@ -35,6 +41,11 @@ public class RabbitMQConfig {
     @Bean
     public TopicExchange threadExchange() {
         return new TopicExchange(THREAD_EXCHANGE, true, false);
+    }
+
+    @Bean
+    public TopicExchange communityExchange() {
+        return new TopicExchange(COMMUNITY_EXCHANGE, true, false);
     }
 
     @Bean
@@ -50,6 +61,7 @@ public class RabbitMQConfig {
         Map<String, Class<?>> idClassMapping = new HashMap<>();
         idClassMapping.put("ReportRequest", ReportRequest.class);
         idClassMapping.put("DeleteCommentRequest", DeleteCommentRequest.class);
+        idClassMapping.put("BanRequest", BanRequest.class);
 
         typeMapper.setIdClassMapping(idClassMapping);
         typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.TYPE_ID);

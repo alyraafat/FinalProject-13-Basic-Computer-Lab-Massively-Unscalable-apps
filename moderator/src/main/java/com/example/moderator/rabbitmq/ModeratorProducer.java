@@ -1,5 +1,6 @@
 package com.example.moderator.rabbitmq;
 
+import com.example.moderator.dto.BanRequest;
 import com.example.moderator.dto.DeleteCommentRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,11 @@ public class ModeratorProducer {
                 RabbitMQConfig.DELETE_COMMENT_REQUEST_ROUTING_KEY, deleteCommentRequest);
 
         System.out.println("Sent delete request for comment id: " + commentId);
+    }
+
+    public void sendBanMemberRequest(BanRequest banRequest) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.COMMUNITY_EXCHANGE,
+                RabbitMQConfig.COMMUNITY_BAN_ROUTING, banRequest);
+        System.out.println("Sent ban member request for request, userID: " + banRequest.getUserID() + "communityID: " + banRequest.getCommunityID());
     }
 }
