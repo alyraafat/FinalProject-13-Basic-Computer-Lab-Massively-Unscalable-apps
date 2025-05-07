@@ -21,11 +21,16 @@ import java.time.Instant;
 public class NotificationController {
     private final NotifierFactory notifierFactory;
     private final NotificationRepository notificationRepository;
+//    added
+    private final NotificationService notificationService;
 
     public NotificationController(NotifierFactory notifierFactory,
-                                  NotificationRepository notificationRepository) {
+                                  NotificationRepository notificationRepository,
+                                  NotificationService notificationService) {
         this.notifierFactory = notifierFactory;
         this.notificationRepository = notificationRepository;
+//        added
+        this.notificationService = notificationService;
     }
 
     @PostMapping
@@ -35,10 +40,15 @@ public class NotificationController {
 //        notifier.send(request);
 
         // Save to database
-        Notification notification = mapRequestToEntity(request);
-        notificationRepository.save(notification);
+//        YOUR PREVIOUS COMMIT
+//        Notification notification = mapRequestToEntity(request);
+//        notificationRepository.save(notification);
 
-        return ResponseEntity.ok(mapToResponse(notification));
+        notificationService.process(request);
+
+//        commented
+//        return ResponseEntity.ok(mapToResponse(notification));
+        return ResponseEntity.ok(new NotificationResponse());
     }
 
     private Notification mapRequestToEntity(NotificationRequest request) {
