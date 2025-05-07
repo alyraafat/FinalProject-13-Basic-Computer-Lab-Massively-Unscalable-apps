@@ -1,6 +1,7 @@
 package com.example.moderator.command.impl;
 
 import com.example.moderator.command.Command;
+import com.example.moderator.rabbitmq.ModeratorProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -8,19 +9,25 @@ import java.util.UUID;
 
 public class RemoveCommentCommand implements Command<Void> {
 
-    private UUID commentId;
+    private final UUID commentId;
+    private final ModeratorProducer moderatorProducer;
 
-
-    public RemoveCommentCommand (UUID commentId) {
+    public RemoveCommentCommand(UUID commentId, ModeratorProducer moderatorProducer) {
         this.commentId = commentId;
-    }
-
-    public RemoveCommentCommand() {
+        this.moderatorProducer = moderatorProducer;
     }
 
     @Override
     public Void execute() {
-        System.out.println("comment deleted");
+        // Perform the comment deletion logic here
+        System.out.println("Comment deletion logic executed for comment ID: " + commentId);
+
+        try {
+            // Send delete request asynchronously via RabbitMQ
+            moderatorProducer.sendDeleteCommentRequest(commentId);
+        } catch (Exception e) {
+            throw new CommentDeletionFailedException(commentId, e);
+        }
         return null;
     }
 

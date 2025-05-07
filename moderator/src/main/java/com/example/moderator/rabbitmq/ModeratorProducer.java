@@ -14,13 +14,11 @@ public class ModeratorProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendDeleteCommentRequest(UUID commentId, UUID threadId, UUID moderatorId) {
-        DeleteCommentRequest deleteCommentRequest = new DeleteCommentRequest(commentId, threadId, moderatorId);
+    public void sendDeleteCommentRequest(UUID commentId) {
+        DeleteCommentRequest deleteCommentRequest = new DeleteCommentRequest(commentId);
         rabbitTemplate.convertAndSend(RabbitMQConfig.THREAD_EXCHANGE,
                 RabbitMQConfig.DELETE_COMMENT_REQUEST_ROUTING_KEY, deleteCommentRequest);
 
-        System.out.println("Sent delete request for comment id: " + commentId
-                           + "\nand thread id: " + threadId
-                           + "\nby moderator id: " + moderatorId);
+        System.out.println("Sent delete request for comment id: " + commentId);
     }
 }

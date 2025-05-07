@@ -20,7 +20,6 @@ public class BanUserCommand implements Command<Void> {
         this.communityID = communityID;
     }
 
-
     @Override
     public Void execute() {
         System.out.println("Ban User");

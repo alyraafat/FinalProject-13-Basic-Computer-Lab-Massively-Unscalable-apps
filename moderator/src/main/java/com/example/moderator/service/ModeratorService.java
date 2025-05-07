@@ -5,6 +5,7 @@ import com.example.moderator.command.CommandInvoker;
 import com.example.moderator.command.impl.*;
 import com.example.moderator.model.Moderator;
 import com.example.moderator.model.Report;
+import com.example.moderator.rabbitmq.ModeratorProducer;
 import com.example.moderator.repository.ModeratorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,16 @@ public class ModeratorService {
     private final ModeratorRepository moderatorRepository;
     private final CommandInvoker commandInvoker;
     private final ReportService reportService;
+    private final ModeratorProducer moderatorProducer;
 
     @Autowired
     public ModeratorService(ModeratorRepository moderatorRepository,
                             CommandInvoker commandInvoker,
-                            ReportService reportService) {
+                            ReportService reportService, ModeratorProducer moderatorProducer) {
         this.moderatorRepository = moderatorRepository;
         this.commandInvoker = commandInvoker;
         this.reportService = reportService;
+        this.moderatorProducer = moderatorProducer;
     }
 
     // ========== Moderator Management ==========
@@ -71,7 +74,7 @@ public class ModeratorService {
     @Transactional
     public void removeComment(UUID moderatorId, UUID communityId, UUID commentId) {
         verifyModerator(moderatorId, communityId);
-        Command<Void> command = new RemoveCommentCommand(commentId);
+        Command<Void> command = new RemoveCommentCommand(commentId, moderatorProducer);
         commandInvoker.execute(command);
         List<UUID> reports = reportService.getReportsForItem(commentId);
         reportService.markReportAsHandledMultiple(reports);

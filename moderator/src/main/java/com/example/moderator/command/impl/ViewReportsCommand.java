@@ -24,8 +24,6 @@ public class ViewReportsCommand implements Command<List<Report>> {
         this.moderatorID = moderatorID;
     }
 
-
-
     @Override
     public List<Report> execute() {
             List<UUID> communities = moderatorRepository.findCommunityIdsByUserId(moderatorID);

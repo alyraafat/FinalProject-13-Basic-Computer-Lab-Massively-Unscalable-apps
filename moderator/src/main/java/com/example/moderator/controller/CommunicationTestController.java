@@ -23,9 +23,7 @@ public class CommunicationTestController {
     @GetMapping
     public void testModeratorProducer() {
         UUID commentId = UUID.randomUUID();
-        UUID threadId = UUID.randomUUID();
-        UUID moderatorId = UUID.randomUUID();
 
-        moderatorProducer.sendDeleteCommentRequest(commentId, threadId, moderatorId);
+        moderatorProducer.sendDeleteCommentRequest(commentId);
     }
 }
