@@ -1,8 +1,22 @@
 spring:
   application:
     name: moderator-app
+
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/moderator-app
+    username: postgres
+    password: 1234
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true

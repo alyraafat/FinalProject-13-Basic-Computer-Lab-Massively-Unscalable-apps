@@ -1,5 +1,6 @@
 package com.example.moderator.rabbitmq;
 
+import com.example.moderator.dto.DeleteCommentRequest;
 import com.example.moderator.dto.ReportRequest;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -18,9 +19,12 @@ import java.util.Map;
 
 @Configuration
 public class RabbitMQConfig {
+    public static final String THREAD_EXCHANGE = "thread_exchange";
+
     public static final String REPORT_QUEUE = "report_queue";
     public static final String REPORT_REQUEST_ROUTING_KEY = "thread.reportRequest";
-    public static final String THREAD_EXCHANGE = "thread_exchange";
+
+    public static final String DELETE_COMMENT_REQUEST_ROUTING_KEY = "moderator.deleteCommentRequest";
 
     @Bean
     public Queue reportQueue() {
@@ -44,6 +48,7 @@ public class RabbitMQConfig {
         DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
         Map<String, Class<?>> idClassMapping = new HashMap<>();
         idClassMapping.put("ReportRequest", ReportRequest.class);
+        idClassMapping.put("DeleteCommentRequest", DeleteCommentRequest.class);
 
         typeMapper.setIdClassMapping(idClassMapping);
         typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.TYPE_ID);
