@@ -2,6 +2,8 @@
 
 package com.example.moderator.controller;
 
+import com.example.moderator.dto.BanRequest;
+import com.example.moderator.dto.UnbanRequest;
 import com.example.moderator.rabbitmq.ModeratorProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,5 +27,21 @@ public class CommunicationTestController {
         UUID commentId = UUID.randomUUID();
 
         moderatorProducer.sendDeleteCommentRequest(commentId);
+    }
+
+    @GetMapping("/ban")
+    public void testBanProducer() {
+        UUID commentId = UUID.randomUUID();
+        UUID userID = UUID.randomUUID();
+        BanRequest banRequest = new BanRequest(userID, commentId);
+        moderatorProducer.sendBanMemberRequest(banRequest);
+    }
+
+    @GetMapping("/unban")
+    public void testUnBanProducer() {
+        UUID commentId = UUID.randomUUID();
+        UUID userID = UUID.randomUUID();
+        UnbanRequest unbanRequest = new UnbanRequest(userID, commentId);
+        moderatorProducer.sendUnBanMemberRequest(unbanRequest);
     }
 }

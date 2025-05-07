@@ -5,7 +5,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/moderator/pom.xml" />
-        <option value="$PROJECT_DIR$/ThreadService/pom.xml" />
       </list>
     </option>
   </component>
