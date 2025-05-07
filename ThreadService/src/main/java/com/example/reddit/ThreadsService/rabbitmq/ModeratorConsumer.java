@@ -12,8 +12,8 @@ public class ModeratorConsumer {
 
     @RabbitHandler
     public void process(DeleteCommentRequest deleteCommentRequest) {
-        System.out.println("Received comment deletion request for comment id: " + deleteCommentRequest.getCommentId()
-                           + "\nand thread id: " + deleteCommentRequest.getThreadId()
-                           + "\nby moderator id: " + deleteCommentRequest.getModeratorId());
+        System.out.println("Received comment deletion request for Comment id: " + deleteCommentRequest.getCommentId()
+                           + "\nThread id: " + deleteCommentRequest.getThreadId()
+                           + "\nModerator id: " + deleteCommentRequest.getModeratorId());
     }
 }
