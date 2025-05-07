@@ -9,10 +9,16 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class DeleteCommentRequest {
     private UUID commentId;
     private UUID threadId;
     private UUID moderatorId;
+
+    public DeleteCommentRequest() {}
+
+    public DeleteCommentRequest(UUID commentId, UUID threadId, UUID moderatorId) {
+        this.commentId = commentId;
+        this.threadId = threadId;
+        this.moderatorId = moderatorId;
+    }
 }

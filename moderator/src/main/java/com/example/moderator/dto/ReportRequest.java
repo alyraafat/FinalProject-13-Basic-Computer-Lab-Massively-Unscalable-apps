@@ -16,4 +16,12 @@ public class ReportRequest {
         this.threadId = threadId;
         this.content = content;
     }
+
+    public UUID getThreadId() {
+        return threadId;
+    }
+
+    public String getContent() {
+        return content;
+    }
 }
