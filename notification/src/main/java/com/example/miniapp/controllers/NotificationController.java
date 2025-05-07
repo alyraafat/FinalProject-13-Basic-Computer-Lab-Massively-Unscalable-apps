@@ -41,7 +41,7 @@ public class NotificationController {
 
         // Save to database
 //        YOUR PREVIOUS COMMIT
-//        Notification notification = mapRequestToEntity(request);
+        Notification notification = mapRequestToEntity(request);
 //        notificationRepository.save(notification);
 
         notificationService.process(request);
@@ -50,21 +50,21 @@ public class NotificationController {
 //        return ResponseEntity.ok(mapToResponse(notification));
         return ResponseEntity.ok(new NotificationResponse());
     }
-
-    private Notification mapRequestToEntity(NotificationRequest request) {
-        Notification notification = new Notification();
-
-        // Core fields
-        notification.setType(request.getType().toString());
-        notification.setMessage(request.getRawMessage());
-        notification.setCreatedAt(Instant.now());
-
-        // Additional fields you might want to set
-        notification.setTitle(generateTitleFromType(request.getType()));
-        notification.setSenderId(request.getActorUserId()); // Or another sender identifier
-
-        return notification;
-    }
+//  PREVIOUS COMMIT
+//    private Notification mapRequestToEntity(NotificationRequest request) {
+//        Notification notification = new Notification();
+//
+//        // Core fields
+//        notification.setType(request.getType().toString());
+//        notification.setMessage(request.getRawMessage());
+//        notification.setCreatedAt(Instant.now());
+//
+//        // Additional fields you might want to set
+//        notification.setTitle(generateTitleFromType(request.getType()));
+//        notification.setSenderId(request.getActorUserId()); // Or another sender identifier
+//
+//        return notification;
+//    }
 
     private NotificationResponse mapToResponse(Notification notification) {
 //        return NotificationResponse.builder()

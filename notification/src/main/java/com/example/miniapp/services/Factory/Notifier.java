@@ -5,6 +5,6 @@ import com.example.miniapp.models.enums.DeliveryChannel;
 
 public interface Notifier {
 
-    void notify(NotificationRequest request);
+    void notify(Notification notification);
     void setDeliveryStrategy(DeliveryChannel strategy);
 }

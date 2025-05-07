@@ -7,6 +7,8 @@ import com.example.miniapp.services.Factory.NotifierFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.miniapp.models.enums.NotificationType;
+import com.example.miniapp.models.entity.Notification;
+
 
 
 @Service
@@ -27,14 +29,31 @@ public class NotificationService {
 //                .getPreferredStrategy(request.getUserId());
 
 
-
         NotificationType type = request.getType();
+        Notification notification = mapRequestToEntity(request);
+
+
 //        to be removed
         DeliveryChannel strategy = DeliveryChannel.PUSH;
 
 //        Notifier notifier = notifierFactory.create(request.getType(), strategy);
         Notifier notifier = notifierFactory.create(type, strategy);
-        notifier.notify(request);
+        notifier.notify(notification);
+    }
+
+    private Notification mapRequestToEntity(NotificationRequest request) {
+        Notification notification = new Notification();
+
+        // Core fields
+        notification.setType(request.getType().toString());
+        notification.setMessage(request.getRawMessage());
+        notification.setCreatedAt(Instant.now());
+
+        // Additional fields you might want to set
+        notification.setTitle(generateTitleFromType(request.getType()));
+        notification.setSenderId(request.getActorUserId()); // Or another sender identifier
+
+        return notification;
     }
 }
 

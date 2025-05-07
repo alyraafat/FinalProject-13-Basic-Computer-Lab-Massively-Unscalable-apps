@@ -11,7 +11,7 @@ public class UserNotifier implements Notifier {
     private DeliveryChannel deliveryChannel;
 
     @Override
-    public void notify(NotificationRequest request) {
+    public void notify(Notification request) {
 
     }
 
