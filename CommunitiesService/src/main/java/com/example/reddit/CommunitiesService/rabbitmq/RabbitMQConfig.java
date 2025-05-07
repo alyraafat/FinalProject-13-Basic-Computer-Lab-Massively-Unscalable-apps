@@ -1,6 +1,12 @@
 package com.example.reddit.CommunitiesService.rabbitmq;
 
+import com.example.reddit.CommunitiesService.dto.BanRequest;
+import com.example.reddit.CommunitiesService.dto.UnbanRequest;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
@@ -15,24 +21,40 @@ import java.util.Map;
 
 @Configuration
 public class RabbitMQConfig {
-//    public static final String COMMUNITY_QUEUE = "community_queue";
     public static final String EXCHANGE = "community_exchange";
-//    public static final String COMMUNITY_ROUTING = "community_routing";
+    public static final String MOD_COMMANDS_QUEUE    = "community.moderator.commands";
+    public static final String ROUTING_BAN           = "community.banUser";
+    public static final String ROUTING_UNBAN         = "community.unbanUser";
 
-//    @Bean
-//    public Queue queue(){
-//        return new Queue(COMMUNITY_QUEUE);
-//    }
 
     @Bean
     public TopicExchange exchange(){
         return new TopicExchange(EXCHANGE);
     }
 
-//    @Bean
-//    public Binding binding(Queue queue, TopicExchange exchange){
-//        return BindingBuilder.bind(queue).to(exchange).with(COMMUNITY_ROUTING);
-//    }
+
+    @Bean
+    public Queue moderatorCommandsQueue() {
+        return new Queue(MOD_COMMANDS_QUEUE, true);
+    }
+
+    @Bean
+    public Binding bindingBan(Queue moderatorCommandsQueue, TopicExchange communityExchange) {
+        return BindingBuilder
+                .bind(moderatorCommandsQueue)
+                .to(communityExchange)
+                .with(ROUTING_BAN);
+    }
+
+    @Bean
+    public Binding bindingUnban(Queue moderatorCommandsQueue, TopicExchange communityExchange) {
+        return BindingBuilder
+                .bind(moderatorCommandsQueue)
+                .to(communityExchange)
+                .with(ROUTING_UNBAN);
+    }
+
+
 
     /** Convert your POJOs to JSON when sending */
     @Bean
@@ -43,7 +65,8 @@ public class RabbitMQConfig {
         DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
         Map<String, Class<?>> idToClass = new HashMap<>();
         idToClass.put("MemberDTO",    com.example.reddit.CommunitiesService.models.MemberDTO.class);
-
+        idToClass.put("BanRequest", BanRequest.class);
+        idToClass.put("UnbanRequest", UnbanRequest.class);
         // …add any other event/DTO types you need
         typeMapper.setIdClassMapping(idToClass);
 
@@ -62,6 +85,19 @@ public class RabbitMQConfig {
         tpl.setMessageConverter(converter);
         return tpl;
     }
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
+            ConnectionFactory cf,
+            Jackson2JsonMessageConverter converter
+    ) {
+        SimpleRabbitListenerContainerFactory factory =
+                new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(cf);
+        factory.setMessageConverter(converter);
+        return factory;
+    }
+
 
 
 }
