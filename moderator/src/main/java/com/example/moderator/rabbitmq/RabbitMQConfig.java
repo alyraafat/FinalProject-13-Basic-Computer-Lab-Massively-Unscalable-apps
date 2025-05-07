@@ -3,6 +3,7 @@ package com.example.moderator.rabbitmq;
 import com.example.moderator.dto.BanRequest;
 import com.example.moderator.dto.DeleteCommentRequest;
 import com.example.moderator.dto.ReportRequest;
+import com.example.moderator.dto.UnbanRequest;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -62,6 +63,7 @@ public class RabbitMQConfig {
         idClassMapping.put("ReportRequest", ReportRequest.class);
         idClassMapping.put("DeleteCommentRequest", DeleteCommentRequest.class);
         idClassMapping.put("BanRequest", BanRequest.class);
+        idClassMapping.put("UnbanRequest", UnbanRequest.class);
 
         typeMapper.setIdClassMapping(idClassMapping);
         typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.TYPE_ID);
