@@ -7,6 +7,7 @@ import com.redditclone.user_service.dtos.TokenRefreshRequest;
 import com.redditclone.user_service.services.AuthService;
 import com.redditclone.user_service.utils.ResponseHandler;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@RequestBody RegisterObject registerObject) {
+    public ResponseEntity<Object> signup(@Valid @RequestBody RegisterObject registerObject) {
         authService.signup(registerObject);
         return ResponseHandler.generateResponse("User Registered Successfully", HttpStatus.OK, null);
     }

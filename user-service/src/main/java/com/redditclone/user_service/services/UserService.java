@@ -38,10 +38,11 @@ public class UserService implements UserDetailsService {
     public User updateUser(UUID id, User updatedUser) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        user.setUsername(updatedUser.getUsername());
-        user.setEmail(updatedUser.getEmail());
-        user.setPassword(updatedUser.getPassword());
-        user.setActivated(updatedUser.isActivated());
+        if(updatedUser.getUsername() != null) user.setUsername(updatedUser.getUsername());
+        if(updatedUser.getEmail() != null) user.setEmail(updatedUser.getEmail());
+        if(updatedUser.getPassword() != null) user.setPassword(updatedUser.getPassword());
+        if(updatedUser.getBio() != null) user.setBio(updatedUser.getBio());
+        if(updatedUser.getFullName() != null) user.setFullName(updatedUser.getFullName());
 
         return userRepository.save(user);
     }
