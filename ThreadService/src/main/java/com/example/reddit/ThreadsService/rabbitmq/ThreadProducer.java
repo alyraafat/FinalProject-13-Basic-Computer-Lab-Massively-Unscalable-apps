@@ -16,7 +16,7 @@ public class ThreadProducer {
 
     public void sendReportRequest(UUID threadId, String content) {
         ReportRequest reportRequest = new ReportRequest(threadId, content);
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, "thread.reportRequest", reportRequest);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.THREAD_EXCHANGE, RabbitMQConfig.REPORT_REQUEST_ROUTING_KEY, reportRequest);
 
         System.out.println("Report request for thread " + threadId + " sent by ThreadProducer with content " + content);
     }
