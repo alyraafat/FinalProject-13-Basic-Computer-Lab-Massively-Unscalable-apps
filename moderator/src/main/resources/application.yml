@@ -8,6 +8,7 @@ spring:
     username: guest
     password: guest
 
+  # This will need to be changed, was written for testing purposes, not final config
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/moderator-app
