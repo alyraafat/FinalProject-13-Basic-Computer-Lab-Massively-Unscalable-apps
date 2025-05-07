@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -69,13 +70,27 @@ public class AuthService {
         userValidation.validateUserDTO(registerObject);
         boolean userExists = userValidation.validateUserNonExistent(registerObject.getUsername(), registerObject.getEmail());
         String encodedPassword = passwordEncoder.encode(registerObject.getPassword());
-        User user = new User(registerObject.getUsername(), encodedPassword, registerObject.getEmail(), Instant.now(), false);
+//        User user = new User(registerObject.getUsername(), encodedPassword, registerObject.getEmail(), Instant.now(), false);
+        User user;
         String token;
         if (!userExists) {
+            user = User.builder()
+                    .username(registerObject.getUsername())
+                    .password(encodedPassword)
+                    .email(registerObject.getEmail())
+                    .createdAt(Instant.now())
+                    .activated(false)
+                    .bio(registerObject.getBio())
+                    .fullName(registerObject.getFullName())
+                    .build();
             userRepository.save(user);
             token = generateVerificationToken(user);
         } else {
             user = userRepository.findByUsername(registerObject.getUsername()).orElseThrow(() -> new RedditAppException("User Not Found with name: " + registerObject.getUsername()));
+            if (registerObject.getBio() != null) {
+                user.setBio(registerObject.getBio());
+                userRepository.save(user);
+            }
             token = updateVerificationToken(user);
         }
         mailService.sendMail(new NotificationEmail(
@@ -130,6 +145,8 @@ public class AuthService {
     public JwtAuthenticationResponse login(LoginObject loginObject) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginObject.getUsername(), loginObject.getPassword()));
         User user = userRepository.findByUsername(loginObject.getUsername()).orElseThrow(() -> new RedditAppException("User Not Found with name: " + loginObject.getUsername()));
+        user.setLastLogin(Instant.now());
+        userRepository.save(user);
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);

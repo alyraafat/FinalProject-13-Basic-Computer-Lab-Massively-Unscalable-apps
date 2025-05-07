@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +36,10 @@ public class User implements UserDetails {
     private String email;
     private Instant createdAt;
     private boolean activated;
+
+    private String bio;
+    private String fullName;
+    private Instant lastLogin;
 
     @OneToMany(mappedBy = "user")
     private List<RefreshToken> refreshTokens;

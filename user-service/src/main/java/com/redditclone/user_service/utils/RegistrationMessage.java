@@ -15,7 +15,7 @@ public class RegistrationMessage {
         return "Thank you for signing up to Reddit Replica. " +
                 "Please click <a href=\""
                 + serviceUrl
-                + "/api/auth/activateAccount/"
+                + "/public/activateAccount/"
                 + token
                 + "\">Activate your account</a>.";
     }

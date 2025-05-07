@@ -9,6 +9,8 @@ public class UserDTO {
     private UUID id;
     private String username;
     private String email;
+    private String fullName;
+    private String bio;
     private boolean activated;
 
     public static UserDTO fromEntity(User user) {
@@ -16,6 +18,8 @@ public class UserDTO {
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
+        dto.setBio(user.getBio());
         dto.setActivated(user.isActivated());
         return dto;
     }
