@@ -56,12 +56,11 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<List<UserDTO>> searchUsers(
             @RequestParam String keyword,
-            @RequestParam UUID currentUserId
+            @RequestParam UUID currentUserId,
+            @RequestParam(defaultValue = "username") String strategyType
     ) {
-        List<UserDTO> results = userService.searchUsers(keyword, currentUserId)
-                .stream()
-                .map(UserDTO::fromEntity)
-                .toList();
+        List<UserDTO> results = userService.searchUsers(keyword, currentUserId, strategyType)
+                .stream().map(UserDTO::fromEntity).toList();
         return ResponseEntity.ok(results);
     }
 

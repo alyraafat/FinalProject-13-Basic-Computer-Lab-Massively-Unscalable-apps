@@ -2,8 +2,10 @@ package com.redditclone.user_service.services;
 
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.repositories.UserRepository;
+import com.redditclone.user_service.search.UserSearchStrategy;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +21,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final BlockService blockService;
+    private final ApplicationContext context;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -55,13 +58,9 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public List<User> searchUsers(String keyword, UUID currentUserId) {
-        List<UUID> blockedUserIds = blockService.getBlockedUsers(currentUserId)
-                .stream()
-                .map(User::getId)
-                .toList();
-
-        return userRepository.searchUsersExcludingBlocked(keyword, blockedUserIds);
+    public List<User> searchUsers(String keyword, UUID currentUserId, String strategyType) {
+        UserSearchStrategy strategy = (UserSearchStrategy) context.getBean(strategyType);
+        return strategy.search(keyword, currentUserId);
     }
 
     @Override
