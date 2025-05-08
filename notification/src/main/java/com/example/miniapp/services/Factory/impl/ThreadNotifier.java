@@ -5,6 +5,7 @@ import com.example.miniapp.models.entity.Notification;
 import com.example.miniapp.models.enums.DeliveryChannel;
 import com.example.miniapp.services.Factory.Notifier;
 import com.example.miniapp.services.strategy.StrategySelector;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.UUID;
 // should implement Notifier
 @Component
 public class ThreadNotifier implements Notifier {
+    @Autowired
     private StrategySelector strategySelector;
 
     @Override
@@ -24,7 +26,8 @@ public class ThreadNotifier implements Notifier {
         List<UUID> threadUsersId = new ArrayList<>();
 
         for (UUID userId : threadUsersId) {
-            strategySelector.selectStrategy(String.valueOf(userId)).deliver(notification);
+
+            strategySelector.performDelivery(notification);
         }
     }
 }

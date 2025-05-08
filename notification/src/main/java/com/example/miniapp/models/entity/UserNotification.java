@@ -6,6 +6,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user_notifications")
@@ -16,7 +17,7 @@ public class UserNotification {
     @ManyToOne
     private Notification notification;
 
-    private String userId;
+    private UUID userId;
     private String status;
     private Instant readAt;
 
@@ -36,11 +37,11 @@ public class UserNotification {
         this.notification = notification;
     }
 
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
