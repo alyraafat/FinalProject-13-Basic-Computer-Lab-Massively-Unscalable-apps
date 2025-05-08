@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,12 +74,18 @@ public class BlockController {
     }
 
     @GetMapping("/allblocks")
-    public ResponseEntity<List<User>> getAllBlockedOrBlockedByUsers(@PathVariable UUID userId) {
+    public ResponseEntity<List<UUID>> getAllBlockedOrBlockedByUsers(@PathVariable UUID userId) {
         try{
             List<User> blocked = blockService.getBlockedUsers(userId);
             List<User> blockedBy = blockService.getUsersThatBlocked(userId);
-            blocked.addAll(blockedBy);
-            return ResponseEntity.ok(blocked);
+            List<UUID> blocksUUID = new ArrayList<>();
+            for (User user : blockedBy) {
+                blocksUUID.add(user.getId());
+            }
+            for (User user : blocked) {
+                blocksUUID.add(user.getId());
+            }
+            return ResponseEntity.ok(blocksUUID);
         }
         catch(EntityNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
