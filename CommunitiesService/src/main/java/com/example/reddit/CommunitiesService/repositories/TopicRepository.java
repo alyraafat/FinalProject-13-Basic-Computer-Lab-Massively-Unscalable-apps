@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface TopicRepository extends MongoRepository<Topic, UUID> {
     boolean existsByName(String name);
     Topic findByName(String name);
-    Topic findByCommunityIdsContaining(UUID communityId);
+//    Topic findByCommunityIdsContaining(UUID communityId);
 }

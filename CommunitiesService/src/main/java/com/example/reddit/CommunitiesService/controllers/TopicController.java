@@ -68,15 +68,15 @@ public class TopicController {
         return ResponseEntity.ok().build();
     }
 
-   @PostMapping("/{topicId}/communities/{communityId}")
-   public ResponseEntity<Topic> addCommunity(@PathVariable UUID topicId, @PathVariable UUID communityId) {
-       return ResponseEntity.ok(topicService.addCommunity(topicId, communityId));
-   }
-
-   @DeleteMapping("/{topicId}/communities/{communityId}")
-   public ResponseEntity<Topic> removeCommunity(@PathVariable UUID topicId, @PathVariable UUID communityId) {
-       return ResponseEntity.ok(topicService.removeCommunity(topicId, communityId));
-   }
+//   @PostMapping("/{topicId}/communities/{communityId}")
+//   public ResponseEntity<Topic> addCommunity(@PathVariable UUID topicId, @PathVariable UUID communityId) {
+//       return ResponseEntity.ok(topicService.addCommunity(topicId, communityId));
+//   }
+//
+//   @DeleteMapping("/{topicId}/communities/{communityId}")
+//   public ResponseEntity<Topic> removeCommunity(@PathVariable UUID topicId, @PathVariable UUID communityId) {
+//       return ResponseEntity.ok(topicService.removeCommunity(topicId, communityId));
+//   }
 
    @PostMapping("/{topicId}/subtopics/{subtopicId}")
    public ResponseEntity<Topic> addSubtopic(@PathVariable UUID topicId, @PathVariable UUID subtopicId) {
@@ -94,9 +94,9 @@ public class TopicController {
         return topic != null ? ResponseEntity.ok(topic) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/community/{communityId}")
-    public ResponseEntity<Topic> getTopicByCommunity(@PathVariable UUID communityId) {
-        Topic topic = topicService.getTopicByCommunity(communityId);
-        return topic != null ? ResponseEntity.ok(topic) : ResponseEntity.notFound().build();
-    }
+//    @GetMapping("/community/{communityId}")
+//    public ResponseEntity<Topic> getTopicByCommunity(@PathVariable UUID communityId) {
+//        Topic topic = topicService.getTopicByCommunity(communityId);
+//        return topic != null ? ResponseEntity.ok(topic) : ResponseEntity.notFound().build();
+//    }
 }

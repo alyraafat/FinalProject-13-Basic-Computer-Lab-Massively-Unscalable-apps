@@ -12,13 +12,15 @@ public class SubTopic {
 
     private String name;
 
-    private UUID topicId;
+    // Default constructor
+    public SubTopic() {
+        this.id = UUID.randomUUID();
+    }
 
     // Private constructor used by Builder
     private SubTopic(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.topicId = builder.topicId;
     }
 
     // Start a new builder
@@ -30,7 +32,6 @@ public class SubTopic {
     public static class Builder {
         private UUID id;
         private String name;
-        private UUID topicId;
 
         public Builder id(UUID id) {
             this.id = id;
@@ -39,11 +40,6 @@ public class SubTopic {
 
         public Builder name(String name) {
             this.name = name;
-            return this;
-        }
-
-        public Builder topicId(UUID topic) {
-            this.topicId = topic;
             return this;
         }
 
@@ -69,11 +65,4 @@ public class SubTopic {
         this.name = name;
     }
 
-    public UUID getTopicId() {
-        return topicId;
-    }
-
-    public void setTopicId(UUID topic) {
-        this.topicId = topic;
-    }
 }

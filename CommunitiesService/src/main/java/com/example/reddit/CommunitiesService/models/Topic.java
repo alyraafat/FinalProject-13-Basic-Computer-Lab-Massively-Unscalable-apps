@@ -16,13 +16,16 @@ public class Topic {
 
     private List<UUID> subtopicIds;
 
-    private List<UUID> communityIds;
+    // Default constructor
+    public Topic() {
+        this.id = UUID.randomUUID();
+        this.subtopicIds = new ArrayList<>();
+    }
 
     private Topic(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.subtopicIds = builder.subtopicIds;
-        this.communityIds = builder.communityIds;
     }
 
     public static Builder builder() {
@@ -33,7 +36,6 @@ public class Topic {
         private UUID id;
         private String name;
         private List<UUID> subtopicIds = new ArrayList<>();
-        private List<UUID> communityIds = new ArrayList<>();
 
         public Builder id(UUID id) {
             this.id = id;
@@ -47,11 +49,6 @@ public class Topic {
 
         public Builder subtopicIds(List<UUID> subtopics) {
             this.subtopicIds = subtopics;
-            return this;
-        }
-
-        public Builder communityIds(List<UUID> communities) {
-            this.communityIds = communities;
             return this;
         }
 
@@ -85,11 +82,4 @@ public class Topic {
         this.subtopicIds = subtopics;
     }
 
-    public List<UUID> getCommunityIds() {
-        return communityIds;
-    }
-
-    public void setCommunityIds(List<UUID> communities) {
-        this.communityIds = communities;
-    }
 }
