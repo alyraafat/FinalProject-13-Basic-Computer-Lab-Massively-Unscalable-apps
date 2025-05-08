@@ -38,10 +38,13 @@ public class User implements UserDetails {
     private boolean activated;
 
     private String bio;
+
+    @NotBlank(message = "Full name is required")
     private String fullName;
+
     private Instant lastLogin;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RefreshToken> refreshTokens;
 
     public User(String username, String password, String email, Instant createdAt, boolean activated) {
