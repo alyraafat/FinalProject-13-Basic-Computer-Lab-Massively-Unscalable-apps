@@ -1,5 +1,5 @@
 package com.example.reddit.ThreadsService.rabbitmq;
-
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import com.example.reddit.ThreadsService.dto.ReportRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
