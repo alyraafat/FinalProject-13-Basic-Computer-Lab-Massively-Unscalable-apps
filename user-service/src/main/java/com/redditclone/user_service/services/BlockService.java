@@ -59,6 +59,12 @@ public class BlockService {
         return blockRepository.findBlockedUsersByBlockerId(user.getId());
     }
 
+    @Transactional(readOnly = true)
+    public List<User> getUsersThatBlocked(UUID userId) {
+        User user = findUser(userId, "User not found");
+        return blockRepository.findBlockersByBlockedId(user.getId());
+    }
+
     public User findUser(UUID userId, String errorMessage){
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(errorMessage));
