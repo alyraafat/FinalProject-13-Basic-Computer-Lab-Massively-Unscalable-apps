@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @NoArgsConstructor
@@ -22,10 +24,12 @@ public class Block {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "blocker_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User blocker;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "blocked_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User blocked;
 
     public Block(User blocker, User blocked) {
