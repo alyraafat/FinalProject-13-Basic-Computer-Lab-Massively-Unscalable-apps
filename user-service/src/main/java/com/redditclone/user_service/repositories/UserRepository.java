@@ -13,11 +13,12 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    @Query("SELECT u FROM User u WHERE " +
-            "(LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-            "AND u.id NOT IN :blockedUserIds")
-    List<User> searchUsersExcludingBlocked(String keyword, List<UUID> blockedUserIds);
+    @Query("SELECT u FROM User u WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) AND u.id NOT IN :excludedIds")
+    List<User> searchByUsername(String keyword, List<UUID> excludedIds);
+
+    @Query("SELECT u FROM User u WHERE LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) AND u.id NOT IN :excludedIds")
+    List<User> searchByEmail(String keyword, List<UUID> excludedIds);
+
 
     Optional<User> findByUsername(String userName);
     Optional<User> findByEmail(String email);
