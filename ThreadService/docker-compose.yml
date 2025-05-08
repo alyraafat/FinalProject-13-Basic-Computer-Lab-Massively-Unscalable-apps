@@ -1,15 +1,15 @@
 services:
   #  APPS
-  app:
-    build: ..
-    ports:
-      - "8090:8080"
-    environment:
-      spring.data.mongodb.uri: mongodb://root:example@mongo:27017/threadDb?authSource=admin
-      spring.data.mongodb.database: threadDb
-    depends_on:
-      - mongo
-      - mongo-express
+#  app:
+#    build: ..
+#    ports:
+#      - "8090:8080"
+#    environment:
+#      spring.data.mongodb.uri: mongodb://root:example@mongo:27017/threadDb?authSource=admin
+#      spring.data.mongodb.database: threadDb
+#    depends_on:
+#      - mongo
+#      - mongo-express
 
 
   # MongoDB

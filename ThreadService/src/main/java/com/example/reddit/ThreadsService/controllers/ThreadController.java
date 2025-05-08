@@ -20,6 +20,12 @@ public class ThreadController {
         this.threadService = threadService;
     }
 
+    @GetMapping("test")
+    public ResponseEntity<List<String>> test(){
+        List<String> blocks = threadService.testGetBlockedUsers();
+        return ResponseEntity.ok(blocks);
+    }
+
     @GetMapping
     public ResponseEntity<List<Thread>> getAllThreads() {
         return ResponseEntity.ok(threadService.getAllThreads());
