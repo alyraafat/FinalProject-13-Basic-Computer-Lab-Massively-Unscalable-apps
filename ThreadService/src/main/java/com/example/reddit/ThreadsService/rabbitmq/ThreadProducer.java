@@ -1,5 +1,5 @@
 package com.example.reddit.ThreadsService.rabbitmq;
-
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import com.example.reddit.ThreadsService.dto.ReportRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,11 @@ public class ThreadProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendReportRequest(UUID threadId, String content) {
-        ReportRequest reportRequest = new ReportRequest(threadId, content);
+    public void sendReportRequest(UUID userReporting, UUID itemReported, String reportDescription, UUID communityId) {
+        ReportRequest reportRequest = new ReportRequest(userReporting, itemReported, reportDescription, communityId);
         rabbitTemplate.convertAndSend(RabbitMQConfig.THREAD_EXCHANGE, RabbitMQConfig.REPORT_REQUEST_ROUTING_KEY, reportRequest);
 
-        System.out.println("Report request for thread " + threadId + " sent by ThreadProducer with content " + content);
+        System.out.println("Report request for community: " + reportRequest.getCommunityId()
+                           + " sent by ThreadProducer with description: " + reportRequest.getReportDescription());
     }
 }

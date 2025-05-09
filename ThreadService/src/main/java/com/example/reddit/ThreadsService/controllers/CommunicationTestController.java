@@ -22,7 +22,11 @@ public class CommunicationTestController {
 
     @GetMapping
     public void testThreadProducer() {
-        UUID threadId = UUID.randomUUID();
-        threadProducer.sendReportRequest(threadId, "test content");
+        UUID userReporting = UUID.randomUUID();
+        UUID itemReported = UUID.randomUUID();
+        String reportDescription = "test report";
+        UUID communityId = UUID.randomUUID();
+
+        threadProducer.sendReportRequest(userReporting, itemReported, reportDescription, communityId);
     }
 }
