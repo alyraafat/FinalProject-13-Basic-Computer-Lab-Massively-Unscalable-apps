@@ -1,5 +1,6 @@
 package com.example.reddit.ThreadsService.services;
 
+import com.example.reddit.ThreadsService.clients.UserClient;
 import com.example.reddit.ThreadsService.models.ActionType;
 import com.example.reddit.ThreadsService.models.Comment;
 import com.example.reddit.ThreadsService.models.Log;
@@ -19,11 +20,21 @@ public class ThreadService {
     @Autowired
     private final ThreadRepository threadRepository;
     private final LogRepository logRepository;
+    private final UserClient userClient;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository) {
+    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient) {
         this.threadRepository = threadRepository;
         this.logRepository=logRepository;
+        this.userClient=userClient;
+    }
+
+    public List<String> testGetBlockedUsers() {
+        System.out.println("testGetBlockedUsers");
+        UUID uuid = UUID.randomUUID();
+        List<String> blocks = userClient.getBlockList(uuid.toString());
+        System.out.println("blocks has been returned: " + blocks);
+        return blocks;
     }
 
     public List<Thread> getAllThreads() {
