@@ -38,14 +38,7 @@ public class CommunityService {
         return communityRepository.findById(id);
     }
 
-    public Community createCommunity(Community community) {
-        if (communityRepository.existsByName(community.getName())) {
-            throw new RuntimeException("Community name already exists");
-        }
-        return communityRepository.save(community);
-    }
-
-    public Community addCommunity(String name, UUID topic, String description, UUID createdBy) {
+    public Community createCommunity(String name, UUID topic, String description, UUID createdBy) {
         if (communityRepository.existsByName(name)) {
             throw new RuntimeException("Community name already exists");
         }

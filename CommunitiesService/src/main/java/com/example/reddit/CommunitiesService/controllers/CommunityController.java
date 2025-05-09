@@ -1,8 +1,10 @@
 package com.example.reddit.CommunitiesService.controllers;
 
 import com.example.reddit.CommunitiesService.models.Community;
+import com.example.reddit.CommunitiesService.models.CommunityCreateRequest;
 import com.example.reddit.CommunitiesService.models.CommunityThread;
 import com.example.reddit.CommunitiesService.services.CommunityService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,20 +37,20 @@ public class CommunityController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // @PostMapping
-    // public ResponseEntity<Community> createCommunity(@RequestBody Community community) {
-    //     return ResponseEntity.ok(communityService.createCommunity(community));
-    // }
-
     @PostMapping
     public ResponseEntity<Community> addCommunity(
-            @RequestParam String name,
-            @RequestParam UUID topic,
-            @RequestParam String description,
-            @RequestParam UUID userId) {
+            @Valid @RequestBody CommunityCreateRequest req) {
 
-        Community community = communityService.addCommunity(name, topic, description, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(community);
+        Community community = communityService.createCommunity(
+                req.getName(),
+                req.getTopicId(),
+                req.getDescription(),
+                req.getUserId()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(community);
     }
 
     @PutMapping("/{id}")
