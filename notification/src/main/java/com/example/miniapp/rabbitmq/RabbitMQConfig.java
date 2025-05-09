@@ -1,5 +1,6 @@
 package com.example.miniapp.rabbitmq;
 
+import com.example.miniapp.models.dto.CommunityNotificationRequest;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -18,6 +19,8 @@ import java.util.Map;
 @Configuration
 public class RabbitMQConfig {
     public static final String MULTI_QUEUE = "multi_event_queue";
+    public static final String COMMUNITY_NOTIFICATION_QUEUE = "community_notification_queue";
+    public static final String COMMUNITY_NOTIFICATION_ROUTING_KEY = "community.notification";
 
     @Bean
     public Queue queue() {
@@ -25,15 +28,23 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue communityNotificationQueue() {
+        return new Queue(COMMUNITY_NOTIFICATION_QUEUE, true);
+    }
+
+    @Bean
     public TopicExchange communityExchange() {
         return new TopicExchange("community_exchange", true, false);
     }
 
-    // add more topic exchanges for different things needed
-
     @Bean
     public Binding communityBinding(Queue queue, TopicExchange communityExchange) {
         return BindingBuilder.bind(queue).to(communityExchange).with("community.memberAdded");
+    }
+
+    @Bean
+    public Binding communityNotificationBinding(Queue communityNotificationQueue, TopicExchange communityExchange) {
+        return BindingBuilder.bind(communityNotificationQueue).to(communityExchange).with(COMMUNITY_NOTIFICATION_ROUTING_KEY);
     }
 
     /** Same JSON converter so listener can auto-deserialize */
@@ -45,6 +56,7 @@ public class RabbitMQConfig {
         DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
         Map<String, Class<?>> idToClass = new HashMap<>();
         idToClass.put("MemberDTO",    com.example.miniapp.models.MemberDTO.class);
+        idToClass.put("CommunityNotificationRequest", CommunityNotificationRequest.class);
 
         // …add any other event/DTO types you need
         typeMapper.setIdClassMapping(idToClass);
