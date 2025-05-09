@@ -1,6 +1,7 @@
 package com.example.reddit.CommunitiesService.rabbitmq;
 
 import com.example.reddit.CommunitiesService.dto.BanRequest;
+import com.example.reddit.CommunitiesService.dto.CommunityNotificationRequest;
 import com.example.reddit.CommunitiesService.dto.UnbanRequest;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -25,6 +26,7 @@ public class RabbitMQConfig {
     public static final String MOD_COMMANDS_QUEUE    = "community.moderator.commands";
     public static final String ROUTING_BAN           = "community.banUser";
     public static final String ROUTING_UNBAN         = "community.unbanUser";
+    public static final String ROUTING_NOTIFICATION  = "community.notification";
 
 
     @Bean
@@ -54,8 +56,6 @@ public class RabbitMQConfig {
                 .with(ROUTING_UNBAN);
     }
 
-
-
     /** Convert your POJOs to JSON when sending */
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
@@ -67,6 +67,7 @@ public class RabbitMQConfig {
         idToClass.put("MemberDTO",    com.example.reddit.CommunitiesService.models.MemberDTO.class);
         idToClass.put("BanRequest", BanRequest.class);
         idToClass.put("UnbanRequest", UnbanRequest.class);
+        idToClass.put("CommunityNotificationRequest", CommunityNotificationRequest.class);
         // …add any other event/DTO types you need
         typeMapper.setIdClassMapping(idToClass);
 
