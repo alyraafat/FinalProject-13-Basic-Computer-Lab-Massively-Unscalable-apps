@@ -72,9 +72,9 @@ public class ModeratorService {
     }
 
     @Transactional
-    public void removeComment(UUID moderatorId, UUID communityId, UUID commentId) {
+    public void removeComment(UUID moderatorId, UUID communityId, UUID threadId, UUID commentId) {
         verifyModerator(moderatorId, communityId);
-        Command<Void> command = new RemoveCommentCommand(commentId, moderatorProducer);
+        Command<Void> command = new RemoveCommentCommand(commentId, threadId, moderatorProducer);
         commandInvoker.execute(command);
         List<UUID> reports = reportService.getReportsForItem(commentId);
         reportService.markReportAsHandledMultiple(reports);
@@ -83,14 +83,14 @@ public class ModeratorService {
     @Transactional
     public void banUser(UUID moderatorId, UUID communityId, UUID userId) {
         verifyModerator(moderatorId, communityId);
-        Command<Void> command = new BanUserCommand(userId, communityId);
+        Command<Void> command = new BanUserCommand(userId, communityId, moderatorProducer);
         commandInvoker.execute(command);
     }
 
     @Transactional
     public void unbanUser(UUID moderatorId, UUID communityId, UUID userId) {
         verifyModerator(moderatorId, communityId);
-        Command<Void> command = new UnbanUserCommand(userId, communityId);
+        Command<Void> command = new UnbanUserCommand(userId, communityId, moderatorProducer);
         commandInvoker.execute(command);
     }
 

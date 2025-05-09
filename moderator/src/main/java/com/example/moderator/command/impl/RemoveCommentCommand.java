@@ -10,11 +10,13 @@ import java.util.UUID;
 public class RemoveCommentCommand implements Command<Void> {
 
     private final UUID commentId;
+    private final UUID threadId;
     private final ModeratorProducer moderatorProducer;
 
-    public RemoveCommentCommand(UUID commentId, ModeratorProducer moderatorProducer) {
+    public RemoveCommentCommand(UUID commentId, UUID threadId, ModeratorProducer moderatorProducer) {
         this.commentId = commentId;
         this.moderatorProducer = moderatorProducer;
+        this.threadId = threadId;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class RemoveCommentCommand implements Command<Void> {
 
         try {
             // Send delete request asynchronously via RabbitMQ
-            moderatorProducer.sendDeleteCommentRequest(commentId);
+            moderatorProducer.sendDeleteCommentRequest(commentId, threadId);
         } catch (Exception e) {
             throw new CommentDeletionFailedException(commentId, e);
         }

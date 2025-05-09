@@ -16,8 +16,8 @@ public class ModeratorProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendDeleteCommentRequest(UUID commentId) {
-        DeleteCommentRequest deleteCommentRequest = new DeleteCommentRequest(commentId);
+    public void sendDeleteCommentRequest(UUID commentId, UUID threadId) {
+        DeleteCommentRequest deleteCommentRequest = new DeleteCommentRequest(commentId, threadId);
         rabbitTemplate.convertAndSend(RabbitMQConfig.THREAD_EXCHANGE,
                 RabbitMQConfig.DELETE_COMMENT_REQUEST_ROUTING_KEY, deleteCommentRequest);
 

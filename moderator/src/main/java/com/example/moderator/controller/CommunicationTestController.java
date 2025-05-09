@@ -25,8 +25,8 @@ public class CommunicationTestController {
     @GetMapping
     public void testModeratorProducer() {
         UUID commentId = UUID.randomUUID();
-
-        moderatorProducer.sendDeleteCommentRequest(commentId);
+        UUID threadId = UUID.randomUUID();
+        moderatorProducer.sendDeleteCommentRequest(commentId, threadId);
     }
 
     @GetMapping("/ban")

@@ -59,8 +59,9 @@ public class ModeratorController {
     @PostMapping("/comment/remove")
     public ResponseEntity<Void> removeComment(@RequestParam UUID moderatorId,
                                               @RequestParam UUID communityId,
+                                              @RequestParam UUID threadId,
                                               @RequestParam UUID commentId) {
-        moderatorService.removeComment(moderatorId, communityId, commentId);
+        moderatorService.removeComment(moderatorId, communityId, threadId, commentId);
         return ResponseEntity.noContent().build();
     }
 
