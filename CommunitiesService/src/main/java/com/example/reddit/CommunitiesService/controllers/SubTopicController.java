@@ -32,10 +32,10 @@ public class SubTopicController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/topic/{topicId}")
-    public ResponseEntity<List<SubTopic>> getSubTopicsByTopic(@PathVariable UUID topicId) {
-        return ResponseEntity.ok(subTopicService.getSubTopicsByTopic(topicId));
-    }
+//    @GetMapping("/topic/{topicId}")
+//    public ResponseEntity<List<SubTopic>> getSubTopicsByTopic(@PathVariable UUID topicId) {
+//        return ResponseEntity.ok(subTopicService.getSubTopicsByTopic(topicId));
+//    }
 
     // @PostMapping
     // public ResponseEntity<SubTopic> createSubTopic(@RequestBody SubTopic subTopic) {
@@ -44,9 +44,8 @@ public class SubTopicController {
 
     @PostMapping
     public ResponseEntity<SubTopic> addSubTopic(
-            @RequestParam String name,
-            @RequestParam UUID topicId) {
-        SubTopic subTopic = subTopicService.addSubTopic(name, topicId);
+            @RequestParam String name) {
+        SubTopic subTopic = subTopicService.addSubTopic(name);
         return ResponseEntity.status(HttpStatus.CREATED).body(subTopic);
     }
 

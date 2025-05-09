@@ -30,6 +30,16 @@ public class Community {
 
     private List<UUID> threadIds;
 
+    // Default constructor
+    public Community() {
+        this.id = UUID.randomUUID();
+        this.createdAt = LocalDateTime.now();
+        this.moderatorIds = new ArrayList<>();
+        this.memberIds = new ArrayList<>();
+        this.bannedUserIds = new ArrayList<>();
+        this.threadIds = new ArrayList<>();
+    }
+
     private Community(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;

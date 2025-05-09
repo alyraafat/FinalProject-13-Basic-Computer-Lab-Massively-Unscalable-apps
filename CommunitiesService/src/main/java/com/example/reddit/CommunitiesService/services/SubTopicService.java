@@ -14,15 +14,10 @@ import java.util.UUID;
 @Service
 public class SubTopicService {
     private final SubTopicRepository subTopicRepository;
-    private final TopicService topicService;
-    private final TopicRepository topicRepository;
 
     @Autowired
-    public SubTopicService(SubTopicRepository subTopicRepository, TopicService topicService,
-            TopicRepository topicRepository) {
+    public SubTopicService(SubTopicRepository subTopicRepository) {
         this.subTopicRepository = subTopicRepository;
-        this.topicService = topicService;
-        this.topicRepository = topicRepository;
     }
 
     public List<SubTopic> getAllSubTopics() {
@@ -33,39 +28,27 @@ public class SubTopicService {
         return subTopicRepository.findById(id);
     }
 
-    public List<SubTopic> getSubTopicsByTopic(UUID topicId) {
-        return subTopicRepository.findByTopicId(topicId);
-    }
+//    public List<SubTopic> getSubTopicsByTopic(UUID topicId) {
+//        return subTopicRepository.findByTopicId(topicId);
+//    }
 
-    public SubTopic createSubTopic(SubTopic subTopic) {
-        if (subTopicRepository.existsByNameAndTopicId(subTopic.getName(), subTopic.getTopicId())) {
-            throw new RuntimeException("SubTopic name already exists in this topic");
-        }
-        SubTopic savedSubTopic = subTopicRepository.save(subTopic);
-        topicService.addSubtopic(subTopic.getTopicId(), savedSubTopic.getId());
-        return savedSubTopic;
-    }
+//    public SubTopic createSubTopic(SubTopic subTopic) {
+//        if (subTopicRepository.existsByNameAndTopicId(subTopic.getName(), subTopic.getTopicId())) {
+//            throw new RuntimeException("SubTopic name already exists in this topic");
+//        }
+//        SubTopic savedSubTopic = subTopicRepository.save(subTopic);
+//        topicService.addSubtopic(subTopic.getTopicId(), savedSubTopic.getId());
+//        return savedSubTopic;
+//    }
 
-    public SubTopic addSubTopic(String name, UUID topicId) {
-        // Verify that the topic exists
-        if (!topicRepository.existsById(topicId)) {
-            throw new RuntimeException("Topic not found");
-        }
-
+    public SubTopic addSubTopic(String name) {
         // Create the subtopic using the builder
         SubTopic subTopic = SubTopic.builder()
                 .id(UUID.randomUUID())
                 .name(name)
-                .topicId(topicId)
                 .build();
 
         SubTopic savedSubTopic = subTopicRepository.save(subTopic);
-
-        // Add this subtopic to the parent topic's subtopics list
-        Topic topic = topicService.getTopicById(topicId)
-                .orElseThrow(() -> new RuntimeException("Topic not found"));
-        topic.getSubtopicIds().add(savedSubTopic.getId());
-        topicRepository.save(topic);
 
         return savedSubTopic;
     }
@@ -84,7 +67,6 @@ public class SubTopicService {
         SubTopic updated = SubTopic.builder()
                 .id(existingSubTopic.getId())
                 .name(name)
-                .topicId(existingSubTopic.getTopicId())
                 .build();
         return subTopicRepository.save(updated);
     }
@@ -92,7 +74,6 @@ public class SubTopicService {
     public void deleteSubTopic(UUID id) {
         SubTopic subTopic = subTopicRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("SubTopic not found"));
-        topicService.removeSubtopic(subTopic.getTopicId(), id);
         subTopicRepository.deleteById(id);
     }
 

@@ -59,7 +59,6 @@ public class TopicService {
                 .id(existingTopic.getId())
                 .name(name != null ? name : existingTopic.getName())
                 .subtopicIds(existingTopic.getSubtopicIds())
-                .communityIds(existingTopic.getCommunityIds())
                 .build();
 
         // Save and return the updated topic
@@ -81,19 +80,19 @@ public class TopicService {
         topicRepository.deleteById(id);
     }
 
-    public Topic addCommunity(UUID topicId, UUID communityId) {
-        Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new RuntimeException("Topic not found"));
-        topic.getCommunityIds().add(communityId);
-        return topicRepository.save(topic);
-    }
-
-    public Topic removeCommunity(UUID topicId, UUID communityId) {
-        Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new RuntimeException("Topic not found"));
-        topic.getCommunityIds().remove(communityId);
-        return topicRepository.save(topic);
-    }
+//    public Topic addCommunity(UUID topicId, UUID communityId) {
+//        Topic topic = topicRepository.findById(topicId)
+//                .orElseThrow(() -> new RuntimeException("Topic not found"));
+//        topic.getCommunityIds().add(communityId);
+//        return topicRepository.save(topic);
+//    }
+//
+//    public Topic removeCommunity(UUID topicId, UUID communityId) {
+//        Topic topic = topicRepository.findById(topicId)
+//                .orElseThrow(() -> new RuntimeException("Topic not found"));
+//        topic.getCommunityIds().remove(communityId);
+//        return topicRepository.save(topic);
+//    }
 
     public Topic addSubtopic(UUID topicId, UUID subtopicId) {
         Topic topic = topicRepository.findById(topicId)
@@ -113,7 +112,7 @@ public class TopicService {
         return topicRepository.findByName(name);
     }
 
-    public Topic getTopicByCommunity(UUID communityId) {
-        return topicRepository.findByCommunityIdsContaining(communityId);
-    }
+//    public Topic getTopicByCommunity(UUID communityId) {
+//        return topicRepository.findByCommunityIdsContaining(communityId);
+//    }
 }
