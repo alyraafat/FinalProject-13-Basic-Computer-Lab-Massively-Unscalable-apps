@@ -1,8 +1,7 @@
 package com.example.reddit.ThreadsService.services;
 
-import com.example.reddit.ThreadsService.models.ActionType;
-import com.example.reddit.ThreadsService.models.Comment;
-import com.example.reddit.ThreadsService.models.Log;
+import com.example.reddit.ThreadsService.clients.UserClient;
+import com.example.reddit.ThreadsService.models.*;
 import com.example.reddit.ThreadsService.models.Thread;
 import com.example.reddit.ThreadsService.repositories.LogRepository;
 import com.example.reddit.ThreadsService.repositories.ThreadRepository;
@@ -19,11 +18,21 @@ public class ThreadService {
     @Autowired
     private final ThreadRepository threadRepository;
     private final LogRepository logRepository;
+    private final UserClient userClient;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository) {
+    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient) {
         this.threadRepository = threadRepository;
         this.logRepository=logRepository;
+        this.userClient=userClient;
+    }
+
+    public List<String> testGetBlockedUsers() {
+        System.out.println("testGetBlockedUsers");
+        UUID uuid = UUID.randomUUID();
+        List<String> blocks = userClient.getBlockList(uuid.toString());
+        System.out.println("blocks has been returned: " + blocks);
+        return blocks;
     }
 
     public List<Thread> getAllThreads() {
@@ -35,12 +44,28 @@ public class ThreadService {
     }
 
     public Thread createThread(Thread thread) {
+         thread = new Thread.Builder()
+                .id(thread.getId())
+                .topic(thread.getTopic())
+                .title(thread.getTitle())
+                .content(thread.getContent())
+                .authorId(thread.getAuthorId())
+                .createdAt(thread.getCreatedAt())
+                .upVotes(thread.getUpVotes() )
+                .downVotes(thread.getDownVotes())
+                .communityId(thread.getCommunityId())
+                .comments(thread.getCommentIds())
+                .build();
         return threadRepository.save(thread);
     }
-    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
+    //@CacheEvict(value = "trending_cache", key = "#thread.communityId")
     public void deleteThread(UUID id) {
+        Thread thread = threadRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Thread not found"));
+
         threadRepository.deleteById(id);
     }
+
 
     public List<Thread> getThreadsByCommunity(UUID communityId) {
         return threadRepository.findByCommunityId(communityId);
@@ -69,6 +94,27 @@ public class ThreadService {
                 .downVotes(thread.getDownVotes())
                 .communityId(thread.getCommunityId())
                 .comments(thread.getCommentIds())
+                .build();
+        return threadRepository.save(thread);
+    }
+
+
+    public Thread updateThread(UUID threadId, Thread newThread)
+    {
+        Thread thread = threadRepository.findById(threadId)
+                .orElseThrow(() -> new RuntimeException("Thread not found"));
+
+        thread = new Thread.Builder()
+                .id(newThread.getId())
+                .topic(newThread.getTopic())
+                .title(newThread.getTitle())
+                .content(newThread.getContent())
+                .authorId(newThread.getAuthorId())
+                .createdAt(newThread.getCreatedAt())
+                .upVotes(newThread.getUpVotes() )
+                .downVotes(newThread.getDownVotes())
+                .communityId(newThread.getCommunityId())
+                .comments(newThread.getCommentIds())
                 .build();
         return threadRepository.save(thread);
     }

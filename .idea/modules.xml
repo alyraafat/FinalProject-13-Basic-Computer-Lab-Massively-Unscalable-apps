@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ThreadService/ThreadService.iml" filepath="$PROJECT_DIR$/ThreadService/ThreadService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/FinalProject-13-Basic-Computer-Lab-Massively-Unscalable-apps.iml" filepath="$PROJECT_DIR$/.idea/FinalProject-13-Basic-Computer-Lab-Massively-Unscalable-apps.iml" />
     </modules>
   </component>
 </project>

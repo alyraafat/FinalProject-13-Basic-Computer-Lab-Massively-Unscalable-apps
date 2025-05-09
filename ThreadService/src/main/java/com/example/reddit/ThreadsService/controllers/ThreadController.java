@@ -2,7 +2,10 @@ package com.example.reddit.ThreadsService.controllers;
 
 import com.example.reddit.ThreadsService.models.Comment;
 import com.example.reddit.ThreadsService.models.Thread;
+import com.example.reddit.ThreadsService.models.ThreadDto;
+import com.example.reddit.ThreadsService.models.ThreadMapper;
 import com.example.reddit.ThreadsService.services.ThreadService;
+import feign.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,18 +14,26 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/threads")
+@RequestMapping("/threads")
 public class ThreadController {
     private final ThreadService threadService;
 
     @Autowired
     public ThreadController(ThreadService threadService) {
         this.threadService = threadService;
+
     }
 
-    @GetMapping
+    @GetMapping("test")
+    public ResponseEntity<List<String>> test(){
+        List<String> blocks = threadService.testGetBlockedUsers();
+        return ResponseEntity.ok(blocks);
+    }
+
+    @GetMapping("/allThreads")
     public ResponseEntity<List<Thread>> getAllThreads() {
-        return ResponseEntity.ok(threadService.getAllThreads());
+        List<Thread> threads = threadService.getAllThreads();
+        return ResponseEntity.ok(threads);
     }
 
     @GetMapping("/{id}")
@@ -34,6 +45,7 @@ public class ThreadController {
 
     @PostMapping
     public ResponseEntity<Thread> createThread(@RequestBody Thread thread) {
+
         return ResponseEntity.ok(threadService.createThread(thread));
     }
 
@@ -47,6 +59,10 @@ public class ThreadController {
     public ResponseEntity<List<Thread>> getThreadsByCommunity(@PathVariable UUID communityId) {
         return ResponseEntity.ok(threadService.getThreadsByCommunity(communityId));
     }
+
+
+
+
 
     @GetMapping("/author/{authorId}")
     public ResponseEntity<List<Thread>> getThreadsByAuthor(@PathVariable UUID authorId) {
@@ -76,6 +92,11 @@ public class ThreadController {
     @PostMapping("/{threadId}/downvote")
     public ResponseEntity<Thread> downvoteThread(@PathVariable UUID threadId) {
         return ResponseEntity.ok(threadService.downvote(threadId));
+    }
+    @PutMapping("/{id}")
+    public Thread updateThread(@PathVariable UUID id , @RequestBody Thread newThread)
+    {
+      return threadService.updateThread(id,newThread);
     }
 
 //    @PostMapping("/recommendThreads/{userId}")

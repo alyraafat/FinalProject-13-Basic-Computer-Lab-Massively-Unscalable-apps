@@ -42,6 +42,13 @@ public class Thread {
     @Field(name = "community_id")
     private UUID communityId;
 
+    public Thread()
+    {
+        this.id = UUID.randomUUID();
+        this.createdAt = LocalDateTime.now();
+       this.comments=new ArrayList<>();
+    }
+
     // Default constructor
     private Thread( Builder builder) {
         this.id = builder.id;
