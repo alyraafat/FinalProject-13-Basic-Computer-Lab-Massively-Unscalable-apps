@@ -62,24 +62,12 @@ public class Topic {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<UUID> getSubtopicIds() {
         return subtopicIds;
-    }
-
-    public void setSubtopicIds(List<UUID> subtopics) {
-        this.subtopicIds = subtopics;
     }
 
 }

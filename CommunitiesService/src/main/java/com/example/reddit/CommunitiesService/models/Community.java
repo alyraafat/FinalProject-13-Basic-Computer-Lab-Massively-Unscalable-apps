@@ -129,80 +129,40 @@ public class Community {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public UUID getTopicId() {
         return topicId;
     }
 
-    public void setTopicId(UUID topic) {
-        this.topicId = topic;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public UUID getCreatedBy() {
         return createdBy;
-    }
-
-    public void setCreatedBy(UUID createdBy) {
-        this.createdBy = createdBy;
     }
 
     public List<UUID> getModeratorIds() {
         return moderatorIds;
     }
 
-    public void setModeratorIds(List<UUID> moderators) {
-        this.moderatorIds = moderators;
-    }
-
     public List<UUID> getMemberIds() {
         return memberIds;
-    }
-
-    public void setMemberIds(List<UUID> members) {
-        this.memberIds = members;
     }
 
     public List<UUID> getBannedUserIds() {
         return bannedUserIds;
     }
 
-    public void setBannedUserIds(List<UUID> bannedUsers) {
-        this.bannedUserIds = bannedUsers;
-    }
-
     public List<UUID> getThreadIds() {
         return threadIds;
-    }
-
-    public void setThreadIds(List<UUID> threads) {
-        this.threadIds = threads;
     }
 
 }
