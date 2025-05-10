@@ -1,0 +1,24 @@
+name: user-service CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'user-service/**'
+  pull_request:
+    paths:
+      - 'user-service/**'
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci-java-maven.yml
+    with:
+      branch: 'refs/heads/main'
+    secrets: inherit
+
+  docker:
+    needs: ci
+    uses: ./.github/workflows/cd-docker-push.yml
+    with:
+      artifact-name: 'packaged-artifact'
+    secrets: inherit
