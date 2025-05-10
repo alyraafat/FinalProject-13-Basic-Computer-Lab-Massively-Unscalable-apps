@@ -66,29 +66,7 @@ public class NotificationService {
         }
     }
 
-        // For push notifications
-    public boolean sendPush(String formattedPayload) {
-        try {
-            logger.info("Sending push notification: {}", formattedPayload);
-            System.out.println("[PUSH] " + formattedPayload);
-            return true; // Assume success for demo
-        } catch (Exception e) {
-            logger.error("Failed to send push notification", e);
-            return false;
-        }
-    }
 
-    // For email notifications
-    public boolean sendEmail(String emailContent) {
-        try {
-            logger.info("Sending email notification");
-            System.out.println("[EMAIL]\n" + emailContent);
-            return true; // Assume success for demo
-        } catch (Exception e) {
-            logger.error("Failed to send email notification", e);
-            return false;
-        }
-    }
 }
 
 

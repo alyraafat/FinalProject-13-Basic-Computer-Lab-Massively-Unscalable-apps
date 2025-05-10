@@ -25,13 +25,13 @@ public class ThreadNotifier implements Notifier {
     public void notify(Notification notification) {
         UUID target = notification.getReceiverId();
 //        TODO: comunication  get all users inside the target thread id
-//        UUID list
-        List<UUID> threadUsersId = new ArrayList<>();
+//        List<UUID> threadUsersId = notification.getReceiverIds();
 
-        for (UUID userId : threadUsersId) {
-            UserNotification userNotification = new UserNotification(userId, notification);
-            userNotifyRepository.save(userNotification);
-            strategySelector.performDelivery(notification);
-        }
+
+//        for (UUID userId : threadUsersId) {
+//            UserNotification userNotification = new UserNotification(userId, notification);
+//            userNotifyRepository.save(userNotification);
+//            strategySelector.performDelivery(notification);
+//        }
     }
 }

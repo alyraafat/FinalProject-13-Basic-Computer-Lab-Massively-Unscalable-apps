@@ -2,7 +2,7 @@ package com.example.miniapp.rabbitmq;
 
 
 
-import com.example.miniapp.models.MemberDTO;
+import com.example.miniapp.models.dto.MemberDTO;
 import com.example.miniapp.models.dto.CommunityNotificationRequest;
 import com.example.miniapp.models.dto.ThreadNotificationRequest;
 import com.example.miniapp.services.NotificationService;
@@ -22,18 +22,29 @@ public class NotificationConsumer {
     public void onMemberAdded(MemberDTO memberDTO) {
         System.out.println("Member added: " + memberDTO.getId());
         // TODO: Add code to handle notification when new member is added
+
+        // This is how we will process the request (apply to all user/thread or comm type)
+//        notificationService.process(request);
     }
 
     @RabbitHandler
     public void onCommunityNotificationRequest(CommunityNotificationRequest notificationRequest) {
         System.out.println("Received notification request from community with ID: " + notificationRequest.getCommunityID());
         // TODO: Add code to handle community notification
+
+        // This is how we will process the request (apply to all user/thread or comm type)
+//        notificationService.process(request);
+
+
     }
 
     @RabbitHandler
     public void onThreadNotificationRequest(ThreadNotificationRequest notificationRequest) {
         System.out.println("Received notification request from thread with ID: " + notificationRequest.getThreadId());
         // TODO: Add code to handle thread notification
+
+        // This is how we will process the request (apply to all user/thread or comm type)
+//        notificationService.process(request);
     }
 
 }

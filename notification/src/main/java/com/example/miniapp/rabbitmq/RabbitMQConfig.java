@@ -1,6 +1,7 @@
 package com.example.miniapp.rabbitmq;
 
 import com.example.miniapp.models.dto.CommunityNotificationRequest;
+import com.example.miniapp.models.dto.MemberDTO;
 import com.example.miniapp.models.dto.ThreadNotificationRequest;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -77,7 +78,7 @@ public class RabbitMQConfig {
         // 1. Create a type-mapper and tell it which simple IDs map to which classes:
         DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
         Map<String, Class<?>> idToClass = new HashMap<>();
-        idToClass.put("MemberDTO",    com.example.miniapp.models.MemberDTO.class);
+        idToClass.put("MemberDTO",    MemberDTO.class);
         idToClass.put("CommunityNotificationRequest", CommunityNotificationRequest.class);
         idToClass.put("ThreadNotificationRequest", ThreadNotificationRequest.class);
 

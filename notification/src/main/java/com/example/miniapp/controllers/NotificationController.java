@@ -34,12 +34,12 @@ public class NotificationController {
     }
 
     @PostMapping
-    public ResponseEntity<NotificationResponse> createNotification(@RequestBody NotificationRequest request) {
+    public ResponseEntity<String> createNotification(@RequestBody NotificationRequest request) {
 
 
         notificationService.process(request);
 
-        return ResponseEntity.ok(new NotificationResponse());
+        return ResponseEntity.ok("Sent!");
     }
 //  PREVIOUS COMMIT
 //    private Notification mapRequestToEntity(NotificationRequest request) {

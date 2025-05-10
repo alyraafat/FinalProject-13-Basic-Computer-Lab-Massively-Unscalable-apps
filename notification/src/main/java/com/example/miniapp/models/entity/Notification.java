@@ -16,6 +16,8 @@ public class Notification {
     private String title;
     private String message;
     private Instant createdAt;
+
+    // Convert to list of recievers
     private UUID receiverId;
 
     public UUID getReceiverId() { return receiverId; }
