@@ -1,6 +1,7 @@
 package com.example.miniapp.rabbitmq;
 
 import com.example.miniapp.models.dto.CommunityNotificationRequest;
+import com.example.miniapp.models.dto.ThreadNotificationRequest;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -18,9 +19,15 @@ import java.util.Map;
 
 @Configuration
 public class RabbitMQConfig {
+    public static final String THREAD_EXCHANGE = "thread_exchange";
+    public static final String COMMUNITY_EXCHANGE = "community_exchange";
+
     public static final String MULTI_QUEUE = "multi_event_queue";
     public static final String COMMUNITY_NOTIFICATION_QUEUE = "community_notification_queue";
+    public static final String THREAD_NOTIFICATION_QUEUE = "thread_notification_queue";
+
     public static final String COMMUNITY_NOTIFICATION_ROUTING_KEY = "community.notification";
+    public static final String THREAD_NOTIFICATION_ROUTING_KEY = "thread.notification";
 
     @Bean
     public Queue queue() {
@@ -33,8 +40,18 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue threadNotificationQueue() {
+        return new Queue(THREAD_NOTIFICATION_QUEUE, true);
+    }
+
+    @Bean
     public TopicExchange communityExchange() {
-        return new TopicExchange("community_exchange", true, false);
+        return new TopicExchange(COMMUNITY_EXCHANGE, true, false);
+    }
+
+    @Bean
+    public TopicExchange threadExchange() {
+        return new TopicExchange(THREAD_EXCHANGE, true, false);
     }
 
     @Bean
@@ -47,6 +64,11 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(communityNotificationQueue).to(communityExchange).with(COMMUNITY_NOTIFICATION_ROUTING_KEY);
     }
 
+    @Bean
+    public Binding threadNotificationBinding(Queue threadNotificationQueue, TopicExchange threadExchange) {
+        return BindingBuilder.bind(threadNotificationQueue).to(threadExchange).with(THREAD_NOTIFICATION_ROUTING_KEY);
+    }
+
     /** Same JSON converter so listener can auto-deserialize */
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
@@ -57,6 +79,7 @@ public class RabbitMQConfig {
         Map<String, Class<?>> idToClass = new HashMap<>();
         idToClass.put("MemberDTO",    com.example.miniapp.models.MemberDTO.class);
         idToClass.put("CommunityNotificationRequest", CommunityNotificationRequest.class);
+        idToClass.put("ThreadNotificationRequest", ThreadNotificationRequest.class);
 
         // …add any other event/DTO types you need
         typeMapper.setIdClassMapping(idToClass);
