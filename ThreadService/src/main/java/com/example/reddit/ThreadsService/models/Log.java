@@ -28,13 +28,12 @@ public class Log {
     public Log(UUID userId, ActionType actionType, UUID threadId) {
         this.id = UUID.randomUUID();
         this.timestamp = LocalDateTime.now();
-        this.userId=userId;
-        this.actionType=actionType;
-        this.threadId=threadId;
-
+        this.userId = userId;
+        this.actionType = actionType;
+        this.threadId = threadId;
     }
 
-    public String getLogType(){
+    public String getLogType() {
         return "";
     }
 
