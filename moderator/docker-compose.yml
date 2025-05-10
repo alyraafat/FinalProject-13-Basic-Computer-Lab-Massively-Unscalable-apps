@@ -18,9 +18,9 @@ services:
       - "17531:8080"
     depends_on:
       - db
-      - rabbitmq
+      # - rabbitmq
     networks:
-      - spring-network
+      - my_shared_net
 
   db:
     image: postgres
@@ -33,22 +33,13 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - spring-network
+      -  my_shared_net
 
-  rabbitmq:
-    image: rabbitmq:4.0-management
-    ports:
-      - "5672:5672"     # AMQP protocol port
-      - "15672:15672"   # RabbitMQ management web UI
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    networks:
-      - spring-network
+
 
 volumes:
   pgdata:
 
 networks:
-  spring-network:
-    driver: bridge
+  my_shared_net:
+    external: true

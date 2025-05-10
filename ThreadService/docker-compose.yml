@@ -10,7 +10,8 @@ services:
     depends_on:
       - mongo
       - mongo-express
-
+    networks:
+      - my_shared_net
 
   # MongoDB
   mongo:
@@ -22,6 +23,8 @@ services:
       MONGO_INITDB_DATABASE: threadDb
     ports:
       - "27017:27017"
+    networks:
+      - my_shared_net
 
   mongo-express:
     image: mongo-express
@@ -33,11 +36,10 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
       ME_CONFIG_BASICAUTH: false
-  rabbitmq:
-    image: rabbitmq:4.0-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - my_shared_net
+
+
+networks:
+  my_shared_net:
+    external: true

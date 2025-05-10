@@ -1,8 +1,10 @@
 package com.example.reddit.ThreadsService.services;
 
 import com.example.reddit.ThreadsService.clients.UserClient;
+import com.example.reddit.ThreadsService.dto.ReportRequest;
 import com.example.reddit.ThreadsService.models.*;
 import com.example.reddit.ThreadsService.models.Thread;
+import com.example.reddit.ThreadsService.rabbitmq.ThreadProducer;
 import com.example.reddit.ThreadsService.repositories.LogRepository;
 import com.example.reddit.ThreadsService.repositories.ThreadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,14 @@ public class ThreadService {
     private final ThreadRepository threadRepository;
     private final LogRepository logRepository;
     private final UserClient userClient;
+    private final ThreadProducer threadProducer;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient) {
+    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient, ThreadProducer threadProducer) {
         this.threadRepository = threadRepository;
         this.logRepository=logRepository;
         this.userClient=userClient;
+        this.threadProducer=threadProducer;
     }
 
     public List<String> testGetBlockedUsers() {
@@ -186,6 +190,8 @@ public class ThreadService {
 
 
 
+
+
     public List<Thread> recommendThreadsByUpvotes(UUID userId)
     {
 
@@ -230,4 +236,11 @@ public class ThreadService {
 
 
 
+
+
+    public void createReport (  UUID userReporting, UUID itemReported,String reportDescription,UUID communityId )
+    {
+
+        threadProducer.sendReportRequest(userReporting,itemReported,reportDescription,communityId);
+    }
     }

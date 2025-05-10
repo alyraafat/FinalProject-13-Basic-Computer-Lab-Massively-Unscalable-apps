@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JetClientState">
+    <option name="draftsState">
+      <draftsState>
+        <option name="requests">
+          <list>
+            <requestState>
+              <option name="id" value="0505d2e3-d20e-4a71-b1a3-0ccc3708b4ef" />
+              <option name="method" value="POST" />
+              <option name="name" value="Draft" />
+              <option name="queryParams">
+                <list>
+                  <queryParamState>
+                    <option name="key" value="moderatorId" />
+                    <option name="value" value="14e1d355-b311-487d-ae4f-2c39631d3898" />
+                  </queryParamState>
+                  <queryParamState>
+                    <option name="key" value="communityId" />
+                    <option name="value" value="3fa85f64-5717-4562-b3fc-2c963f66afa6" />
+                  </queryParamState>
+                  <queryParamState>
+                    <option name="key" value="threadId" />
+                    <option name="value" value="3fa85f64-5717-4562-b3fc-2c963f66afa6" />
+                  </queryParamState>
+                  <queryParamState>
+                    <option name="key" value="commentId" />
+                    <option name="value" value="3fa85f64-5717-4562-b3fc-2c963f66afa6" />
+                  </queryParamState>
+                </list>
+              </option>
+              <option name="url" value="http://localhost:17531/moderators/comment/remove?moderatorId=14e1d355-b311-487d-ae4f-2c39631d3898&amp;communityId=3fa85f64-5717-4562-b3fc-2c963f66afa6&amp;threadId=3fa85f64-5717-4562-b3fc-2c963f66afa6&amp;commentId=3fa85f64-5717-4562-b3fc-2c963f66afa6" />
+            </requestState>
+          </list>
+        </option>
+      </draftsState>
+    </option>
+    <option name="id" value="207dbd57-a5e9-4cc9-a572-ca66304bfc25" />
+    <option name="version" value="6" />
+  </component>
+</project>

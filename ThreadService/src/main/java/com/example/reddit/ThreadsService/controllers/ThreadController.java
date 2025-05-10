@@ -1,5 +1,6 @@
 package com.example.reddit.ThreadsService.controllers;
 
+import com.example.reddit.ThreadsService.dto.ReportRequest;
 import com.example.reddit.ThreadsService.models.Comment;
 import com.example.reddit.ThreadsService.models.Thread;
 import com.example.reddit.ThreadsService.models.ThreadDto;
@@ -103,6 +104,13 @@ public class ThreadController {
     public ResponseEntity<List<Thread>> recommendThreadsByUpvote(@PathVariable  UUID userId)
     {
         return ResponseEntity.ok(threadService.recommendThreadsByUpvotes(userId));
+    }
+
+
+    @PostMapping("/createReportRequest")
+    public void createReportRequest(@RequestBody ReportRequest request)
+    {
+        threadService.createReport(request.getUserReporting(),request.getItemReported(), request.getReportDescription(), request.getCommunityId());
     }
 
 
