@@ -2,7 +2,9 @@ package com.example.miniapp.services.Factory.impl;
 
 import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.entity.Notification;
+import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.enums.DeliveryChannel;
+import com.example.miniapp.repositories.UserNotifyRepository;
 import com.example.miniapp.services.Factory.Notifier;
 import com.example.miniapp.services.strategy.StrategySelector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class CommunityNotifier implements Notifier {
     @Autowired
     private StrategySelector strategySelector;
+    private UserNotifyRepository userNotifyRepository;
 
     @Override
     public void notify(Notification notification) {
@@ -26,7 +29,8 @@ public class CommunityNotifier implements Notifier {
         List<UUID> communityUsersId = new ArrayList<>();
 
         for (UUID userId : communityUsersId) {
-
+            UserNotification userNotification = new UserNotification(userId, notification);
+            userNotifyRepository.save(userNotification);
             strategySelector.performDelivery(notification);
         }
 

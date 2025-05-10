@@ -60,4 +60,16 @@ public class UserNotification {
     public void setReadAt(Instant readAt) {
         this.readAt = readAt;
     }
+
+    public UserNotification(UUID userId, Notification notification) {
+        this.id = UUID.randomUUID().toString();
+        this.userId = userId;
+        this.notification = notification;
+        this.status = "unread";
+        this.readAt = null;
+    }
+
+    public UserNotification() {
+        // Default constructor
+    }
 }
