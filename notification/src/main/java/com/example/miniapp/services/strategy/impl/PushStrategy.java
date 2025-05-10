@@ -10,34 +10,36 @@ import org.slf4j.LoggerFactory;
 
 @Component
 public class PushStrategy implements DeliveryStrategy {
-    private static final Logger logger = LoggerFactory.getLogger(PushStrategy.class);
-
-    private final NotificationService notificationService;
-
-    public PushStrategy(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
 
     @Override
-    public void deliver(Notification request) {
+    public void deliver(Notification notification) {
         try {
-            String formattedPayload = formatPushNotification(request);
-
-            boolean delivered = notificationService.sendPush(formattedPayload);
+            String pushPayload = formatPushNotification(notification);
+            boolean delivered = sendPush(pushPayload);
 
             if (!delivered) {
-                logger.warn("Push delivery failed for request: {}", request.getId());
+                System.err.println("Push delivery failed for notification: " + notification.getId());
             }
         } catch (Exception e) {
-            logger.error("Push delivery error", e);
+            System.err.println("Push delivery error: " + e.getMessage());
             throw new RuntimeException("Push delivery failed", e);
         }
     }
 
-    private String formatPushNotification(Notification request) {
+    private String formatPushNotification(Notification notification) {
         return String.format("%s|%s|%s",
-                request.getType(),
-                request.getMessage(),
-                request.getCreatedAt());
+                notification.getType(),
+                notification.getMessage(),
+                notification.getCreatedAt());
+    }
+
+    private boolean sendPush(String formattedPayload) {
+        try {
+            System.out.println("[PUSH] Simulation - would send: " + formattedPayload);
+            return true; // Simulate successful send
+        } catch (Exception e) {
+            System.err.println("Failed to send push: " + e.getMessage());
+            return false;
+        }
     }
 }

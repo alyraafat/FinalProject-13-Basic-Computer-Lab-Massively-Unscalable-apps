@@ -28,22 +28,19 @@ public class UserNotifier implements Notifier {
 
     @Override
     public void notify(Notification notification) {
-
-//        UUID target = notification.getReceiverId();
-//        DeliveryStrategy deliveryStrategy = strategySelect.selectStrategy(String.valueOf(target));
-//
-//        StrategySelector strategySelector = new StrategySelector( deliveryStrategy);
-//
-//        strategySelector.performDelivery(notification);
-
+        // Create and save user notification first
+        UserNotification userNotification = new UserNotification();
         userNotification.setUserId(notification.getReceiverId());
         userNotification.setNotification(notification);
-//        userNotification.setReadAt("null");
-//        TODO: to be continued (rest of attributes or make constructor instead)
 
         userNotifyRepository.save(userNotification);
-        strategySelector.performDelivery(notification);
 
+        try {
+            strategySelector.performDelivery(notification);
+        } catch (Exception e) {
+            System.out.println("Failed to deliver");
+            // Handle delivery failure (log, retry, etc.)
+            // You might want to update notification status here
+        }
     }
-
 }

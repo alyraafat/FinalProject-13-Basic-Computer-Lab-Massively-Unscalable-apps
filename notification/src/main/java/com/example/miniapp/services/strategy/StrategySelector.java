@@ -33,7 +33,6 @@ public class StrategySelector {
         } else if (preference.isEmailNotifications()) {
             return emailStrategy;
         }
-
         throw new RuntimeException("No delivery method enabled for user");
     }
 }

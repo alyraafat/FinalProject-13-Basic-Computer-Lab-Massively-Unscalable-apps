@@ -35,19 +35,10 @@ public class NotificationController {
 
     @PostMapping
     public ResponseEntity<NotificationResponse> createNotification(@RequestBody NotificationRequest request) {
-        // Strategy will also be selected inside the factory
-//        Notifier notifier = notifierFactory.createNotifier(request);
-//        notifier.send(request);
 
-        // Save to database
-//        YOUR PREVIOUS COMMIT
-//        Notification notification = mapRequestToEntity(request);
-//        notificationRepository.save(notification);
 
         notificationService.process(request);
 
-//        commented
-//        return ResponseEntity.ok(mapToResponse(notification));
         return ResponseEntity.ok(new NotificationResponse());
     }
 //  PREVIOUS COMMIT
