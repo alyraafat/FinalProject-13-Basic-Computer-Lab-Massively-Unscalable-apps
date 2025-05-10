@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: alyraafat/user-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            # Load the "dev" profile so Spring reads dev.yml overrides
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+
+            # Point at your Postgres headless Service:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/user_service
+
+            # Pull username & password from the Secret:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+
