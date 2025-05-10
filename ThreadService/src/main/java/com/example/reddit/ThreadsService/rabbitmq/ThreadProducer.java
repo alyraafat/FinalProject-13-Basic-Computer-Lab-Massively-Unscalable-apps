@@ -31,6 +31,7 @@ public class ThreadProducer {
 
     public void sendThreadNotificationRequest(UUID threadId) {
         List<Log> threadLogs = logService.getLogsByThread(threadId);
+        // TODO: check if these userIds should be distinct
         List<UUID> userIds = threadLogs.stream().map(Log::getUserId).distinct().toList();
         ThreadNotificationRequest notificationRequest = new ThreadNotificationRequest(threadId, userIds);
         rabbitTemplate.convertAndSend(RabbitMQConfig.THREAD_EXCHANGE, RabbitMQConfig.THREAD_NOTIFICATION_ROUTING_KEY, notificationRequest);
