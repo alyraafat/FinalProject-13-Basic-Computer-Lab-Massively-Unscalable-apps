@@ -23,10 +23,10 @@ public class CommunityNotifier implements Notifier {
 
     @Override
     public void notify(Notification notification) {
-        UUID target = notification.getReceiverId();
+//        UUID target = notification.getReceiverId();
 //        TODO: comunication  get all users inside the target comunity id
 //        UUID list
-        List<UUID> communityUsersId = new ArrayList<>();
+        List<UUID> communityUsersId = notification.getRecieversId();
 
         for (UUID userId : communityUsersId) {
             UserNotification userNotification = new UserNotification(userId, notification);

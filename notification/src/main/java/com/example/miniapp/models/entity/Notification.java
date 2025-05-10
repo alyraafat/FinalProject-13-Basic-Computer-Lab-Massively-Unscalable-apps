@@ -3,6 +3,7 @@ package com.example.miniapp.models.entity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,11 +19,9 @@ public class Notification {
     private Instant createdAt;
 
     // Convert to list of recievers
-    private UUID receiverId;
-
-    public UUID getReceiverId() { return receiverId; }
-
-    public void setReceiverId(UUID receiverId) { this.receiverId = receiverId; }
+     private List<UUID> recieversId;
+     public List<UUID> getRecieversId() { return recieversId; }
+    public void setRecieversId(List<UUID> recieversId) { this.recieversId = recieversId; }
 
     public String getId() {
         return id;
