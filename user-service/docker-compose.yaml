@@ -1,15 +1,15 @@
 services:
-  spring-app:
-    container_name: spring-app
-    build: .
-    ports:
-      - "8080:8080"
-    environment:
-      server.error.include-message: always
-    restart:
-      on-failure
-    depends_on:
-      - postgres
+#  spring-app:
+#    container_name: spring-app
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      server.error.include-message: always
+#    restart:
+#      on-failure
+#    depends_on:
+#      - postgres
 
   # PostgreSQL
   postgres:

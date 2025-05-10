@@ -4,6 +4,7 @@ package com.redditclone.user_service.repositories;
 import com.redditclone.user_service.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,5 +23,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByUsername(String userName);
     Optional<User> findByEmail(String email);
+
+    @Query("SELECT u.email FROM User u WHERE u.id IN :ids")
+    List<String> findEmailsByIds(@Param("ids") List<UUID> ids);
 
 }

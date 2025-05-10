@@ -69,4 +69,12 @@ public class UserController {
         return ResponseHandler.generateResponse("Test Auth", HttpStatus.OK, null);
     }
 
+    @GetMapping("/get_emails")
+    public ResponseEntity<List<String>> getUserEmails(
+            @RequestParam("ids") List<UUID> ids
+    ) {
+        List<String> emails = userService.getEmailsByIds(ids);
+        return ResponseEntity.ok(emails);
+    }
+
 }
