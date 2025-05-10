@@ -8,11 +8,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="ModeratorService" />
         <module name="ThreadsService" />
+        <module name="CommunitiesService" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="CommunitiesService" options="-parameters" />
       <module name="ModeratorService" options="-parameters" />
       <module name="ThreadsService" options="-parameters" />
     </option>

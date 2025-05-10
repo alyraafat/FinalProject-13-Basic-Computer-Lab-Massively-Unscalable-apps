@@ -92,6 +92,10 @@ public class CommunityController {
         return ResponseEntity.ok(communityService.getCommunitiesByMemberId(memberId));
     }
 
+    @PostMapping("/{communityId}/thread/{threadId}")
+    public ResponseEntity<Community> addThread(@PathVariable UUID communityId, @PathVariable UUID threadId) {
+        return ResponseEntity.ok(communityService.addThread(communityId, threadId));
+    }
 
    @PostMapping("/{communityId}/moderators/{userId}")
    public ResponseEntity<Community> addModerator(@PathVariable UUID communityId, @PathVariable UUID userId) {

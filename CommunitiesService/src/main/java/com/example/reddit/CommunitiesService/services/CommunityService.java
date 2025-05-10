@@ -10,10 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -108,6 +105,14 @@ public class CommunityService {
         return communityRepository.findByMemberIdsContaining(memberId);
     }
 
+    // Add thread to a community
+    public Community addThread(UUID communityId, UUID threadId) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+        community.getThreadIds().add(threadId);
+        return communityRepository.save(community);
+    }
+
     public Community addModerator(UUID communityId, UUID userId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
@@ -186,14 +191,21 @@ public class CommunityService {
     public List<CommunityThread> getCommunityThreadsByDate(UUID communityId) {
         Community c = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
+        List<CommunityThread> threads = new ArrayList<>();
+        // Fetch threads by their IDs
+        for (UUID threadId : c.getThreadIds()) {
+            CommunityThread thread = threadClient.getThreadById(threadId);
+            // add thread to threads
+            if (thread != null) {
+                threads.add(thread);
+            }
+        }
 
-        return c.getThreadIds().stream()
-                .map(threadClient::getById) // Optional<ThreadDto>
-                .flatMap(Optional::stream) // drop missing
-                .sorted(Comparator.comparing(
-                        CommunityThread::getCreatedAt)
-                        .reversed())
+        // sort threads by date the return them
+        return threads.stream()
+                .sorted(Comparator.comparing(CommunityThread::getCreatedAt).reversed())
                 .collect(Collectors.toList());
+
     }
 
     /**
@@ -203,15 +215,21 @@ public class CommunityService {
         Community c = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
 
-        return c.getThreadIds().stream()
-                .map(threadClient::getById)
-                .flatMap(Optional::stream)
-                .sorted(Comparator
-                        .comparingInt((CommunityThread t) -> t.getUpVotes()
-                                - (t.getDownVotes() != null ? t.getDownVotes() : 0))
-                        .reversed()
-                )
+        List<CommunityThread> threads = new ArrayList<>();
+
+        for (UUID threadId : c.getThreadIds()) {
+            CommunityThread thread = threadClient.getThreadById(threadId);
+            // add thread to threads
+            if (thread != null) {
+                threads.add(thread);
+            }
+        }
+
+        // sort threads by top which is (upvotes - downvotes) and return them
+        return threads.stream()
+                .sorted(Comparator.comparingInt((CommunityThread t) -> t.getUpVotes() - (t.getDownVotes() != null ? t.getDownVotes() : 0)).reversed())
                 .collect(Collectors.toList());
+
     }
 
 }
