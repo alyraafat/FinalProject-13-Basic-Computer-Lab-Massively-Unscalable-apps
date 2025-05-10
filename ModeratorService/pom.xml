@@ -12,8 +12,8 @@
 	<groupId>com.example</groupId>
 	<artifactId>ModeratorService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>moderator</name>
-	<description>moderator</description>
+	<name>ModeratorService</name>
+	<description>ModeratorService</description>
 
 	<properties>
 		<java.version>23</java.version>
