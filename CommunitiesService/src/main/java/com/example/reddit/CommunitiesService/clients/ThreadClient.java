@@ -14,7 +14,7 @@ import java.util.UUID;
 @Component
 public class ThreadClient {
     private final RestTemplate rest;
-    private final String baseUrl = "http://threads-service/api/threads";
+    private final String baseUrl = "http://localhost:8090/threads";
 
     @Autowired
     public ThreadClient(RestTemplate restTemplate) {

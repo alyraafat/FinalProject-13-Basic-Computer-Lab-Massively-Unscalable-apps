@@ -158,7 +158,15 @@ public class CommunityService {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
         community.getBannedUserIds().remove(userId);
+        community.getMemberIds().add(userId);
         return communityRepository.save(community);
+    }
+
+    // check if user is banned from community
+    public boolean isUserBanned(UUID communityId, UUID userId) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new RuntimeException("Community not found"));
+        return community.getBannedUserIds().contains(userId);
     }
 
     /**
