@@ -30,7 +30,7 @@ public class NotificationService {
         this.preferenceService = preferenceService;
         this.notificationRepository = notificationRepository;
     }
-
+    
 
     public void process(NotificationRequest request) {
 
@@ -49,10 +49,10 @@ public class NotificationService {
         notification.setType(request.getType().toString());
         notification.setMessage(request.getRawMessage());
         notification.setCreatedAt(Instant.now());
-        notification.setReceiverId(request.getReceiverId());
+        notification.setReceiversId(request.getReceiversId());
         // Additional fields you might want to set
         notification.setTitle(generateTitleFromType(request.getType()));
-        notification.setSenderId(request.getActorUserId()); // Or another sender identifier
+        notification.setSenderId(String.valueOf(request.getSenderId())); // Or another sender identifier
 
         return notification;
     }

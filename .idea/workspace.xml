@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="Setting Up Testing enviroment and config files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/NotificationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/NotificationRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/Notification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/CommunityNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/CommunityNotifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/ThreadNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/ThreadNotifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/UserNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/UserNotifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/enums/NotificationType.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/enums/NotificationType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/test/java/com/example/miniapp/NotificationServiceTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/test/java/com/example/miniapp/NotificationServiceTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

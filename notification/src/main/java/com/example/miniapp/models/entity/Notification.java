@@ -19,9 +19,14 @@ public class Notification {
     private Instant createdAt;
 
     // Convert to list of recievers
-     private List<UUID> recieversId;
-     public List<UUID> getRecieversId() { return recieversId; }
-    public void setRecieversId(List<UUID> recieversId) { this.recieversId = recieversId; }
+    @ElementCollection
+    @CollectionTable(name = "notification_receivers", joinColumns = @JoinColumn(name = "notification_id"))
+    @Column(name = "receiver_id")
+    private List<UUID> receiversId;
+
+
+     public List<UUID> getReceiversId() { return receiversId; }
+    public void setReceiversId(List<UUID> recieversId) { this.receiversId = recieversId; }
 
     public String getId() {
         return id;

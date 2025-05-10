@@ -1,79 +1,65 @@
 package com.example.miniapp.models.dto;
 
 import com.example.miniapp.models.enums.NotificationType;
-import jakarta.persistence.*;
 import java.time.Instant;
-import java.util.Objects;
+import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "notification_requests")
 public class NotificationRequest {
-
-    // PRIMARY KEY
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    // CORE CONTENT
-    @Column(nullable = false, length = 1000)
     private String rawMessage;
-
-    @Column(nullable = false)
-    private UUID receiverId;
-
-    // SYSTEM METADATA
-    @Column(nullable = false, name = "origin_system")
-    private String originSystem;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    private List<UUID> receiversId;
+    private UUID senderId;
     private NotificationType type;
-
-    @Column(nullable = false, updatable = false, name = "created_at")
     private Instant createdAt;
 
-    // HUMAN CONTEXT
-    @Column(name = "actor_user_id")
-    private String actorUserId;
 
-    // JPA REQUIREMENTS
-    protected NotificationRequest() {}
 
-    public NotificationRequest(String rawMessage,
-                               UUID receiverId,
-                               String originSystem,
-                               NotificationType type,
-                               String actorUserId) {
-        this.rawMessage = validateMessage(rawMessage);
-        this.receiverId = Objects.requireNonNull(receiverId);
-        this.originSystem = validateSystem(originSystem);
-        this.type = Objects.requireNonNull(type);
+    public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String type) {
+        this.rawMessage = rawMessage;
+        this.receiversId = receiversId;
+        this.type = NotificationType.fromString(type);
+        this.senderId = senderId;
         this.createdAt = Instant.now();
-        this.actorUserId = actorUserId;
     }
 
-    // VALIDATION HELPERS
-    private String validateMessage(String message) {
-        if (message == null || message.isBlank()) {
-            throw new IllegalArgumentException("Message cannot be blank");
-        }
-        return message.length() > 1000 ? message.substring(0, 1000) : message;
+    public UUID getSenderId() {
+        return senderId;
     }
 
-    private String validateSystem(String system) {
-        if (system == null || system.isBlank()) {
-            throw new IllegalArgumentException("Origin system cannot be blank");
-        }
-        return system.trim();
+    public void setSenderId(UUID senderId) {
+        this.senderId = senderId;
     }
 
-    // GETTERS
-    public UUID getId() { return id; }
-    public String getRawMessage() { return rawMessage; }
-    public UUID getReceiverId() { return receiverId; }
-    public String getOriginSystem() { return originSystem; }
-    public NotificationType getType() { return type; }
-    public Instant getCreatedAt() { return createdAt; }
-    public String getActorUserId() { return actorUserId; }
+    // Getters and setters (optional, if needed)
+    public String getRawMessage() {
+        return rawMessage;
+    }
+
+    public void setRawMessage(String rawMessage) {
+        this.rawMessage = rawMessage;
+    }
+
+    public List<UUID> getReceiversId() {
+        return receiversId;
+    }
+
+    public void setReceiversId(List<UUID> receiversId) {
+        this.receiversId = receiversId;
+    }
+
+    public NotificationType getType() {
+        return type;
+    }
+
+    public void setType(NotificationType type) {
+        this.type = type;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
 }

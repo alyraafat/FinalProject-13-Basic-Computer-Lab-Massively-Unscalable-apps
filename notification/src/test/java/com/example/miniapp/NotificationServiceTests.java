@@ -67,11 +67,11 @@ class NotificationServiceTests {
         // Create notification request
         NotificationRequest request = new NotificationRequest(
                 "Test user-specific notification",
-                UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
-                "reddit-service",
-                NotificationType.USER_SPECIFIC,
-                "system"
+                List.of(UUID.fromString("123e4567-e89b-12d3-a456-426614174000")),
+                UUID.fromString("223e4567-e89b-12d3-a456-426614174001"), // senderId
+                "user"
         );
+
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
