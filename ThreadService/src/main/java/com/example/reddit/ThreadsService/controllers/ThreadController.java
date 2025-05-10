@@ -99,11 +99,11 @@ public class ThreadController {
       return threadService.updateThread(id,newThread);
     }
 
-//    @PostMapping("/recommendThreads/{userId}")
-//    public ResponseEntity<List<Thread>> recommendThreadsByUpvote(@PathVariable  UUID userId)
-//    {
-//        return ResponseEntity.ok(threadService.recommendThreadsByUpvotes(userId));
-//    }
+    @PostMapping("/recommendThreads/{userId}")
+    public ResponseEntity<List<Thread>> recommendThreadsByUpvote(@PathVariable  UUID userId)
+    {
+        return ResponseEntity.ok(threadService.recommendThreadsByUpvotes(userId));
+    }
 
 
 }
