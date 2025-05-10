@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/communities")
+@RequestMapping("/communities")
 public class CommunityController {
     private final CommunityService communityService;
 
@@ -35,6 +35,13 @@ public class CommunityController {
         return communityService.getCommunityById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // check if user is banned from community
+    @GetMapping("/{id}/is-banned/{userId}")
+    public ResponseEntity<Boolean> isUserBanned(@PathVariable UUID id, @PathVariable UUID userId) {
+        boolean isBanned = communityService.isUserBanned(id, userId);
+        return ResponseEntity.ok(isBanned);
     }
 
     @PostMapping
