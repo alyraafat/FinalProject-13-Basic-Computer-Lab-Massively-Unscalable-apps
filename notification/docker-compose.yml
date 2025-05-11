@@ -22,7 +22,9 @@ services:
     container_name: mongodb
     restart: always
     environment:
-      MONGO_INITDB_DATABASE: notification_service_mongo
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGO_INITDB_DATABASE=notification_service_mongo
     ports:
       - "27017:27017"
     volumes:
