@@ -6,10 +6,12 @@ on:
     branches: ["main", "userservicebase"]
     paths:
       - 'user-service/**'
+      - '.github/workflows/user-service-ci-cd.yml'
   pull_request:
     branches: ["**"]
     paths:
       - 'user-service/**'
+      - '.github/workflows/user-service-ci-cd.yml'
 
 jobs:
   ci:
