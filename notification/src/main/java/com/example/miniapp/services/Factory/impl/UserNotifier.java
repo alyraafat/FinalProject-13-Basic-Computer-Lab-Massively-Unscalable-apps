@@ -29,7 +29,7 @@ public class UserNotifier implements Notifier {
     @Override
     public void notify(Notification notification) {
         // Create and save user notification first
-        UserNotification userNotification = new UserNotification(notification.getRecieversId().get(0), notification);
+        UserNotification userNotification = new UserNotification(notification.getReceiversId().get(0), notification);
 
         userNotifyRepository.save(userNotification);
 

@@ -1,8 +1,10 @@
 package com.example.miniapp.services;
 
 import com.example.miniapp.models.dto.NotificationRequest;
+import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.enums.DeliveryChannel;
 import com.example.miniapp.repositories.NotificationRepository;
+import com.example.miniapp.repositories.UserNotifyRepository;
 import com.example.miniapp.services.Factory.Notifier;
 import com.example.miniapp.services.Factory.NotifierFactory;
 import com.example.miniapp.services.strategy.DeliveryStrategy;
@@ -14,23 +16,37 @@ import com.example.miniapp.models.enums.NotificationType;
 import com.example.miniapp.models.entity.Notification;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
 public class NotificationService {
     private final NotifierFactory notifierFactory;
-    private final PreferenceService preferenceService;
     private final NotificationRepository notificationRepository;
+    private final UserNotifyRepository userNotificationRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
-    public NotificationService(NotifierFactory factory, PreferenceService preferenceService, NotificationRepository notificationRepository) {
-        this.notifierFactory = factory;
-        this.preferenceService = preferenceService;
+    public NotificationService(
+            NotifierFactory notifierFactory,
+            NotificationRepository notificationRepository,
+            UserNotifyRepository userNotificationRepository
+    ) {
+        this.notifierFactory = notifierFactory;
         this.notificationRepository = notificationRepository;
+        this.userNotificationRepository = userNotificationRepository;
     }
-    
+
+    public List<UserNotification> getUserNotifications(UUID userId, String status) {
+        if (status == null || status.isBlank()) {
+            return userNotificationRepository.findByUserId(userId);
+        } else {
+            return userNotificationRepository.findByUserIdAndStatus(userId, status.toLowerCase());
+        }
+    }
+
 
     public void process(NotificationRequest request) {
 
@@ -42,6 +58,16 @@ public class NotificationService {
         notifier.notify(notification);
     }
 
+
+    public void readNotification(String userNotificationId) {
+        userNotificationRepository.findById(userNotificationId)
+                .ifPresent(userNotification -> {
+                    userNotification.setStatus("read");
+                    userNotification.setReadAt(Instant.now());
+                    userNotificationRepository.save(userNotification);
+                });
+    }
+//    HELPERS
     private Notification mapRequestToEntity(NotificationRequest request) {
         Notification notification = new Notification();
 
@@ -52,7 +78,7 @@ public class NotificationService {
         notification.setReceiversId(request.getReceiversId());
         // Additional fields you might want to set
         notification.setTitle(generateTitleFromType(request.getType()));
-        notification.setSenderId(String.valueOf(request.getSenderId())); // Or another sender identifier
+        notification.setSenderId(String.valueOf(request.getSenderId()));
 
         return notification;
     }
@@ -68,37 +94,3 @@ public class NotificationService {
 
 
 }
-
-
-//import org.slf4j.LoggerFactory;
-//import org.slf4j.Logger;
-//
-//@Service
-//public class NotificationService {
-//    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
-//
-//    // For push notifications
-//    public boolean sendPush(String formattedPayload) {
-//        try {
-//            logger.info("Sending push notification: {}", formattedPayload);
-//            System.out.println("[PUSH] " + formattedPayload);
-//            return true; // Assume success for demo
-//        } catch (Exception e) {
-//            logger.error("Failed to send push notification", e);
-//            return false;
-//        }
-//    }
-//
-//    // For email notifications
-//    public boolean sendEmail(String emailContent) {
-//        try {
-//            logger.info("Sending email notification");
-//            System.out.println("[EMAIL]\n" + emailContent);
-//            return true; // Assume success for demo
-//        } catch (Exception e) {
-//            logger.error("Failed to send email notification", e);
-//            return false;
-//        }
-//    }
-//
-//}

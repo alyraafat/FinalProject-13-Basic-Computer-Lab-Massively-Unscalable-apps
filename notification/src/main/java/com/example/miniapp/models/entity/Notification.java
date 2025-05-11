@@ -26,7 +26,7 @@ public class Notification {
 
 
      public List<UUID> getReceiversId() { return receiversId; }
-    public void setReceiversId(List<UUID> recieversId) { this.receiversId = recieversId; }
+    public void setReceiversId(List<UUID> receiversId) { this.receiversId = receiversId; }
 
     public String getId() {
         return id;

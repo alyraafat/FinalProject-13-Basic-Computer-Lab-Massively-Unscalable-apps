@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 
 import java.time.Instant;
 import java.util.UUID;
+import jakarta.persistence.JoinColumn;
+
 
 @Entity
 @Table(name = "user_notifications")
@@ -15,6 +17,7 @@ public class UserNotification {
     private String id;
 
     @ManyToOne
+    @JoinColumn(name = "notification_id")
     private Notification notification;
 
     private UUID userId;

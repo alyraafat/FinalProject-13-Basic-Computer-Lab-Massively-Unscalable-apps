@@ -3,18 +3,18 @@ package com.example.miniapp.controllers;
 import com.example.miniapp.models.dto.NotificationResponse;
 import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.entity.Notification;
+import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.enums.NotificationType;
 import com.example.miniapp.repositories.NotificationRepository;
 import com.example.miniapp.services.Factory.Notifier;
 import com.example.miniapp.services.Factory.NotifierFactory;
 import com.example.miniapp.services.NotificationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/notifications")
@@ -33,49 +33,27 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<List<UserNotification>> getUserNotifications(
+            @RequestParam UUID userId,
+            @RequestParam(required = false) String status
+    ) {
+        List<UserNotification> notifications = notificationService.getUserNotifications(userId, status);
+        return ResponseEntity.ok(notifications);
+    }
+
     @PostMapping
     public ResponseEntity<String> createNotification(@RequestBody NotificationRequest request) {
-
-
         notificationService.process(request);
-
         return ResponseEntity.ok("Sent!");
     }
-//  PREVIOUS COMMIT
-//    private Notification mapRequestToEntity(NotificationRequest request) {
-//        Notification notification = new Notification();
-//
-//        // Core fields
-//        notification.setType(request.getType().toString());
-//        notification.setMessage(request.getRawMessage());
-//        notification.setCreatedAt(Instant.now());
-//
-//        // Additional fields you might want to set
-//        notification.setTitle(generateTitleFromType(request.getType()));
-//        notification.setSenderId(request.getActorUserId()); // Or another sender identifier
-//
-//        return notification;
-//    }
 
-    private NotificationResponse mapToResponse(Notification notification) {
-//        return NotificationResponse.builder()
-//                .id(notification.getId())
-//                .type(notification.getType())
-//                .title(notification.getTitle())
-//                .message(notification.getMessage())
-//                .createdAt(notification.getCreatedAt())
-//                .status("DELIVERED") // Or get actual status from UserNotification
-//                .build();
-        return new NotificationResponse();
+    @PutMapping
+    public ResponseEntity<String> readNotification(@RequestBody UUID userNotificationId) {
+        notificationService.readNotification(String.valueOf(userNotificationId));
+        return ResponseEntity.ok("Read!");
     }
 
-//    private String generateTitleFromType(NotificationType type) {
-//        switch(type) {
-//            case COMMUNITY: return "Community Update";
-//            case THREAD: return "New Thread Activity";
-//            case USER_SPECIFIC: return "User Notification";
-//            default: return "Notification";
-//        }
-//    }
+
 
 }

@@ -26,7 +26,7 @@ public class CommunityNotifier implements Notifier {
 //        UUID target = notification.getReceiverId();
 //        TODO: comunication  get all users inside the target comunity id
 //        UUID list
-        List<UUID> communityUsersId = notification.getRecieversId();
+        List<UUID> communityUsersId = notification.getReceiversId();
 
         for (UUID userId : communityUsersId) {
             UserNotification userNotification = new UserNotification(userId, notification);
