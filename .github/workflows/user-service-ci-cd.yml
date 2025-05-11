@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - '../..'
+      - 'user-service/**'
   pull_request:
     paths:
-      - '../..'
+      - 'user-service/**'
 
 jobs:
   ci:
