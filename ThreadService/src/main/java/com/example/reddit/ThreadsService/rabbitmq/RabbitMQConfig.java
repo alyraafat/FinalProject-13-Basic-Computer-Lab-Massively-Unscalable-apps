@@ -1,6 +1,7 @@
 package com.example.reddit.ThreadsService.rabbitmq;
 
 import com.example.reddit.ThreadsService.dto.DeleteCommentRequest;
+import com.example.reddit.ThreadsService.dto.NotificationRequest;
 import com.example.reddit.ThreadsService.dto.ReportRequest;
 import com.example.reddit.ThreadsService.dto.ThreadNotificationRequest;
 import org.springframework.amqp.core.Binding;
@@ -52,7 +53,7 @@ public class RabbitMQConfig {
         Map<String, Class<?>> idClassMapping = new HashMap<>();
         idClassMapping.put("ReportRequest", ReportRequest.class);
         idClassMapping.put("DeleteCommentRequest", DeleteCommentRequest.class);
-        idClassMapping.put("ThreadNotificationRequest", ThreadNotificationRequest.class);
+        idClassMapping.put("NotificationRequest", NotificationRequest.class);
 
         typeMapper.setIdClassMapping(idClassMapping);
         typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.TYPE_ID);
