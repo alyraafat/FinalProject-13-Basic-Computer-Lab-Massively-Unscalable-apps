@@ -3,13 +3,11 @@ name: user-service CI/CD
 on:
   workflow_dispatch:
   push:
+    branches: ["main", "userservicebase"]
     paths:
       - 'user-service/**'
   pull_request:
-    # Only fire when the *destination* branch is one of these
-    branches:
-      - main
-      - userservicebase
+    branches: ["**"]
     paths:
       - 'user-service/**'
 
