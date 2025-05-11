@@ -1,5 +1,6 @@
 package com.redditclone.user_service.services;
 
+import com.redditclone.user_service.exceptions.RedditAppException;
 import com.redditclone.user_service.models.Block;
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.repositories.BlockRepository;
@@ -25,6 +26,10 @@ public class BlockService {
 
     @Transactional
     public void blockUser(UUID userId, UUID blockedId) {
+        // Check if the user is trying to block themselves
+        if (userId.equals(blockedId)) {
+            throw new IllegalArgumentException("Cannot block yourself");
+        }
         User[] users = getBlockerAndBlocked(userId, blockedId);
         User blocker = users[0];
         User blocked = users[1];

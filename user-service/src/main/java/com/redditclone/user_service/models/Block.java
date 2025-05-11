@@ -1,10 +1,7 @@
 package com.redditclone.user_service.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,6 +14,7 @@ import org.hibernate.annotations.OnDeleteAction;
                                                 name = "uq_blocks_blocker_blocked",
                                                 columnNames = {"blocker_id","blocked_id"})
 )
+@Builder
 public class Block {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

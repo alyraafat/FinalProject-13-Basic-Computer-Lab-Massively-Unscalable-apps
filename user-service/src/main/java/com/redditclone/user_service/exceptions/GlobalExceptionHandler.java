@@ -1,6 +1,7 @@
 package com.redditclone.user_service.exceptions;
 
 import com.redditclone.user_service.utils.ResponseHandler;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({RedditAppException.class})
     public ResponseEntity<Object> handleRedditAppException(RedditAppException exception) {
         return ResponseHandler.generateResponse(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+    }
+
+    @ExceptionHandler({EntityNotFoundException.class})
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException exception) {
+        return ResponseHandler.generateResponse(exception.getMessage(), HttpStatus.NOT_FOUND, null);
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException exception) {
+        return ResponseHandler.generateResponse(exception.getMessage(), HttpStatus.BAD_REQUEST, null);
     }
 
 
