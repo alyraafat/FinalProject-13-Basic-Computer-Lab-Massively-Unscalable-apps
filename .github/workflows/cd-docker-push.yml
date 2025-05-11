@@ -9,6 +9,10 @@ on:
       service-dir:
         required: true
         type: string
+      image-name:           # ← new input
+        description: 'Name of the Docker image (without user/org prefix)'
+        required: true
+        type: string
 
 jobs:
   docker-build-and-push:
@@ -21,7 +25,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
-          # put the JAR back where it came from:
           path: ${{ inputs.service-dir }}/target
 
       - name: Log in to Docker Hub
@@ -30,16 +33,15 @@ jobs:
             | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build & tag Docker image
-        # we need to build _inside_ the service folder
         working-directory: ${{ inputs.service-dir }}
         run: |
           docker build \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/my-java-app:latest .
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:latest .
           docker tag \
-            ${{ secrets.DOCKERHUB_USERNAME }}/my-java-app:latest \
-            ${{ secrets.DOCKERHUB_USERNAME }}/my-java-app:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:latest \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:${{ github.sha }}
 
       - name: Push images to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-java-app:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-java-app:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:${{ github.sha }}
