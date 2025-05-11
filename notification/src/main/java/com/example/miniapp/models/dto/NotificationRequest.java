@@ -11,14 +11,16 @@ public class NotificationRequest {
     private UUID senderId;
     private NotificationType type;
     private Instant createdAt;
+    private String senderName;
 
 
 
-    public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String type) {
+    public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String type, String senderName) {
         this.rawMessage = rawMessage;
         this.receiversId = receiversId;
         this.type = NotificationType.fromString(type);
         this.senderId = senderId;
+        this.senderName = senderName;
         this.createdAt = Instant.now();
     }
 
@@ -61,5 +63,13 @@ public class NotificationRequest {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 }
