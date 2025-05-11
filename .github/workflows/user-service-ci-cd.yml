@@ -6,6 +6,10 @@ on:
     paths:
       - 'user-service/**'
   pull_request:
+    # Only fire when the *destination* branch is one of these
+    branches:
+      - main
+      - userservicebase
     paths:
       - 'user-service/**'
 
@@ -13,7 +17,7 @@ jobs:
   ci:
     uses: ./.github/workflows/ci-java-maven.yml
     with:
-      branch: 'refs/heads/main'
+      branch: ${{ github.ref }}
       service-dir: 'user-service'
     secrets: inherit
 
