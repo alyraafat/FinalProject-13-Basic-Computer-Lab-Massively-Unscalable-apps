@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="Setting Up Testing enviroment and config files">
+    <list default="true" id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="feat: change types of notification to only 1 notification request">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/NotificationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/NotificationRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/rabbitmq/NotificationConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/rabbitmq/NotificationConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/rabbitmq/RabbitMQConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/rabbitmq/RabbitMQConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/StrategySelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/StrategySelector.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,7 +215,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746540008828</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="feat: change types of notification to only 1 notification request">
+      <option name="closed" value="true" />
+      <created>1747003487485</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747003487485</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,6 +246,7 @@
     <MESSAGE value="feat: add RabbitMQ configs and consumer code for add new member in communities" />
     <MESSAGE value="model,controller,repositories updated" />
     <MESSAGE value="Setting Up Testing enviroment and config files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Setting Up Testing enviroment and config files" />
+    <MESSAGE value="feat: change types of notification to only 1 notification request" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: change types of notification to only 1 notification request" />
   </component>
 </project>
