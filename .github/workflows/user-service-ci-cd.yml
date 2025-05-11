@@ -14,6 +14,7 @@ jobs:
     uses: ./.github/workflows/ci-java-maven.yml
     with:
       branch: 'refs/heads/main'
+      service-dir: 'user-service'
     secrets: inherit
 
   docker:
