@@ -74,18 +74,20 @@ public class BlockController {
     }
 
     @GetMapping("/allblocks")
-    public ResponseEntity<List<UUID>> getAllBlockedOrBlockedByUsers(@PathVariable UUID userId) {
+    public ResponseEntity<List<String>> getAllBlockedOrBlockedByUsers(@PathVariable UUID userId) {
         try{
-            List<User> blocked = blockService.getBlockedUsers(userId);
-            List<User> blockedBy = blockService.getUsersThatBlocked(userId);
-            List<UUID> blocksUUID = new ArrayList<>();
-            for (User user : blockedBy) {
-                blocksUUID.add(user.getId());
-            }
-            for (User user : blocked) {
-                blocksUUID.add(user.getId());
-            }
+            List<String> blocksUUID = new ArrayList<>();
             return ResponseEntity.ok(blocksUUID);
+//            List<User> blocked = blockService.getBlockedUsers(userId);
+//            List<User> blockedBy = blockService.getUsersThatBlocked(userId);
+//            for (User user : blockedBy) {
+//                blocksUUID.add(user.getId().toString());
+//            }
+//            for (User user : blocked) {
+//                blocksUUID.add(user.getId().toString());
+//            }
+//            System.out.println(blocksUUID);
+//            return ResponseEntity.ok(blocksUUID);
         }
         catch(EntityNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

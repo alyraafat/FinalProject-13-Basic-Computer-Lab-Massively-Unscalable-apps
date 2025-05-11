@@ -68,4 +68,8 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
     }
+
+    public List<String> getEmailsByIds(List<UUID> userIDs) {
+        return userRepository.findEmailsByIds(userIDs);
+    }
 }
