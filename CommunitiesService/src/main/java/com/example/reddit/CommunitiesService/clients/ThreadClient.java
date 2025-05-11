@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(name = "thread-service", url = "http://localhost:8090/threads")
+@FeignClient(name = "thread-service", url = "http://thread-service:8090/threads")
 public interface ThreadClient {
 
     @GetMapping("/{id}")

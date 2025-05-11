@@ -1,5 +1,5 @@
 services:
-  app:
+  community-service:
     build: .
     ports:
       - "8091:8091"
@@ -10,6 +10,7 @@ services:
       SPRING_RABBITMQ_PORT:         5672
       SPRING_RABBITMQ_USERNAME:     guest
       SPRING_RABBITMQ_PASSWORD:     guest
+      thread-service.url: http://app:8090/threads
     depends_on:
       - mongo
       - rabbitmq

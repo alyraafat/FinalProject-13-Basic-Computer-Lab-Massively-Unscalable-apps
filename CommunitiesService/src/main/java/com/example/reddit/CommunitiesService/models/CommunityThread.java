@@ -30,6 +30,9 @@ public class CommunityThread {
 
     private UUID communityId;
 
+
+    public CommunityThread() { }
+
     // Default constructor
     private CommunityThread( Builder builder) {
         this.id = builder.id;

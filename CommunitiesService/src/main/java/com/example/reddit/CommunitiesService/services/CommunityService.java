@@ -198,12 +198,18 @@ public class CommunityService {
             // add thread to threads
             if (thread != null) {
                 threads.add(thread);
+                // print thread createdAt
+                System.out.println("Thread ID: " + thread.getId() + ", Created At: " + thread.getCreatedAt());
             }
         }
 
         // sort threads by date the return them
         return threads.stream()
-                .sorted(Comparator.comparing(CommunityThread::getCreatedAt).reversed())
+                .sorted(Comparator
+                        .comparing(CommunityThread::getCreatedAt,
+                                Comparator.nullsLast(Comparator.naturalOrder()))
+                        .reversed()
+                )
                 .collect(Collectors.toList());
 
     }
@@ -222,12 +228,21 @@ public class CommunityService {
             // add thread to threads
             if (thread != null) {
                 threads.add(thread);
+                // print thread upvotes and downvotes
+                System.out.println("Thread ID: " + thread.getId() + ", Upvotes: " + thread.getUpVotes() +
+                        ", Downvotes: " + thread.getDownVotes());
             }
         }
 
         // sort threads by top which is (upvotes - downvotes) and return them
         return threads.stream()
-                .sorted(Comparator.comparingInt((CommunityThread t) -> t.getUpVotes() - (t.getDownVotes() != null ? t.getDownVotes() : 0)).reversed())
+                .sorted(Comparator
+                        .comparingInt((CommunityThread t) ->
+                                (t.getUpVotes()   != null ? t.getUpVotes()   : 0)
+                                        - (t.getDownVotes() != null ? t.getDownVotes() : 0)
+                        )
+                        .reversed()
+                )
                 .collect(Collectors.toList());
 
     }

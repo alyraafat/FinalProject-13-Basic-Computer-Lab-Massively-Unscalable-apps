@@ -15,38 +15,38 @@ public class Thread {
     @Id
     private UUID id; // todo: check if it should be uuid or string like the object id of mongo
 
-    @Field(name = "topic")
+//    @Field(name = "topic")
     private UUID topic;
 
-    @Field(name = "title")
+//    @Field(name = "title")
     private String title;
 
-    @Field(name = "content")
+//    @Field(name = "content")
     private String content;
 
-    @Field(name = "author_id")
+//    @Field(name = "author_id")
     private UUID authorId;
 
-    @Field(name = "comment_ids")
+//    @Field(name = "comment_ids")
     private List<Comment > comments = new ArrayList<>();
 
-    @Field(name = "created_at")
+//    @Field(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Field(name = "up_votes")
+//    @Field(name = "up_votes")
     private Integer upVotes;
 
-    @Field(name = "down_votes")
+//    @Field(name = "down_votes")
     private Integer downVotes;
 
-    @Field(name = "community_id")
+//    @Field(name = "community_id")
     private UUID communityId;
 
     public Thread()
     {
         this.id = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
-       this.comments=new ArrayList<>();
+        this.comments=new ArrayList<>();
     }
 
     // Default constructor
