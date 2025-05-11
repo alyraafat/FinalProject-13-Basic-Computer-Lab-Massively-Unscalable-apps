@@ -26,4 +26,5 @@ jobs:
     uses: ./.github/workflows/cd-docker-push.yml
     with:
       artifact-name: 'packaged-artifact'
+      service-dir: 'user-service'
     secrets: inherit
