@@ -8,6 +8,8 @@ import com.example.miniapp.services.strategy.impl.PushStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class StrategySelector {
     @Autowired
@@ -20,8 +22,12 @@ public class StrategySelector {
     private PushStrategy pushStrategy;
 
     public void performDelivery(Notification notification) {
-        DeliveryStrategy strategy = selectStrategy(notification.getReceiverId().toString());
-        strategy.deliver(notification);
+        for(UUID receiverId : notification.getReceiversId()) {
+            DeliveryStrategy strategy = selectStrategy(receiverId.toString());
+            strategy.deliver(notification);
+        }
+//        DeliveryStrategy strategy = selectStrategy(notification.getReceiverId().toString());
+//        strategy.deliver(notification);
     }
 
     private DeliveryStrategy selectStrategy(String userId) {
