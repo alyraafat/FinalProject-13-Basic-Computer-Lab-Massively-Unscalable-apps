@@ -1,0 +1,47 @@
+name: Docker Build & Push
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        required: true
+        type: string
+      service-dir:
+        required: true
+        type: string
+      image-name:           # ← new input
+        description: 'Name of the Docker image (without user/org prefix)'
+        required: true
+        type: string
+
+jobs:
+  docker-build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download built artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.service-dir }}/target
+
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" \
+            | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build & tag Docker image
+        working-directory: ${{ inputs.service-dir }}
+        run: |
+          docker build \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:latest .
+          docker tag \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:latest \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:${{ github.sha }}
+
+      - name: Push images to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image-name }}:${{ github.sha }}
