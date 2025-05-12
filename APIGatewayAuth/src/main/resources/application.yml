@@ -2,15 +2,14 @@ spring:
   main:
     web-application-type: reactive
   application:
-    name: APIGateway
+    name: apigateway-service
   config:
-    import: "dev.yml"
+    import: optional:dev.yml
   cloud:
     gateway:
       routes:
         - id: user-service
           uri: http://localhost:8080
-#          change to lb://user-service later when using kubernetes
           predicates:
             - Path=/api/user/**
           filters:
@@ -31,3 +30,4 @@ server:
 
 jwt:
   secret: "key1234"
+  expirationms: 60000 # 1 minute

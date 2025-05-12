@@ -31,7 +31,7 @@ public class SecurityConfig {
     @Order(1)
     public SecurityWebFilterChain publicSecurityFilterChain(ServerHttpSecurity http) {
         return http
-                .securityMatcher(ServerWebExchangeMatchers.pathMatchers("/api/user/public/**"))
+                .securityMatcher(ServerWebExchangeMatchers.pathMatchers("/api/user/public/**","/api/gateway/public/**"))
                 .authorizeExchange(exchanges -> exchanges.anyExchange().permitAll())
                 .build();
     }

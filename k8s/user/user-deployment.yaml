@@ -14,13 +14,17 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: alyraafat/user-service:latest
+          image: redditclone/user-service:latest
           ports:
             - containerPort: 8080
           env:
             # Load the "dev" profile so Spring reads dev.yml overrides
             - name: SPRING_PROFILES_ACTIVE
               value: dev
+
+            # add app url
+            - name: SERVICE_URL
+              value: http://localhost:8081/api/user
 
             # Point at your Postgres headless Service:
             - name: SPRING_DATASOURCE_URL
