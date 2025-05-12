@@ -54,13 +54,13 @@ class UserControllerIntegrationTest {
     }
 
     /**
-     * GET /api/users → should return list of all users.
+     * GET  → should return list of all users.
      */
     @Test
     void getAllUsers_returnsSeededUsers() {
         given()
                 .when()
-                .get("/api/users")
+                .get("")
                 .then()
                 .statusCode(200)
                 .body("size()", is(2))
@@ -68,13 +68,13 @@ class UserControllerIntegrationTest {
     }
 
     /**
-     * GET /api/users/{id} for existing user → should return that user’s DTO.
+     * GET /{id} for existing user → should return that user’s DTO.
      */
     @Test
     void getUserById_existing_thenOk() {
         given()
                 .when()
-                .get("/api/users/{id}", alice.getId())
+                .get("/{id}", alice.getId())
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(alice.getId().toString()))
@@ -82,20 +82,20 @@ class UserControllerIntegrationTest {
     }
 
     /**
-     * GET /api/users/{id} for non-existent user → should return 404 Not Found.
+     * GET /{id} for non-existent user → should return 404 Not Found.
      */
     @Test
     void getUserById_nonexistent_thenNotFound() {
         UUID fake = UUID.randomUUID();
         given()
                 .when()
-                .get("/api/users/{id}", fake)
+                .get("/{id}", fake)
                 .then()
                 .statusCode(404);
     }
 
     /**
-     * POST /api/users → create a new user; expect returned DTO with generated ID.
+     * POST  → create a new user; expect returned DTO with generated ID.
      */
     @Test
     void createUser_thenReturnsCreatedDto() {
@@ -114,7 +114,7 @@ class UserControllerIntegrationTest {
                 .contentType(ContentType.JSON)
                 .body(newUser)
                 .when()
-                .post("/api/users")
+                .post("")
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
@@ -122,7 +122,7 @@ class UserControllerIntegrationTest {
     }
 
     /**
-     * PUT /api/users/{id} → update existing user’s bio; expect updated DTO.
+     * PUT /{id} → update existing user’s bio; expect updated DTO.
      */
     @Test
     void updateUser_thenBioUpdated() {
@@ -141,7 +141,7 @@ class UserControllerIntegrationTest {
                 .contentType(ContentType.JSON)
                 .body(update)
                 .when()
-                .put("/api/users/{id}", alice.getId())
+                .put("/{id}", alice.getId())
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(alice.getId().toString()))
@@ -149,7 +149,7 @@ class UserControllerIntegrationTest {
     }
 
     /**
-     * DELETE /api/users/{id} → delete that user; expect 204 No Content,
+     * DELETE /{id} → delete that user; expect 204 No Content,
      * then GET again returns 404.
      */
     @Test
@@ -157,20 +157,20 @@ class UserControllerIntegrationTest {
         // Delete Alice
         given()
                 .when()
-                .delete("/api/users/{id}", alice.getId())
+                .delete("/{id}", alice.getId())
                 .then()
                 .statusCode(204);
 
         // Subsequent GET should 404
         given()
                 .when()
-                .get("/api/users/{id}", alice.getId())
+                .get("/{id}", alice.getId())
                 .then()
                 .statusCode(404);
     }
 
     /**
-     * GET /api/users/search?keyword={kw}&currentUserId={id}&strategyType=username
+     * GET /search?keyword={kw}&currentUserId={id}&strategyType=username
      * → should return users whose username contains the keyword.
      */
     @Test
@@ -181,7 +181,7 @@ class UserControllerIntegrationTest {
                 .queryParam("currentUserId", alice.getId())
                 .queryParam("strategyType", "username")
                 .when()
-                .get("/api/users/search")
+                .get("/search")
                 .then()
                 .statusCode(200)
                 .body("size()", is(1))
@@ -200,7 +200,7 @@ class UserControllerIntegrationTest {
                 .queryParam("currentUserId", alice.getId())
                 .queryParam("strategyType", "email")
                 .when()
-                .get("/api/users/search")
+                .get("/search")
                 .then()
                 .statusCode(200)
                 .body("size()", is(2))
@@ -218,7 +218,7 @@ class UserControllerIntegrationTest {
                 .queryParam("currentUserId", alice.getId())
                 .queryParam("strategyType", "username")
                 .when()
-                .get("/api/users/search")
+                .get("/search")
                 .then()
                 .statusCode(200)
                 .body("", hasSize(0));
@@ -235,7 +235,7 @@ class UserControllerIntegrationTest {
 //                .queryParam("currentUserId", alice.getId())
 //                .queryParam("strategyType", "username")
 //                .when()
-//                .get("/api/users/search")
+//                .get("/search")
 //                .then()
 //                .statusCode(200)
 //                .body("", hasSize(0));
@@ -252,7 +252,7 @@ class UserControllerIntegrationTest {
                 .queryParam("currentUserId", bob.getId())  // search performed by Bob
                 .queryParam("strategyType", "username")
                 .when()
-                .get("/api/users/search")
+                .get("/search")
                 .then()
                 .statusCode(200)
                 .body("size()", is(1))
@@ -260,13 +260,13 @@ class UserControllerIntegrationTest {
     }
 
     /**
-     * GET /api/users/test_auth → should return generic ResponseHandler payload.
+     * GET /test_auth → should return generic ResponseHandler payload.
      */
     @Test
     void testAuth_endpoint() {
         given()
                 .when()
-                .get("/api/users/test_auth")
+                .get("/test_auth")
                 .then()
                 .statusCode(200)
                 .body("message", equalTo("Test Auth"))
