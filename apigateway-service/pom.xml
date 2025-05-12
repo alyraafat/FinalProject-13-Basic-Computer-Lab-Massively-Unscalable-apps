@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.redditclone</groupId>
-    <artifactId>APIGatewayAuth</artifactId>
+    <artifactId>apigateway-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>APIGateway</name>
     <description>APIGateway to add Auth</description>
