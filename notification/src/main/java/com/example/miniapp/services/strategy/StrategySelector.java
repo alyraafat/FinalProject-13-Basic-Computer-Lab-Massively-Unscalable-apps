@@ -20,7 +20,8 @@ public class StrategySelector {
     private PushStrategy pushStrategy;
 
     public void performDelivery(Notification notification) {
-        DeliveryStrategy strategy = selectStrategy(notification.getReceiverId().toString());
+//        DeliveryStrategy strategy = selectStrategy(notification.getReceiverId().toString());
+        DeliveryStrategy strategy = selectStrategy(notification.getReceiversId().get(0).toString());
         strategy.deliver(notification);
     }
 
