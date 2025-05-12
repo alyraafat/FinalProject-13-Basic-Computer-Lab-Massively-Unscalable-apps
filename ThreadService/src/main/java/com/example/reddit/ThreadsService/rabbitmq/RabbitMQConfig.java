@@ -1,7 +1,9 @@
 package com.example.reddit.ThreadsService.rabbitmq;
 
 import com.example.reddit.ThreadsService.dto.DeleteCommentRequest;
+import com.example.reddit.ThreadsService.dto.NotificationRequest;
 import com.example.reddit.ThreadsService.dto.ReportRequest;
+import com.example.reddit.ThreadsService.dto.ThreadNotificationRequest;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -23,9 +25,10 @@ public class RabbitMQConfig {
     public static final String THREAD_EXCHANGE = "thread_exchange";
 
     public static final String DELETE_COMMENT_QUEUE = "delete_comment_queue";
-    public static final String DELETE_COMMENT_REQUEST_ROUTING_KEY = "moderator.deleteCommentRequest";
 
+    public static final String DELETE_COMMENT_REQUEST_ROUTING_KEY = "moderator.deleteCommentRequest";
     public static final String REPORT_REQUEST_ROUTING_KEY = "thread.reportRequest";
+    public static final String THREAD_NOTIFICATION_ROUTING_KEY = "thread.notification";
 
     @Bean
     public Queue deleteCommentQueue() {
@@ -50,6 +53,7 @@ public class RabbitMQConfig {
         Map<String, Class<?>> idClassMapping = new HashMap<>();
         idClassMapping.put("ReportRequest", ReportRequest.class);
         idClassMapping.put("DeleteCommentRequest", DeleteCommentRequest.class);
+        idClassMapping.put("NotificationRequest", NotificationRequest.class);
 
         typeMapper.setIdClassMapping(idClassMapping);
         typeMapper.setTypePrecedence(Jackson2JavaTypeMapper.TypePrecedence.TYPE_ID);
