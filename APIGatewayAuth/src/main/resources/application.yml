@@ -15,13 +15,6 @@ spring:
           filters:
             - StripPrefix=2
             - JwtClaims
-        - id: dummy-service
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/dummy/**
-          filters:
-            - StripPrefix=2
-            - JwtClaims
 
 server:
   error:
