@@ -16,12 +16,11 @@ spring:
     password: guest
   data:
     redis:
-      host: localhost
+      host: redis_cache
       port: 6379
     mongodb:
       uri: mongodb://root:example@localhost:27017/threadDb?authSource=admin
       database: threadDb
-
   cache:
     type: redis
 

@@ -14,7 +14,7 @@ public class ThreadMapper {
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .authorId(dto.getAuthorId())
-                .comments(dto.getCommentIds())
+                .comments(dto.getComments())
                 .createdAt(dto.getCreatedAt() != null ? dto.getCreatedAt() : LocalDateTime.now())
                 .upVotes(dto.getUpVotes() != null ? dto.getUpVotes() : 0)
                 .downVotes(dto.getDownVotes() != null ? dto.getDownVotes() : 0)
@@ -29,7 +29,7 @@ public class ThreadMapper {
         dto.setTitle(thread.getTitle());
         dto.setContent(thread.getContent());
         dto.setAuthorId(thread.getAuthorId());
-        dto.setCommentIds(thread.getCommentIds());
+        dto.setComments(thread.getComments());
         dto.setCreatedAt(thread.getCreatedAt());
         dto.setUpVotes(thread.getUpVotes());
         dto.setDownVotes(thread.getDownVotes());
