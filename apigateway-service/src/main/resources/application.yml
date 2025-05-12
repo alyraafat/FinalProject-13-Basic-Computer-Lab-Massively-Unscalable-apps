@@ -1,0 +1,28 @@
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: apigateway-service
+  profiles:
+    active: dev
+  config:
+    import: optional:dev.yml
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - StripPrefix=2
+            - JwtClaims
+
+server:
+  error:
+    include-message: always
+  port: 8081
+
+jwt:
+  secret: "key1234"
+  expirationms: 60000 # 1 minute
