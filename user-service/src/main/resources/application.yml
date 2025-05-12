@@ -4,7 +4,7 @@ spring:
   application:
     name: user-service
   config:
-    import: "dev.yml"
+    import: optional:dev.yml
 
 # Database configuration
   datasource:
@@ -27,12 +27,12 @@ spring:
 
 # mail configuration
   mail:
-    host: smtp.mailersend.net
-    port: 587
-    protocol: smtp
-    username: mail.com
-    password: 1234
-    test-connection: false
+    host:  ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    protocol: ${MAIL_PROTOCOL}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    test-connection: ${MAIL_TEST_CONNECTION}
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
@@ -47,9 +47,9 @@ server:
 service_url: "http://localhost:${server.port}"
 
 jwt:
-  secret: "key1234"
-  expirationms: 360000000
+  secret: ${JWT_SECRET}
+  expirationms: 60000 # 1 minute
   refresh-token:
-    secret: "key1234"
-    expirationms: 720000000
+    secret: ${JWT_REFRESH_SECRET}
+    expirationms: 600000 # 10 minutes
 
