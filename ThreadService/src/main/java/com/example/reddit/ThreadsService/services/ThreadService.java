@@ -195,8 +195,6 @@ public class ThreadService {
     public List<Thread> recommendThreadsByUpvotes(UUID userId)
     {
 
-
-
         // TODO: PLACE CALL TO ALIS FUNCVTION TO GET LOGS FOR THIS USER AND THIS ACTION TYPE
 
          List <Log>  userUpVoteLogs = logRepository.findByUserIdAndActionType(userId,ActionType.UPVOTE);
@@ -209,12 +207,6 @@ public class ThreadService {
             threadIds.add(log.getThreadId());
         }
 
-
-        // If topic is changed from string to uuid then I need to call the communities microservice through the message queue to get the entire subtopic then I loop on the
-        //returned list of subtopics and get their topics through synchronous communication
-        // List<Subtopic> subTopicsOfInterest = communities service call
-
-        //loop on threads and see which ones have same topic ids like the ids
 
         List<Thread> recommendedThreads= new ArrayList<>();
 
@@ -233,12 +225,8 @@ public class ThreadService {
         for(UUID topicId: topicIds )
         {
             List<Thread> threads2= this.getThreadsByTopic(topicId);
-            recommendedThreads.add((Thread) threads2);
+            recommendedThreads.addAll(threads2);
         }
-
-
-
-
 
 
         return recommendedThreads;

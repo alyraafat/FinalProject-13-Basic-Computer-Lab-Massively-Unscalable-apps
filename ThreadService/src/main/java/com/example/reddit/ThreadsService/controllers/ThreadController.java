@@ -99,15 +99,16 @@ public class ThreadController {
       return threadService.updateThread(id,newThread);
     }
 
-//    @PostMapping("/recommendThreads/{userId}")
-//    public ResponseEntity<List<Thread>> recommendThreadsByUpvote(@PathVariable  UUID userId)
-//    {
-//        return ResponseEntity.ok(threadService.recommendThreadsByUpvotes(userId));
-//    }
-@GetMapping("/community/{communityId}/trending")
-public ResponseEntity<List<Thread>> getTrendingThreads(@PathVariable UUID communityId) {
-    List<Thread> trendingThreads = threadService.getTrendingThreads(communityId);
-    return ResponseEntity.ok(trendingThreads);
-}
+    @PostMapping("/recommendThreads/{userId}")
+    public ResponseEntity<List<Thread>> recommendThreadsByUpvote(@PathVariable  UUID userId)
+    {
+        return ResponseEntity.ok(threadService.recommendThreadsByUpvotes(userId));
+    }
+
+    @GetMapping("/community/{communityId}/trending")
+    public ResponseEntity<List<Thread>> getTrendingThreads(@PathVariable UUID communityId) {
+        List<Thread> trendingThreads = threadService.getTrendingThreads(communityId);
+        return ResponseEntity.ok(trendingThreads);
+    }
 
 }
