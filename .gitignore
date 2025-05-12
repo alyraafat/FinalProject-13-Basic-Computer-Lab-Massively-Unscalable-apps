@@ -1,8 +1,15 @@
 # Visual Studio Code
 .vscode/
 
-# IntelliJ IDEA
-.idea/
-
-# macOS
+# OS or IDE junk
 .DS_Store
+*.iml
+
+# IntelliJ
+**/.idea/
+
+# Build output
+**/target/
+
+# Ignore all dev.yml config files
+**/dev.yml
