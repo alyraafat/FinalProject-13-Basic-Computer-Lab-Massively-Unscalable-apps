@@ -1,7 +1,7 @@
 package com.example.reddit.CommunitiesService.listeners;
 
-import com.example.reddit.CommunitiesService.clients.NotificationClient;
 import com.example.reddit.CommunitiesService.events.CommunityMemberAddedEvent;
+import com.example.reddit.CommunitiesService.rabbitmq.CommunityProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -9,19 +9,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommunityEventListener {
 
-    private final NotificationClient notifier;
+    private final CommunityProducer producer;
 
     @Autowired
-    public CommunityEventListener(NotificationClient notifier) {
-        this.notifier = notifier;
+    public CommunityEventListener(CommunityProducer producer) {
+        this.producer = producer;
     }
 
     @EventListener
     public void onMemberAdded(CommunityMemberAddedEvent evt) {
-        notifier.notifyMemberAdded(
-                evt.getType(),
-                evt.getCommunityId(),
-                evt.getMessage()
+        producer.notifyMemberAdded(
+                evt.getUserId()
         );
     }
 }

@@ -60,8 +60,14 @@ public class ThreadService {
                 .communityId(thread.getCommunityId())
                 .comments(thread.getCommentIds())
                 .build();
-        return threadRepository.save(thread);
+        Thread saved = threadRepository.save(thread);
+
+        threadProducer.sendThreadNotificationRequest(saved.getId());
+
+        return saved;
     }
+
+
     //@CacheEvict(value = "trending_cache", key = "#thread.communityId")
     public void deleteThread(UUID id) {
         Thread thread = threadRepository.findById(id)
@@ -99,7 +105,12 @@ public class ThreadService {
                 .communityId(thread.getCommunityId())
                 .comments(thread.getCommentIds())
                 .build();
-        return threadRepository.save(thread);
+
+        Thread saved = threadRepository.save(thread);
+
+        threadProducer.sendThreadNotificationRequest(threadId);
+
+        return saved;
     }
 
 
@@ -158,8 +169,14 @@ public class ThreadService {
                 .communityId(thread.getCommunityId())
                 .comments(thread.getCommentIds())
                 .build();
-        return threadRepository.save(thread);
+        Thread saved = threadRepository.save(thread);
+
+        threadProducer.sendThreadNotificationRequest(threadId);
+
+        return saved;
     }
+
+
     @CacheEvict(value = "trending_cache", key = "#thread.communityId")
     public Thread downvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
@@ -176,8 +193,15 @@ public class ThreadService {
                 .communityId(thread.getCommunityId())
                 .comments(thread.getCommentIds())
                 .build();
-        return threadRepository.save(thread);
+
+        Thread saved = threadRepository.save(thread);
+
+        threadProducer.sendThreadNotificationRequest(threadId);
+
+        return saved;
     }
+
+
     @Cacheable(value = "trending_cache", key = "#communityId")
     public List<Thread> getTrendingThreads(UUID communityId) {
         List<Thread> communityThreads = threadRepository.findByCommunityId(communityId);
@@ -187,9 +211,6 @@ public class ThreadService {
                 .limit(5)
                 .collect(Collectors.toList());
     }
-
-
-
 
 
     public List<Thread> recommendThreadsByUpvotes(UUID userId)

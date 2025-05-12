@@ -7,8 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ModeratorService" />
-        <module name="ThreadsService" />
         <module name="CommunitiesService" />
+        <module name="ThreadsService" />
       </profile>
     </annotationProcessing>
   </component>

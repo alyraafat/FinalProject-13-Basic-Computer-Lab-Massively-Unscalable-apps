@@ -127,19 +127,15 @@ public class CommunityService {
         return communityRepository.save(community);
     }
 
-    public Community addMember(UUID communityId, UUID userId, String username) {
+    public Community addMember(UUID communityId, UUID userId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
 
         community.getMemberIds().add(userId);
         Community saved = communityRepository.save(community);
 
-        String message = String.format("User %s has joined the community %s", username, community.getName());
-
-        String type = "COMMUNITY";
-
         // fire the event *after* save
-        events.publishEvent(new CommunityMemberAddedEvent(type, communityId, message));
+        events.publishEvent(new CommunityMemberAddedEvent(userId));
 
         return saved;
     }
