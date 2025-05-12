@@ -1,12 +1,14 @@
 package com.example.reddit.CommunitiesService.rabbitmq;
 
-import com.example.reddit.CommunitiesService.dto.CommunityNotificationRequest;
+import com.example.reddit.CommunitiesService.dto.NotificationRequest;
 import com.example.reddit.CommunitiesService.models.Community;
 import com.example.reddit.CommunitiesService.models.MemberDTO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.List;
+
 
 @Service
 public class CommunityProducer {
@@ -28,17 +30,22 @@ public class CommunityProducer {
     }
 
     public void notifyCommunity(Community community) {
-        CommunityNotificationRequest notificationRequest = new CommunityNotificationRequest(
-                community.getId(),
-                community.getName(),
-                community.getMemberIds()
-        );
+//        CommunityNotificationRequest notificationRequest = new CommunityNotificationRequest(
+//                community.getId(),
+//                community.getName(),
+//                community.getMemberIds()
+//        );
+        String rawMessage = "Notification";
+        UUID senderID = UUID.randomUUID();
+        List<UUID> recieversID = community.getMemberIds();
+        String name = community.getName();
+        NotificationRequest notificationRequest = new NotificationRequest(rawMessage, recieversID, senderID, name);
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.EXCHANGE,
                 RabbitMQConfig.ROUTING_NOTIFICATION,
                 notificationRequest
         );
 
-        System.out.println("Notified Community with ID: " + notificationRequest.getCommunityID());
+        System.out.println("Notified Community with ID: " + notificationRequest.getSenderName());
     }
 }

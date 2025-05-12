@@ -2,6 +2,7 @@ package com.example.reddit.CommunitiesService.rabbitmq;
 
 import com.example.reddit.CommunitiesService.dto.BanRequest;
 import com.example.reddit.CommunitiesService.dto.CommunityNotificationRequest;
+import com.example.reddit.CommunitiesService.dto.NotificationRequest;
 import com.example.reddit.CommunitiesService.dto.UnbanRequest;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -67,7 +68,7 @@ public class RabbitMQConfig {
         idToClass.put("MemberDTO",    com.example.reddit.CommunitiesService.models.MemberDTO.class);
         idToClass.put("BanRequest", BanRequest.class);
         idToClass.put("UnbanRequest", UnbanRequest.class);
-        idToClass.put("CommunityNotificationRequest", CommunityNotificationRequest.class);
+        idToClass.put("NotificationRequest", NotificationRequest.class);
         // …add any other event/DTO types you need
         typeMapper.setIdClassMapping(idToClass);
 
