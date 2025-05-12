@@ -77,17 +77,16 @@ public class BlockController {
     public ResponseEntity<List<String>> getAllBlockedOrBlockedByUsers(@PathVariable UUID userId) {
         try{
             List<String> blocksUUID = new ArrayList<>();
+            List<User> blocked = blockService.getBlockedUsers(userId);
+            List<User> blockedBy = blockService.getUsersThatBlocked(userId);
+            for (User user : blockedBy) {
+                blocksUUID.add(user.getId().toString());
+            }
+            for (User user : blocked) {
+                blocksUUID.add(user.getId().toString());
+            }
+            System.out.println(blocksUUID);
             return ResponseEntity.ok(blocksUUID);
-//            List<User> blocked = blockService.getBlockedUsers(userId);
-//            List<User> blockedBy = blockService.getUsersThatBlocked(userId);
-//            for (User user : blockedBy) {
-//                blocksUUID.add(user.getId().toString());
-//            }
-//            for (User user : blocked) {
-//                blocksUUID.add(user.getId().toString());
-//            }
-//            System.out.println(blocksUUID);
-//            return ResponseEntity.ok(blocksUUID);
         }
         catch(EntityNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

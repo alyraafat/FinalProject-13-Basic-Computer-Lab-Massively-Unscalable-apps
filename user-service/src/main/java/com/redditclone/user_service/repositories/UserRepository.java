@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String userName);
     Optional<User> findByEmail(String email);
 
+    List<User> findByActivatedTrue();
+
     @Query("SELECT u.email FROM User u WHERE u.id IN :ids")
     List<String> findEmailsByIds(@Param("ids") List<UUID> ids);
 

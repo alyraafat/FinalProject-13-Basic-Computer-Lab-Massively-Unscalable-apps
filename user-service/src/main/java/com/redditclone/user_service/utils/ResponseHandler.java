@@ -1,6 +1,7 @@
 package com.redditclone.user_service.utils;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
@@ -12,6 +13,6 @@ public class ResponseHandler {
         map.put("message", message);
         map.put("status", status.value());
         map.put("data", responseObj);
-        return new ResponseEntity<Object>(map, status);
+        return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(map);
     }
 }

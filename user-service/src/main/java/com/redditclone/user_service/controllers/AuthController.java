@@ -45,12 +45,13 @@ public class AuthController {
         return ResponseHandler.generateResponse("Account Activated Successfully", HttpStatus.OK, null);
     }
 
-    @PostMapping("/refresh-token")
-    public void refreshToken(
+    @PostMapping("/refreshToken")
+    public ResponseEntity<Object> refreshToken(
             @RequestBody TokenRefreshRequest refreshRequest,
             HttpServletResponse response
     ) throws IOException {
         authService.refreshToken(refreshRequest.getRefreshToken(), response);
+        return ResponseHandler.generateResponse("Token Refreshed Successfully", HttpStatus.OK, null);
     }
 
     @PostMapping("/logout")
