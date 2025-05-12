@@ -1,0 +1,59 @@
+
+services:
+
+  notification-service:
+    build: .
+    ports:
+      - "9090:9090"
+    environment:
+      spring.data.mongodb.uri: mongodb://root:example@mongo:27018/notificationDb?authSource=admin
+      spring.data.mongodb.database: notificationDb
+    depends_on:
+      - mongodb
+      - mongo-express
+    networks:
+      - my_shared_net
+
+
+
+  # MongoDB Database
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: notification_service_mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - my_shared_net
+
+  # Mongo Express UI
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "9000:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongodb:27018/?authSource=admin
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongodb
+    networks:
+      - my_shared_net
+
+
+
+
+volumes:
+  mongo_data:
+
+
+networks:
+  my_shared_net:
+    external: true

@@ -1,0 +1,23 @@
+
+server:
+  port: 9090
+
+user:
+  service:
+    url: http://localhost:8080
+
+spring:
+  application:
+    name: notification_service
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+  data:
+
+    mongodb:
+      uri: mongodb://localhost:27017/notification_service_mongo
+      database: notification_service_mongo
+
+

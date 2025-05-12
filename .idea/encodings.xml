@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/CommunitiesService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ModeratorService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ThreadService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/notification/src/main/java" charset="UTF-8" />
   </component>
 </project>

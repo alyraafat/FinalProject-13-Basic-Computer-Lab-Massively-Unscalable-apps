@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/MiniappApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/clients/UserClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/config/Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/config/ModelsPathConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/config/NotificationConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/config/StrategyConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/TestController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/external/CommunityServiceClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/external/ThreadServiceClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/PreferenceUpdate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/CommunityNotificationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/MemberDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/NotificationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/NotificationResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/ThreadNotificationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/Notification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserNotification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserPreference.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/enums/DeliveryChannel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/enums/NotificationType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/rabbitmq/NotificationConsumer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/rabbitmq/RabbitMQConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/repositories/NotificationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/repositories/PreferenceRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/repositories/UserNotifyRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/Notifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/NotifierFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/CommunityNotifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/ThreadNotifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/UserNotifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/PreferenceService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/DeliveryStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/StrategySelector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/EmailStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/PushStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/test/java/com/example/miniapp/MiniappApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/test/java/com/example/miniapp/NotificationServiceTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ThreadService/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ThreadService/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ThreadService/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ThreadService/src/main/resources/application.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="notification-service" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;omarrazzam&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/alyraafat/FinalProject-13-Basic-Computer-Lab-Massively-Unscalable-apps.git&quot;,
+    &quot;accountId&quot;: &quot;519cdfd6-c846-4d37-96fe-b67a190458b8&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///JetClient Request Console" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2wBxiEY6Tk65bo9DMpCviWV8bMC" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "JUnit.NotificationServiceTests.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.MiniappApplication.executor": "Run",
+    "git-widget-placeholder": "Merging community-notification-merge",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/karimgamaleldin/AACL Final Project/another/FinalProject-13-Basic-Computer-Lab-Massively-Unscalable-apps",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.editor.code.editing",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\GUC\sem10\final zft\FinalProject-13-Basic-Computer-Lab-Massively-Unscalable-apps\notification\src\test" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\GUC\sem10\final zft\FinalProject-13-Basic-Computer-Lab-Massively-Unscalable-apps\notification\src\main\java\com\example\miniapp\models\enums" />
+      <recent name="D:\GUC\sem10\final zft\FinalProject-13-Basic-Computer-Lab-Massively-Unscalable-apps\notification\src\main\java\com\example\miniapp\models\dto" />
+      <recent name="D:\GUC\sem10\ACL Scalable\Notification\notification" />
+      <recent name="D:\GUC\sem10\ACL Scalable\Notification" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.NotificationServiceTests">
+    <configuration name="NotificationServiceTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="miniapp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.miniapp.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.miniapp" />
+      <option name="MAIN_CLASS_NAME" value="com.example.miniapp.NotificationServiceTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Mini2-26-BeanJARs" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Mini2-26-BeanJARs" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="MiniappApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="miniapp" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.miniapp.MiniappApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.NotificationServiceTests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="" />
+      <created>1745528892609</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1745528892609</updated>
+      <workItem from="1745528893710" duration="34000" />
+      <workItem from="1745528936191" duration="75000" />
+      <workItem from="1745529048429" duration="13000" />
+      <workItem from="1746115286130" duration="20003000" />
+      <workItem from="1746295416669" duration="308000" />
+      <workItem from="1746383187289" duration="1959000" />
+      <workItem from="1746393825469" duration="678000" />
+      <workItem from="1746394527999" duration="1318000" />
+      <workItem from="1746539204933" duration="870000" />
+      <workItem from="1746550072077" duration="6761000" />
+      <workItem from="1746896630994" duration="7545000" />
+      <workItem from="1747059668554" duration="94000" />
+    </task>
+    <task id="LOCAL-00001" summary="Strategy progress">
+      <option name="closed" value="true" />
+      <created>1746224879545</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1746224879545</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Moving Files">
+      <option name="closed" value="true" />
+      <created>1746395243538</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746395243538</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Moving Files">
+      <option name="closed" value="true" />
+      <created>1746395467051</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1746395467051</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Moving Files">
+      <option name="closed" value="true" />
+      <created>1746395536953</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746395536953</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Moving Files">
+      <option name="closed" value="true" />
+      <created>1746395853743</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746395853743</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feat: add RabbitMQ configs and consumer code for add new member in communities">
+      <option name="closed" value="true" />
+      <created>1746540008828</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1746540008828</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feat: change types of notification to only 1 notification request">
+      <option name="closed" value="true" />
+      <created>1747003487485</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1747003487485</updated>
+    </task>
+    <task id="LOCAL-00008" summary="feat: change types of notification to only 1 notification request">
+      <option name="closed" value="true" />
+      <created>1747004458696</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1747004458696</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Strategy progress" />
+    <MESSAGE value="Moving Files" />
+    <MESSAGE value="feat: add RabbitMQ configs and consumer code for add new member in communities" />
+    <MESSAGE value="model,controller,repositories updated" />
+    <MESSAGE value="Setting Up Testing enviroment and config files" />
+    <MESSAGE value="feat: change types of notification to only 1 notification request" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+</project>
