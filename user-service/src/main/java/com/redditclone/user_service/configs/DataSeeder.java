@@ -41,7 +41,8 @@ public class DataSeeder {
                     User u = User.builder()
                             // no .id() so JPA will INSERT
                             .username((fn.charAt(0) + ln).toLowerCase())
-                            .password(passwordEncoder.encode(faker.internet().password(8, 16)))
+                            //faker.internet().password(8, 16)
+                            .password(passwordEncoder.encode("password"))
                             .email(fn.toLowerCase() + "." + ln.toLowerCase() + "@example.com")
                             .fullName(fn + " " + ln)
                             .createdAt(Instant.now().minusSeconds(faker.number().numberBetween(0, 86_400)))
