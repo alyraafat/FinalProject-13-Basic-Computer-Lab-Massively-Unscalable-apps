@@ -3,6 +3,8 @@ spring:
     web-application-type: reactive
   application:
     name: apigateway-service
+  profiles:
+    active: dev
   config:
     import: optional:dev.yml
   cloud:

@@ -19,7 +19,7 @@ spec:
             - containerPort: 8081
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: k8s
+              value: dev
             - name: SPRING_MAIN_WEB_APPLICATION_TYPE
               value: reactive
             - name: SPRING_CLOUD_GATEWAY_ROUTES_0_ID
