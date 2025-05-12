@@ -58,7 +58,7 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes())
                 .communityId(thread.getCommunityId())
-                .comments(thread.getCommentIds())
+                .comments(thread.getComments())
                 .build();
         Thread saved = threadRepository.save(thread);
 
@@ -66,10 +66,8 @@ public class ThreadService {
 
         return saved;
     }
-
-
-    //@CacheEvict(value = "trending_cache", key = "#thread.communityId")
-    public void deleteThread(UUID id) {
+    @CacheEvict(value = "trending_cache", key = "#communityId")
+    public void deleteThread(UUID communityId,UUID id) {
         Thread thread = threadRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Thread not found"));
 
@@ -88,11 +86,11 @@ public class ThreadService {
     public List<Thread> getThreadsByTopic(UUID topic) {
         return threadRepository.findByTopic(topic);
     }
-    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
+    @CacheEvict(value = "trending_cache", key = "#result.communityId")
     public Thread addComment(UUID threadId, Comment comment) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
-        thread.getCommentIds().add(comment);
+        thread.getComments().add(comment);
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -103,7 +101,7 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes())
                 .communityId(thread.getCommunityId())
-                .comments(thread.getCommentIds())
+                .comments(thread.getComments())
                 .build();
 
         Thread saved = threadRepository.save(thread);
@@ -113,7 +111,7 @@ public class ThreadService {
         return saved;
     }
 
-
+    @CacheEvict(value = "trending_cache", key = "#result.communityId")
     public Thread updateThread(UUID threadId, Thread newThread)
     {
         Thread thread = threadRepository.findById(threadId)
@@ -129,15 +127,21 @@ public class ThreadService {
                 .upVotes(newThread.getUpVotes() )
                 .downVotes(newThread.getDownVotes())
                 .communityId(newThread.getCommunityId())
-                .comments(newThread.getCommentIds())
+                .comments(newThread.getComments())
                 .build();
         return threadRepository.save(thread);
     }
-    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
+    @CacheEvict(value = "trending_cache", key = "#result.communityId")
     public Thread removeComment(UUID threadId, UUID commentId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
-        thread.getCommentIds().remove(commentId);
+        // Find and remove comment with matching ID, capturing the result
+        boolean commentRemoved = thread.getComments().removeIf(comment -> comment.getId().equals(commentId));
+
+        // Throw exception if comment wasn't found
+        if (!commentRemoved) {
+            throw new RuntimeException("Comment not found with ID: " + commentId);
+        }
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -148,12 +152,12 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes())
                 .communityId(thread.getCommunityId())
-                .comments(thread.getCommentIds())
+                .comments(thread.getComments())
                 .build();
         return threadRepository.save(thread);
     }
 
-    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
+    @CacheEvict(value = "trending_cache", key = "#result.communityId")
     public Thread upvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -167,7 +171,7 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() + 1)
                 .downVotes(thread.getDownVotes())
                 .communityId(thread.getCommunityId())
-                .comments(thread.getCommentIds())
+                .comments(thread.getComments())
                 .build();
         Thread saved = threadRepository.save(thread);
 
@@ -175,9 +179,7 @@ public class ThreadService {
 
         return saved;
     }
-
-
-    @CacheEvict(value = "trending_cache", key = "#thread.communityId")
+    @CacheEvict(value = "trending_cache", key = "#result.communityId")
     public Thread downvote(UUID threadId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
@@ -191,7 +193,7 @@ public class ThreadService {
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes() + 1 )
                 .communityId(thread.getCommunityId())
-                .comments(thread.getCommentIds())
+                .comments(thread.getComments())
                 .build();
 
         Thread saved = threadRepository.save(thread);
@@ -200,8 +202,6 @@ public class ThreadService {
 
         return saved;
     }
-
-
     @Cacheable(value = "trending_cache", key = "#communityId")
     public List<Thread> getTrendingThreads(UUID communityId) {
         List<Thread> communityThreads = threadRepository.findByCommunityId(communityId);
@@ -211,6 +211,7 @@ public class ThreadService {
                 .limit(5)
                 .collect(Collectors.toList());
     }
+
 
 
     public List<Thread> recommendThreadsByUpvotes(UUID userId)

@@ -5,16 +5,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Document(collection = "threads")
-public class Thread {
+public class Thread implements Serializable {
     @Id
     private UUID id; // todo: check if it should be uuid or string like the object id of mongo
-
+    private static final long serialVersionUID = 1L;
 //    @Field(name = "topic")
     private UUID topic;
 
@@ -27,7 +28,7 @@ public class Thread {
 //    @Field(name = "author_id")
     private UUID authorId;
 
-//    @Field(name = "comment_ids")
+//    @Field(name = "comments")
     private List<Comment > comments = new ArrayList<>();
 
 //    @Field(name = "created_at")
@@ -94,11 +95,7 @@ public class Thread {
     }
 
 
-    public List<Comment> getCommentIds() {
-        return comments;
-    }
-
-
+    public List<Comment> getComments() {return comments;}
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

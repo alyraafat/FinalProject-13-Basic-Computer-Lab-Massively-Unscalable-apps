@@ -19,7 +19,10 @@ public class Comment {
 
     @Field (name="user_id")
     private UUID userId;
-
+    // Default constructor required for Jackson deserialization (cache)
+    public Comment() {
+        this.id = UUID.randomUUID();
+    }
     // Default constructor
     public Comment(String content , UUID threadId, UUID userId) {
         this.id = UUID.randomUUID();

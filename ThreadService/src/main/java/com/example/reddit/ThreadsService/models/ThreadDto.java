@@ -19,14 +19,14 @@ public class ThreadDto {
     private String title;
     private String content;
     private UUID authorId;
-    private List<Comment> commentIds;
+    private List<Comment> comments;
     private LocalDateTime createdAt;
     private Integer upVotes;
     private Integer downVotes;
     private UUID communityId;
 
     public ThreadDto() {
-        // Default constructor for deserialization (e.g., by Jackson)
+        // Default constructor for deserialization (cache)
     }
 
     // Getters and Setters
@@ -71,13 +71,9 @@ public class ThreadDto {
         this.authorId = authorId;
     }
 
-    public List<Comment> getCommentIds() {
-        return commentIds;
-    }
+    public List<Comment> getComments() {return comments;}
 
-    public void setCommentIds(List<Comment> comments) {
-        this.commentIds = comments;
-    }
+    public void setComments(List<Comment> comments) {this.comments = comments;}
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

@@ -50,9 +50,9 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.createThread(thread));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteThread(@PathVariable UUID id) {
-        threadService.deleteThread(id);
+    @DeleteMapping("/communities/{communityId}/threads/{id}")
+    public ResponseEntity<Void> deleteThread(@PathVariable UUID communityId,@PathVariable UUID id) {
+        threadService.deleteThread(communityId,id);
         return ResponseEntity.ok().build();
     }
 
@@ -106,6 +106,11 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.recommendThreadsByUpvotes(userId));
     }
 
+    @GetMapping("/community/{communityId}/trending")
+    public ResponseEntity<List<Thread>> getTrendingThreads(@PathVariable UUID communityId) {
+        List<Thread> trendingThreads = threadService.getTrendingThreads(communityId);
+        return ResponseEntity.ok(trendingThreads);
+    }
 
     @PostMapping("/createReportRequest")
     public void createReportRequest(@RequestBody ReportRequest request)

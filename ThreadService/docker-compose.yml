@@ -10,8 +10,11 @@ services:
     depends_on:
       - mongo
       - mongo-express
+      - redis_cache
     networks:
       - my_shared_net
+
+
 
   # MongoDB
   mongo:
@@ -38,8 +41,20 @@ services:
       ME_CONFIG_BASICAUTH: false
     networks:
       - my_shared_net
+  redis_cache:
+    image: redis:latest
+    container_name: redisCache
+    ports:
+      - "6379:6379"
 
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisInsight
+    ports:
+      - "5540:5540"
+    restart: always
 
 networks:
   my_shared_net:
     external: true
+
