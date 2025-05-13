@@ -14,11 +14,14 @@ public class PushStrategy implements DeliveryStrategy {
     @Override
     public void deliver(Notification notification) {
         try {
+            System.out.println("Delivering notification: " + notification.getId());
             String pushPayload = formatPushNotification(notification);
             boolean delivered = sendPush(pushPayload);
 
             if (!delivered) {
                 System.err.println("Push delivery failed for notification: " + notification.getId());
+            }else{
+                System.out.println("Notification delivered for notification: " + notification.getId());
             }
         } catch (Exception e) {
             System.err.println("Push delivery error: " + e.getMessage());

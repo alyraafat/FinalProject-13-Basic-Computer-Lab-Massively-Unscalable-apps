@@ -9,7 +9,7 @@ public class NotificationRequest {
     private String rawMessage;
     private List<UUID> receiversId;
     private UUID senderId;
-    private NotificationType type;
+    private String type;
     private Instant createdAt;
     private String senderName;
 
@@ -18,7 +18,7 @@ public class NotificationRequest {
     public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String type, String senderName) {
         this.rawMessage = rawMessage;
         this.receiversId = receiversId;
-        this.type = NotificationType.fromString(type);
+        this.type = type;
         this.senderId = senderId;
         this.senderName = senderName;
         this.createdAt = Instant.now();
@@ -49,11 +49,11 @@ public class NotificationRequest {
         this.receiversId = receiversId;
     }
 
-    public NotificationType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(NotificationType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

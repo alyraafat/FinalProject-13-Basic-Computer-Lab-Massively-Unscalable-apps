@@ -24,7 +24,7 @@ public class UserNotifier implements Notifier {
     private StrategySelector strategySelector;
     @Autowired
     private UserNotifyRepository userNotifyRepository;
-    private UserNotification userNotification;
+//    private UserNotification userNotification;
 
     @Override
     public void notify(Notification notification) {
@@ -34,11 +34,9 @@ public class UserNotifier implements Notifier {
         userNotifyRepository.save(userNotification);
 
         try {
-            strategySelector.performDelivery(notification);
+            strategySelector.performDelivery(userNotification);
         } catch (Exception e) {
             System.out.println("Failed to deliver");
-            // Handle delivery failure (log, retry, etc.)
-            // You might want to update notification status here
         }
     }
 

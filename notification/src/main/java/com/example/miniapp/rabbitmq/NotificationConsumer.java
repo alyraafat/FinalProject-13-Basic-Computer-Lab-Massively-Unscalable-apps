@@ -19,6 +19,6 @@ public class NotificationConsumer {
         // simple console output instead of a logger
         System.out.println("Received notification request: " + request.getSenderName());
         notificationService.process(request);
-        // TODO: Handle the request here.
+
     }
 }

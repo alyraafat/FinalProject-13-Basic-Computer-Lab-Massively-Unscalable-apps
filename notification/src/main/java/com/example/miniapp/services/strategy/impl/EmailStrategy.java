@@ -10,12 +10,17 @@ public class EmailStrategy implements DeliveryStrategy {
     @Override
     public void deliver(Notification notification) {
         try {
+            System.out.println("delivering mail");
             String emailContent = formatEmail(notification);
             boolean delivered = sendEmail(emailContent);
 
             if (!delivered) {
                 System.err.println("Email delivery failed for notification: " + notification.getId());
             }
+            else{
+                System.out.println("Email delivered for notification: " + notification.getId());
+            }
+
         } catch (Exception e) {
             System.err.println("Email delivery error: " + e.getMessage());
             throw new RuntimeException("Email delivery failed", e);

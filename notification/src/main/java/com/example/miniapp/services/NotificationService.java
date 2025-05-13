@@ -17,6 +17,7 @@ import com.example.miniapp.models.entity.Notification;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -50,7 +51,8 @@ public class NotificationService {
 
     public void process(NotificationRequest request) {
 
-        NotificationType type = request.getType();
+        String sType = request.getType();
+        NotificationType type = NotificationType.fromString(sType);
         Notification notification = mapRequestToEntity(request);
         notificationRepository.save(notification);
 
@@ -59,14 +61,20 @@ public class NotificationService {
     }
 
 
-    public void readNotification(UUID userNotificationId) {
-        userNotificationRepository.findById(userNotificationId)
-                .ifPresent(userNotification -> {
-                    userNotification.setStatus("read");
-                    userNotification.setReadAt(Instant.now());
-                    userNotificationRepository.save(userNotification);
-                });
+    public void readNotification(UUID userId, UUID notificationId) {
+        Optional<UserNotification> optional = userNotificationRepository.findByUserIdAndNotificationId(userId, notificationId);
+        if (optional.isPresent()) {
+            UserNotification userNotification = optional.get();
+            userNotification.setStatus("read");
+            userNotification.setReadAt(Instant.now());
+            userNotificationRepository.save(userNotification);
+            System.out.println("Notification read successfully");
+        } else {
+            System.out.println("Failed to mark notification as read: not found for userId = " + userId + " and notificationId = " + notificationId);
+        }
     }
+
+
 //    HELPERS
     private Notification mapRequestToEntity(NotificationRequest request) {
         Notification notification = new Notification();
@@ -77,7 +85,7 @@ public class NotificationService {
         notification.setCreatedAt(Instant.now());
         notification.setReceiversId(request.getReceiversId());
         // Additional fields you might want to set
-        notification.setTitle(generateTitleFromType(request.getType()));
+        notification.setTitle(generateTitleFromType(NotificationType.fromString(request.getType())));
         notification.setSenderId(String.valueOf(request.getSenderId()));
 
         return notification;

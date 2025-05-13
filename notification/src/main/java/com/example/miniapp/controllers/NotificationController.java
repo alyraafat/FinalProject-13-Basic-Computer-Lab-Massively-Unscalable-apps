@@ -8,6 +8,7 @@ import com.example.miniapp.repositories.NotificationRepository;
 import com.example.miniapp.services.Factory.Notifier;
 import com.example.miniapp.services.Factory.NotifierFactory;
 import com.example.miniapp.services.NotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,18 +19,20 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationController {
-    private final NotifierFactory notifierFactory;
-    private final NotificationRepository notificationRepository;
-//    added
+
+
     private final NotificationService notificationService;
 
-    public NotificationController(NotifierFactory notifierFactory,
-                                  NotificationRepository notificationRepository,
-                                  NotificationService notificationService) {
-        this.notifierFactory = notifierFactory;
-        this.notificationRepository = notificationRepository;
-//        added
+    @Autowired
+    public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
+    }
+
+
+    @GetMapping("/test")
+    public ResponseEntity<String> testEndpoint()
+    {
+        return ResponseEntity.ok("welcome");
     }
 
     @GetMapping("/")
@@ -41,15 +44,15 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<String> createNotification(@RequestBody NotificationRequest request) {
         notificationService.process(request);
         return ResponseEntity.ok("Sent!");
     }
 
-    @PutMapping
-    public ResponseEntity<String> readNotification(@RequestBody UUID userNotificationId) {
-        notificationService.readNotification(userNotificationId);
+    @PutMapping("/read")
+    public ResponseEntity<String> readNotification(@RequestBody UUID userId, @RequestParam UUID notificationId) {
+        notificationService.readNotification(userId, notificationId);
         return ResponseEntity.ok("Read!");
     }
 

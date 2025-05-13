@@ -19,6 +19,7 @@ import java.util.UUID;
 public class ThreadNotifier implements Notifier {
     @Autowired
     private StrategySelector strategySelector;
+    @Autowired
     private UserNotifyRepository userNotifyRepository;
 
     @Override
@@ -31,7 +32,7 @@ public class ThreadNotifier implements Notifier {
         for (UUID userId : threadUsersId) {
             UserNotification userNotification = new UserNotification(userId, notification);
             userNotifyRepository.save(userNotification);
-            strategySelector.performDelivery(notification);
+            strategySelector.performDelivery(userNotification);
         }
     }
 }

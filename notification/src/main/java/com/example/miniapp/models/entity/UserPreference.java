@@ -15,6 +15,20 @@ public class UserPreference {
     private boolean pushNotifications;
     private String userEmail;
 
+    public UserPreference(UUID userId) {
+        this.userId = userId;
+        emailNotifications = false;
+        pushNotifications = true;
+        userEmail = "";
+    }
+
+    public UserPreference(UUID userId, String userEmail) {
+        this.userId = userId;
+        emailNotifications = false;
+        pushNotifications = true;
+        this.userEmail = userEmail;
+    }
+
     // Getters and setters
     public UUID getUserId() {
         return userId;

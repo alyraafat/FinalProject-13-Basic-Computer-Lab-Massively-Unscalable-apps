@@ -13,8 +13,7 @@ public class UserNotification {
     @Id
     private UUID id;
 
-    @DBRef
-    private Notification notification;
+    private UUID notificationId;
 
     private UUID userId;
     private String status;
@@ -27,7 +26,7 @@ public class UserNotification {
     public UserNotification(UUID userId, Notification notification) {
         this.id = UUID.randomUUID();
         this.userId = userId;
-        this.notification = notification;
+        this.notificationId = notification.getId(); // use the ID only
         this.status = "unread";
         this.readAt = null;
     }
@@ -41,12 +40,12 @@ public class UserNotification {
         this.id = id;
     }
 
-    public Notification getNotification() {
-        return notification;
+    public UUID getNotificationId() {
+        return notificationId;
     }
 
-    public void setNotification(Notification notification) {
-        this.notification = notification;
+    public void setNotificationId(UUID notificationId) {
+        this.notificationId = notificationId;
     }
 
     public UUID getUserId() {

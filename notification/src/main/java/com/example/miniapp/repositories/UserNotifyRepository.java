@@ -5,10 +5,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface UserNotifyRepository   extends MongoRepository<UserNotification, UUID> {
     List<UserNotification> findByUserId(UUID userId);
     List<UserNotification> findByUserIdAndStatus(UUID userId, String status);
+    Optional<UserNotification> findByUserIdAndNotificationId(UUID userId, UUID notificationId);
+
 }
