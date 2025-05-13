@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/PreferenceUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/enums/NotificationPreference.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserPreference.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserPreference.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,9 +23,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -201,6 +205,7 @@
       <workItem from="1746896630994" duration="7545000" />
       <workItem from="1747059668554" duration="94000" />
       <workItem from="1747125588801" duration="8042000" />
+      <workItem from="1747148039980" duration="4272000" />
     </task>
     <task id="LOCAL-00001" summary="Strategy progress">
       <option name="closed" value="true" />

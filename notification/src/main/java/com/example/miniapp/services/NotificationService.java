@@ -1,9 +1,12 @@
 package com.example.miniapp.services;
 
 import com.example.miniapp.models.dto.NotificationRequest;
+import com.example.miniapp.models.dto.PreferenceUpdateRequest;
 import com.example.miniapp.models.entity.UserNotification;
+import com.example.miniapp.models.entity.UserPreference;
 import com.example.miniapp.models.enums.DeliveryChannel;
 import com.example.miniapp.repositories.NotificationRepository;
+import com.example.miniapp.repositories.PreferenceRepository;
 import com.example.miniapp.repositories.UserNotifyRepository;
 import com.example.miniapp.services.Factory.Notifier;
 import com.example.miniapp.services.Factory.NotifierFactory;
@@ -26,6 +29,9 @@ public class NotificationService {
     private final NotifierFactory notifierFactory;
     private final NotificationRepository notificationRepository;
     private final UserNotifyRepository userNotificationRepository;
+
+    @Autowired
+    private PreferenceRepository preferenceRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
@@ -74,8 +80,25 @@ public class NotificationService {
         }
     }
 
+    public void updatePreferences(PreferenceUpdateRequest request) {
+        if (request.getPreference() == null) {
+            throw new IllegalArgumentException("Preference must be set.");
+        }
 
-//    HELPERS
+        UserPreference pref = preferenceRepository.findById(request.getUserId())
+                .orElse(new UserPreference(request.getUserId()));
+
+        pref.setPreference(request.getPreference());
+
+        if (request.getUserEmail() != null && !request.getUserEmail().isBlank()) {
+            pref.setUserEmail(request.getUserEmail());
+        }
+
+        preferenceRepository.save(pref);
+    }
+
+
+    //    HELPERS
     private Notification mapRequestToEntity(NotificationRequest request) {
         Notification notification = new Notification();
 

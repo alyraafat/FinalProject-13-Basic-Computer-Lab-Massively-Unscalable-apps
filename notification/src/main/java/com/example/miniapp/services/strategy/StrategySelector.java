@@ -39,21 +39,22 @@ public class StrategySelector {
     }
 
     private DeliveryStrategy selectStrategy(UUID userId, UserNotification userNotification) {
-        UserPreference preference = preferenceRepository.findById(userId).orElse(
-//                default perferences push only
-                new UserPreference(userId)
-        );
+        UserPreference preference = preferenceRepository.findById(userId)
+                .orElse(new UserPreference(userId));
 
-        preferenceRepository.save(preference);
+        preferenceRepository.save(preference); // ensure saved
 
-        if (preference.isPushNotifications()) {
-            return pushStrategy;
-        } else if (preference.isEmailNotifications()) {
-            userNotification.setStatus("mail");
-            userNotifyRepository.save(userNotification);
-            return emailStrategy;
+        switch (preference.getPreference()) {
+            case PUSH:
+                return pushStrategy;
+            case EMAIL:
+                userNotification.setStatus("mail");
+                userNotifyRepository.save(userNotification);
+                return emailStrategy;
+            default:
+                throw new RuntimeException("No valid delivery method enabled for user");
         }
-        throw new RuntimeException("No delivery method enabled for user");
     }
+
 }
 

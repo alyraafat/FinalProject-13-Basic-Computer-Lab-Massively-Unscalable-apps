@@ -1,6 +1,7 @@
 package com.example.miniapp.controllers;
 
 import com.example.miniapp.models.dto.NotificationRequest;
+import com.example.miniapp.models.dto.PreferenceUpdateRequest;
 import com.example.miniapp.models.entity.Notification;
 import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.enums.NotificationType;
@@ -9,6 +10,7 @@ import com.example.miniapp.services.Factory.Notifier;
 import com.example.miniapp.services.Factory.NotifierFactory;
 import com.example.miniapp.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +57,18 @@ public class NotificationController {
         notificationService.readNotification(userId, notificationId);
         return ResponseEntity.ok("Read!");
     }
+
+    @PutMapping("/preferences")
+    public ResponseEntity<String> updatePreferences(@RequestBody PreferenceUpdateRequest request) {
+        try {
+            notificationService.updatePreferences(request);
+            return ResponseEntity.ok("Preferences updated");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 
 
 

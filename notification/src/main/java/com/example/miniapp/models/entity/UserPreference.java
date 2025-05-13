@@ -1,5 +1,6 @@
 package com.example.miniapp.models.entity;
 
+import com.example.miniapp.models.enums.NotificationPreference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,23 +12,23 @@ public class UserPreference {
     @Id
     private UUID userId;
 
-    private boolean emailNotifications;
-    private boolean pushNotifications;
+    private NotificationPreference preference = NotificationPreference.PUSH; // default
+
     private String userEmail;
+
 
     public UserPreference() {
     }
+
     public UserPreference(UUID userId) {
         this.userId = userId;
-        emailNotifications = false;
-        pushNotifications = true;
-        userEmail = "";
+        this.preference = NotificationPreference.PUSH;
+        this.userEmail = "";
     }
 
     public UserPreference(UUID userId, String userEmail) {
         this.userId = userId;
-        emailNotifications = false;
-        pushNotifications = true;
+        this.preference = NotificationPreference.PUSH;
         this.userEmail = userEmail;
     }
 
@@ -40,20 +41,12 @@ public class UserPreference {
         this.userId = userId;
     }
 
-    public boolean isEmailNotifications() {
-        return emailNotifications;
+    public NotificationPreference getPreference() {
+        return preference;
     }
 
-    public void setEmailNotifications(boolean emailNotifications) {
-        this.emailNotifications = emailNotifications;
-    }
-
-    public boolean isPushNotifications() {
-        return pushNotifications;
-    }
-
-    public void setPushNotifications(boolean pushNotifications) {
-        this.pushNotifications = pushNotifications;
+    public void setPreference(NotificationPreference preference) {
+        this.preference = preference;
     }
 
     public String getUserEmail() {
