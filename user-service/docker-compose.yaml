@@ -1,15 +1,18 @@
 services:
-#  spring-app:
-#    container_name: spring-app
-#    build: .
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      server.error.include-message: always
-#    restart:
-#      on-failure
-#    depends_on:
-#      - postgres
+  user-service:
+    container_name: user-service
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      server.error.include-message: always
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_service
+    restart:
+      on-failure
+    depends_on:
+      - postgres
+    networks:
+      - my_shared_net
 
   # PostgreSQL
   postgres:
@@ -22,7 +25,8 @@ services:
       - "5432:5432"
     volumes:
       - ./volumes/postgres_data:/var/lib/postgresql/data
-
+    networks:
+      - my_shared_net
   # pgAdmin
   pgadmin:
     image: dpage/pgadmin4
@@ -36,3 +40,9 @@ services:
     restart: on-failure
     volumes:
       - ./volumes/pgadmin_data:/var/lib/pgadmin
+    networks:
+      - my_shared_net
+
+networks:
+  my_shared_net:
+    external: true
