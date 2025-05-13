@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  app:
+  moderator-service:
     build:
       context: ./
       dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
     ports:
-      - "17531:8080"
+      - "8086:8086"
     depends_on:
       - db
       # - rabbitmq
@@ -34,8 +34,6 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       -  my_shared_net
-
-
 
 volumes:
   pgdata:
