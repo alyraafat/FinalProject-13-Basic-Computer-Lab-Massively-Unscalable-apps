@@ -17,6 +17,13 @@ spring:
           filters:
             - StripPrefix=2
             - JwtClaims
+        - id: moderator-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/moderator/**
+          filters:
+            - StripPrefix=1
+            - JwtClaims
 
 server:
   error:

@@ -8,6 +8,7 @@ import com.example.moderator.model.Report;
 import com.example.moderator.rabbitmq.ModeratorProducer;
 import com.example.moderator.repository.ModeratorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,6 +100,16 @@ public class ModeratorService {
         if (!isModerator(userId, communityId)) {
             throw new UnauthorizedModeratorActionException(userId, communityId);
         }
+    }
+
+    public UUID parseModeratorIDFromHeader(String userHeaderId){
+        UUID moderatorId;
+        try {
+            moderatorId = UUID.fromString(userHeaderId);
+        } catch (IllegalArgumentException e) {
+           throw new IllegalArgumentException("Failed to parse ModeratorID from Header");
+        }
+        return moderatorId;
     }
 
     // ========== Custom Exceptions ==========

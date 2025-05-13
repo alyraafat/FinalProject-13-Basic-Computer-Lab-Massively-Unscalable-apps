@@ -15,7 +15,7 @@ services:
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
     ports:
-      - "17531:8080"
+      - "17531:8086"
     depends_on:
       - db
       # - rabbitmq
