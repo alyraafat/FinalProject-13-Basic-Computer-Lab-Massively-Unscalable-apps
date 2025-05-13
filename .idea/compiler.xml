@@ -9,7 +9,9 @@
         <module name="maven-archiver" />
         <module name="ModeratorService" />
         <module name="CommunitiesService" />
+        <module name="miniapp" />
         <module name="apigateway-service" />
+
         <module name="ThreadsService" />
       </profile>
       <profile name="Annotation profile for user-service" enabled="true">
@@ -23,6 +25,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="moderator" target="23" />
       <module name="apigateway-service" target="19" />
       <module name="CommunitiesService" target="19" />
       <module name="maven-archiver" target="1.5" />
@@ -36,6 +39,7 @@
       <module name="CommunitiesService" options="-parameters" />
       <module name="ModeratorService" options="-parameters" />
       <module name="ThreadsService" options="-parameters" />
+      <module name="miniapp" options="-parameters" />
       <module name="apigateway-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
