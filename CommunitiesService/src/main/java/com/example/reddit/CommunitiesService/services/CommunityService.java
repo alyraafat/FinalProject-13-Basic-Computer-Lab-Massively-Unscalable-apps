@@ -1,5 +1,6 @@
 package com.example.reddit.CommunitiesService.services;
 
+import com.example.reddit.CommunitiesService.clients.ModeratorClient;
 import com.example.reddit.CommunitiesService.clients.ThreadClient;
 import com.example.reddit.CommunitiesService.events.CommunityMemberAddedEvent;
 import com.example.reddit.CommunitiesService.models.Community;
@@ -18,13 +19,15 @@ public class CommunityService {
     private final CommunityRepository communityRepository;
     private final ThreadClient threadClient;
     private final ApplicationEventPublisher events;
+    private final ModeratorClient moderatorClient;
 
     @Autowired
     public CommunityService(CommunityRepository communityRepository, ThreadClient threadClient,
-            ApplicationEventPublisher events) {
+            ApplicationEventPublisher events, ModeratorClient moderatorClient) {
         this.communityRepository = communityRepository;
         this.threadClient = threadClient;
         this.events = events;
+        this.moderatorClient = moderatorClient;
     }
 
     public List<Community> getAllCommunities() {
@@ -39,15 +42,16 @@ public class CommunityService {
         if (communityRepository.existsByName(name)) {
             throw new RuntimeException("Community name already exists");
         }
-
+        UUID communityId = UUID.randomUUID();
         Community community = Community.builder()
-                .id(UUID.randomUUID())
+                .id(communityId)
                 .name(name)
                 .topicId(topic)
                 .description(description)
                 .createdBy(createdBy)
                 .createdAt(LocalDateTime.now())
                 .build();
+        moderatorClient.addModerator(createdBy, communityId, createdBy.toString());
 
         return communityRepository.save(community);
     }
