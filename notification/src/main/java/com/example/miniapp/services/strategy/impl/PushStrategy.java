@@ -1,16 +1,12 @@
 package com.example.miniapp.services.strategy.impl;
 
-import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.entity.Notification;
 import com.example.miniapp.models.entity.PushReceived;
 import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.repositories.PushReceivedRepository;
-import com.example.miniapp.services.NotificationService;
 import com.example.miniapp.services.strategy.DeliveryStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
 public class PushStrategy implements DeliveryStrategy {
@@ -56,7 +52,7 @@ public class PushStrategy implements DeliveryStrategy {
             return true; // Simulate successful send
         } catch (Exception e) {
             System.err.println("Failed to send push: " + e.getMessage());
-            return false;
+            throw e;
         }
     }
 }

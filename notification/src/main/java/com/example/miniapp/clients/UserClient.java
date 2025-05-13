@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @FeignClient(name = "user-service", url  = "${user.service.url}")
 public interface UserClient {
-    @GetMapping("/api/users/get_emails")
+    @GetMapping("/get_emails")
     List<String> getEmailsByIds(@RequestParam("ids") List<UUID> ids);
 }

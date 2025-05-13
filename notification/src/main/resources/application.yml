@@ -3,7 +3,7 @@ server:
 
 user:
   service:
-    url: http://localhost:8080
+    url: http://user-service:8080
 
 spring:
   application:

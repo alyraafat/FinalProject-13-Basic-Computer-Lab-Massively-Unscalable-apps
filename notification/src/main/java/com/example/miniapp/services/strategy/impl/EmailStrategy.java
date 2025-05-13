@@ -53,6 +53,8 @@ public class EmailStrategy implements DeliveryStrategy {
                 List<String> emails = userClient.getEmailsByIds(List.of(userId));
                 if (emails != null && !emails.isEmpty()) {
                     email = emails.get(0); // Assuming you get the email from the list
+                    userPreference.setUserEmail(email);
+                    preferenceRepository.save(userPreference); // Save the email in preferences
                     System.out.println("Using email from UserClient: " + email);
                 } else {
                     throw new RuntimeException("Email not found for userId: " + userId);
