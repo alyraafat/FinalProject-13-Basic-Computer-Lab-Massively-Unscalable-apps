@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/PreferenceUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/enums/NotificationPreference.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserPreference.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserPreference.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/notification/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/EmailStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/EmailStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +65,7 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="2wBxiEY6Tk65bo9DMpCviWV8bMC" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />

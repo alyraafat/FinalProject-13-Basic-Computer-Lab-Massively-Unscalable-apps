@@ -69,6 +69,13 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>4.7.3</version> <!-- Or the latest version -->
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

@@ -18,4 +18,8 @@ spring:
       uri: mongodb://root:example@localhost:27017/notification_service_mongo?authSource=admin
       database: notification_service_mongo
 
-
+sendgrid:
+  api:
+    key: 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
+  sender:
+    email: emailnotificationsapp@gmail.com
