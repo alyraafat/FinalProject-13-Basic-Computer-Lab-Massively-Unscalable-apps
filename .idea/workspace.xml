@@ -5,24 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b156cc48-3c1e-4b3a-8894-967f06f62f2e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/PushReceived.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/repositories/PushReceivedRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/notification/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/controllers/NotificationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/NotificationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/dto/NotificationRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserNotification.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserNotification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserPreference.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/UserPreference.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/rabbitmq/NotificationConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/rabbitmq/NotificationConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/repositories/UserNotifyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/repositories/UserNotifyRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/CommunityNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/CommunityNotifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/ThreadNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/ThreadNotifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/UserNotifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/Factory/impl/UserNotifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/models/entity/Notification.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/NotificationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/DeliveryStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/DeliveryStrategy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/StrategySelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/StrategySelector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/EmailStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/EmailStrategy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/PushStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/java/com/example/miniapp/services/strategy/impl/PushStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,8 +27,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>

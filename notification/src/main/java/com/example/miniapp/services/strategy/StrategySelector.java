@@ -35,7 +35,7 @@ public class StrategySelector {
         DeliveryStrategy strategy = selectStrategy(userNotification.getUserId(), userNotification);
         Notification notification = notificationRepository.findById(userNotification.getNotificationId()).orElse(null);
 
-        strategy.deliver(notification);
+        strategy.deliver(userNotification , notification);
     }
 
     private DeliveryStrategy selectStrategy(UUID userId, UserNotification userNotification) {

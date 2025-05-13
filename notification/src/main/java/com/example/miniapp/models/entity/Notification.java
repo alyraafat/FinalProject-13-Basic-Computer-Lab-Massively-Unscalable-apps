@@ -21,7 +21,7 @@ public class Notification {
     private String title;
     private String message;
     private Instant createdAt;
-
+    private String senderName;
     @Field("receivers_id")
     private List<UUID> receiversId;
 
@@ -32,6 +32,15 @@ public class Notification {
         this.id=UUID.randomUUID();
         this.receiversId= new ArrayList<>();
 
+    }
+
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
 

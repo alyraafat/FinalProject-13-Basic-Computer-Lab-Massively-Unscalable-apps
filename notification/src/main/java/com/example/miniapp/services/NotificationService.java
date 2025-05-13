@@ -80,8 +80,9 @@ public class NotificationService {
         Notification notification = new Notification();
 
         // Core fields
-        notification.setType(request.getType().toString());
+        notification.setType(request.getType());
         notification.setMessage(request.getRawMessage());
+        notification.setSenderName(request.getSenderName());
         notification.setCreatedAt(Instant.now());
         notification.setReceiversId(request.getReceiversId());
         // Additional fields you might want to set

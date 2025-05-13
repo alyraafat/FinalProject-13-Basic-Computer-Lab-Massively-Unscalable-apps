@@ -1,6 +1,7 @@
 package com.example.miniapp.services.strategy.impl;
 
 import com.example.miniapp.models.entity.Notification;
+import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.services.strategy.DeliveryStrategy;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class EmailStrategy implements DeliveryStrategy {
 
     @Override
-    public void deliver(Notification notification) {
+    public void deliver(UserNotification userNotification, Notification notification) {
         try {
             System.out.println("delivering mail");
             String emailContent = formatEmail(notification);
