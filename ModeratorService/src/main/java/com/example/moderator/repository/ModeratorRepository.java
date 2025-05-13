@@ -30,4 +30,6 @@ public interface ModeratorRepository extends JpaRepository<Moderator, UUID> {
 
     // Count moderators for a community
     long countByCommunityId(UUID communityId);
+
+    boolean existsByCommunityId(UUID communityId);
 }

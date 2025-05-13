@@ -96,6 +96,13 @@ public class ModeratorService {
 
     // ========== Helper Methods ==========
     private void verifyModerator(UUID userId, UUID communityId) {
+        // If no moderators exist for the community, allow the action (first moderator)
+        boolean communityHasModerators = moderatorRepository.existsByCommunityId(communityId);
+        if (!communityHasModerators) {
+            return;
+        }
+
+        // Otherwise, check if the user is a moderator
         if (!isModerator(userId, communityId)) {
             throw new UnauthorizedModeratorActionException(userId, communityId);
         }
