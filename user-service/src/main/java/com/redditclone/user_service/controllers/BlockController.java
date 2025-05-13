@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users/{userId}/block")
+@RequestMapping("/block/{userId}")
 public class BlockController {
     private final BlockService blockService;
 

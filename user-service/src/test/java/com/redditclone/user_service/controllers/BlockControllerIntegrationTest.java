@@ -72,14 +72,14 @@ class BlockControllerIntegrationTest {
         // 1. Alice blocks Bob → 201
         given()
                 .when()
-                .post("/users/{userId}/block/{blockedId}", alice.getId(), bob.getId())
+                .post("/block/{userId}/{blockedId}", alice.getId(), bob.getId())
                 .then()
                 .statusCode(201);
 
         // 2. Check isBlocked → true
         given()
                 .when()
-                .get("/users/{userId}/block/{blockedId}", alice.getId(), bob.getId())
+                .get("/block/{userId}/{blockedId}", alice.getId(), bob.getId())
                 .then()
                 .statusCode(200)
                 .body(equalTo("true"));
@@ -87,7 +87,7 @@ class BlockControllerIntegrationTest {
         // 3. getBlockedUsers for Alice → list containing Bob
         given()
                 .when()
-                .get("/users/{userId}/block", alice.getId())
+                .get("/block/{userId}", alice.getId())
                 .then()
                 .statusCode(200)
                 .body("size()", is(1))
@@ -96,7 +96,7 @@ class BlockControllerIntegrationTest {
         // 4. getAllblocks for Alice → also contains Bob’s UUID
         given()
                 .when()
-                .get("/users/{userId}/block/allblocks", alice.getId())
+                .get("/block/{userId}/allblocks", alice.getId())
                 .then()
                 .statusCode(200)
                 .body("size()", is(1))
@@ -105,14 +105,14 @@ class BlockControllerIntegrationTest {
         // 5. Alice unblocks Bob → 204 No Content
         given()
                 .when()
-                .delete("/users/{userId}/block/{blockedId}", alice.getId(), bob.getId())
+                .delete("/block/{userId}/{blockedId}", alice.getId(), bob.getId())
                 .then()
                 .statusCode(204);
 
         // 6. isBlocked now → false
         given()
                 .when()
-                .get("/users/{userId}/block/{blockedId}", alice.getId(), bob.getId())
+                .get("/block/{userId}/{blockedId}", alice.getId(), bob.getId())
                 .then()
                 .statusCode(200)
                 .body(equalTo("false"));
@@ -134,42 +134,42 @@ class BlockControllerIntegrationTest {
         // block with unknown userId
         given()
                 .when()
-                .post("/users/{userId}/block/{blockedId}", fakeUser, bob.getId())
+                .post("/block/{userId}/{blockedId}", fakeUser, bob.getId())
                 .then()
                 .statusCode(404);
 
         // block with unknown blockedId
         given()
                 .when()
-                .post("/users/{userId}/block/{blockedId}", alice.getId(), fakeOther)
+                .post("/block/{userId}/{blockedId}", alice.getId(), fakeOther)
                 .then()
                 .statusCode(404);
 
         // unblock unknown combination
         given()
                 .when()
-                .delete("/users/{userId}/block/{blockedId}", fakeUser, fakeOther)
+                .delete("/block/{userId}/{blockedId}", fakeUser, fakeOther)
                 .then()
                 .statusCode(404);
 
         // isBlocked on unknown → 404
         given()
                 .when()
-                .get("/users/{userId}/block/{blockedId}", fakeUser, fakeOther)
+                .get("/block/{userId}/{blockedId}", fakeUser, fakeOther)
                 .then()
                 .statusCode(404);
 
         // getBlockedUsers for nonexistent user
         given()
                 .when()
-                .get("/users/{userId}/block", fakeUser)
+                .get("/block/{userId}", fakeUser)
                 .then()
                 .statusCode(404);
 
         // getAllblocks for nonexistent user
         given()
                 .when()
-                .get("/users/{userId}/block/allblocks", fakeUser)
+                .get("/block/{userId}/allblocks", fakeUser)
                 .then()
                 .statusCode(404);
     }
@@ -208,21 +208,21 @@ class BlockControllerIntegrationTest {
         // 1) A (alice) blocks B (bob)
         given()
                 .when()
-                .post("/users/{userId}/block/{blockedId}", alice.getId(), bob.getId())
+                .post("/block/{userId}/{blockedId}", alice.getId(), bob.getId())
                 .then()
                 .statusCode(201);
 
         // 2) C (charlie) blocks A (alice)
         given()
                 .when()
-                .post("/users/{userId}/block/{blockedId}", c.getId(), alice.getId())
+                .post("/block/{userId}/{blockedId}", c.getId(), alice.getId())
                 .then()
                 .statusCode(201);
 
         // 3) Fetch allblocks for A (alice)
         given()
                 .when()
-                .get("/users/{userId}/block/allblocks", alice.getId())
+                .get("/block/{userId}/allblocks", alice.getId())
                 .then()
                 .statusCode(200)
                 // should only contain C then B
@@ -242,7 +242,7 @@ class BlockControllerIntegrationTest {
     void getBlockedUsers_whenNone_thenEmptyList() {
         given()
                 .when()
-                .get("/users/{userId}/block", alice.getId())
+                .get("/block/{userId}", alice.getId())
                 .then()
                 .statusCode(200)
                 .body("", hasSize(0));
@@ -256,7 +256,7 @@ class BlockControllerIntegrationTest {
     void unblock_whenNotBlocked_then404() {
         given()
                 .when()
-                .delete("/users/{userId}/block/{blockedId}", alice.getId(), bob.getId())
+                .delete("/block/{userId}/{blockedId}", alice.getId(), bob.getId())
                 .then()
                 .statusCode(404);
     }
@@ -270,7 +270,7 @@ class BlockControllerIntegrationTest {
     void block_self_thenBadRequest() {
         given()
                 .when()
-                .post("/users/{userId}/block/{blockedId}", alice.getId(), alice.getId())
+                .post("/block/{userId}/{blockedId}", alice.getId(), alice.getId())
                 .then()
                 .statusCode(400);
     }
