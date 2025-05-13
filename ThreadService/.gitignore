@@ -1,9 +1,9 @@
-
 HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
+../target/
+!ThreadService/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+target
 
 ### STS ###
 .apt_generated
@@ -32,20 +32,3 @@ build/
 
 ### VS Code ###
 .vscode/
-=======
-# Visual Studio Code
-.vscode/
-
-# OS or IDE junk
-.DS_Store
-*.iml
-
-# IntelliJ
-**/.idea/
-
-# Build output
-**/target/
-
-# Ignore all dev.yml config files
-**/dev.yml
-

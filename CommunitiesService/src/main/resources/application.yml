@@ -1,0 +1,12 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: CommunitiesService
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
