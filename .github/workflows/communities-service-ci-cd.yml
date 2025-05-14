@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: ["**"]
     paths:
-      - 'user-service/**'
+      - 'CommunitiesService/**'
       - '.github/workflows/communities-service-ci-cd.yml'
 
 jobs:
