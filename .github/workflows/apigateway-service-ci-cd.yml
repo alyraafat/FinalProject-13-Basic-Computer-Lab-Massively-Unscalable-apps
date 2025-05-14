@@ -3,7 +3,7 @@ name: apigateway CI/CD
 on:
   workflow_dispatch:
   push:
-    branches: ["main", "userservicebase"]
+    branches: ["main", "userservicebase", "dev"]
     paths:
       - 'apigateway-service/**'
       - '.github/workflows/apigateway-service-ci-cd.yml'

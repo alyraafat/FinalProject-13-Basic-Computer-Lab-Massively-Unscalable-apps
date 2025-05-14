@@ -32,3 +32,11 @@ spec:
               value: StripPrefix=2
             - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_1
               value: JwtClaims
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_ID
+              value: moderator-service
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0
+              value: http://moderator-service:8086
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_0
+              value: StripPrefix=1
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_1
+              value: JwtClaims
