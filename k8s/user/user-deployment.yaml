@@ -28,7 +28,7 @@ spec:
 
             # Point at your Postgres headless Service:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres:5432/user_service
+              value: jdbc:postgresql://postgres-user:5432/user_service
 
             # Pull username & password from the Secret:
             - name: SPRING_DATASOURCE_USERNAME
