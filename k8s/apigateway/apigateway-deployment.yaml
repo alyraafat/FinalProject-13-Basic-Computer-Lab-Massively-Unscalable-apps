@@ -22,6 +22,8 @@ spec:
               value: dev
             - name: SPRING_MAIN_WEB_APPLICATION_TYPE
               value: reactive
+
+            # Route 0 — user-service
             - name: SPRING_CLOUD_GATEWAY_ROUTES_0_ID
               value: user-service
             - name: SPRING_CLOUD_GATEWAY_ROUTES_0_URI
@@ -32,10 +34,14 @@ spec:
               value: StripPrefix=2
             - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_1
               value: JwtClaims
+
+            # Route 1 — moderator-service
             - name: SPRING_CLOUD_GATEWAY_ROUTES_1_ID
               value: moderator-service
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_URI
+              value: http://moderator-service:8086           # <-- This was missing
             - name: SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0
-              value: http://moderator-service:8086
+              value: Path=/api/moderator/**
             - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_0
               value: StripPrefix=1
             - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_1
