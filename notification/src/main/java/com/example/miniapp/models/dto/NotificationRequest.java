@@ -10,16 +10,16 @@ public class NotificationRequest {
     private String rawMessage;
     private List<UUID> receiversId;
     private UUID senderId;
-    private String type;
+    private NotificationType type;
     private Instant createdAt;
     private String senderName;
 
 
 
-    public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String type, String senderName) {
+    public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String senderName) {
         this.rawMessage = rawMessage;
         this.receiversId = receiversId;
-        this.type = type;
+        this.type = NotificationType.fromString("community");
         this.senderId = senderId;
         this.senderName = senderName;
         this.createdAt = Instant.now();
@@ -50,11 +50,11 @@ public class NotificationRequest {
         this.receiversId = receiversId;
     }
 
-    public String getType() {
+    public NotificationType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(NotificationType type) {
         this.type = type;
     }
 

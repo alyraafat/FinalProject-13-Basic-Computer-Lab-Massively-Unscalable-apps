@@ -4,13 +4,11 @@ import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.dto.PreferenceUpdateRequest;
 import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.entity.UserPreference;
-import com.example.miniapp.models.enums.DeliveryChannel;
 import com.example.miniapp.repositories.NotificationRepository;
 import com.example.miniapp.repositories.PreferenceRepository;
 import com.example.miniapp.repositories.UserNotifyRepository;
 import com.example.miniapp.services.Factory.Notifier;
 import com.example.miniapp.services.Factory.NotifierFactory;
-import com.example.miniapp.services.strategy.DeliveryStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +54,10 @@ public class NotificationService {
 
 
     public void process(NotificationRequest request) {
-
-        String sType = request.getType();
-        NotificationType type = NotificationType.fromString(sType);
-        Notification notification = mapRequestToEntity(request);
+        String title = generateTitleFromType(request.getType());
+        Notification notification = new Notification(request.getType(), request.getSenderId().toString(), title, request.getRawMessage(), request.getSenderName(), request.getReceiversId());
         notificationRepository.save(notification);
-
-        Notifier notifier = notifierFactory.create(type);
+        Notifier notifier = notifierFactory.create(request.getType());
         notifier.notify(notification);
     }
 
@@ -97,30 +92,16 @@ public class NotificationService {
         preferenceRepository.save(pref);
     }
 
-
-    //    HELPERS
-    private Notification mapRequestToEntity(NotificationRequest request) {
-        Notification notification = new Notification();
-
-        // Core fields
-        notification.setType(request.getType());
-        notification.setMessage(request.getRawMessage());
-        notification.setSenderName(request.getSenderName());
-        notification.setCreatedAt(Instant.now());
-        notification.setReceiversId(request.getReceiversId());
-        // Additional fields you might want to set
-        notification.setTitle(generateTitleFromType(NotificationType.fromString(request.getType())));
-        notification.setSenderId(String.valueOf(request.getSenderId()));
-
-        return notification;
-    }
-
     private String generateTitleFromType(NotificationType type) {
-        switch(type) {
-            case COMMUNITY: return "Community Update";
-            case THREAD: return "New Thread Activity";
-            case USER_SPECIFIC: return "User Notification";
-            default: return "Notification";
+        switch (type) {
+            case COMMUNITY:
+                return "Community Update";
+            case THREAD:
+                return "New Thread Activity";
+            case USER_SPECIFIC:
+                return "User Notification";
+            default:
+                return "Notification";
         }
     }
 

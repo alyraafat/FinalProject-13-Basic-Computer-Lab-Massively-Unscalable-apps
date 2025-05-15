@@ -3,7 +3,6 @@ package com.example.miniapp.services.Factory;
 import com.example.miniapp.services.Factory.impl.CommunityNotifier;
 
 import com.example.miniapp.models.enums.NotificationType;
-import com.example.miniapp.models.enums.DeliveryChannel;
 import com.example.miniapp.services.Factory.impl.UserNotifier;
 import com.example.miniapp.services.Factory.impl.ThreadNotifier;
 import org.springframework.beans.factory.annotation.Autowired;
