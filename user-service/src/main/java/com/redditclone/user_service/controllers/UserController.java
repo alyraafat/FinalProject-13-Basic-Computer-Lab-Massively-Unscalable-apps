@@ -2,6 +2,9 @@ package com.redditclone.user_service.controllers;
 
 import com.redditclone.user_service.dtos.UserDTO;
 import com.redditclone.user_service.models.User;
+import com.redditclone.user_service.search.EmailSearchStrategy;
+import com.redditclone.user_service.search.UserSearchStrategy;
+import com.redditclone.user_service.search.UsernameSearchStrategy;
 import com.redditclone.user_service.services.UserService;
 import com.redditclone.user_service.utils.ResponseHandler;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,8 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
+    private final UsernameSearchStrategy usernameSearchStrategy;
+    private final EmailSearchStrategy emailSearchStrategy;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -59,7 +64,15 @@ public class UserController {
             @RequestParam UUID currentUserId,
             @RequestParam(defaultValue = "username") String strategyType
     ) {
-        List<UserDTO> results = userService.searchUsers(keyword, currentUserId, strategyType)
+        UserSearchStrategy userSearchStrategy = null;
+        if (strategyType.equalsIgnoreCase("username")) {
+            userSearchStrategy = usernameSearchStrategy;
+        } else if (strategyType.equalsIgnoreCase("email")) {
+            userSearchStrategy = emailSearchStrategy;
+        } else {
+            throw new IllegalArgumentException("Unknown strategy type: " + strategyType);
+        }
+        List<UserDTO> results = userService.searchUsers(keyword, currentUserId, userSearchStrategy)
                 .stream().map(UserDTO::fromEntity).toList();
         return ResponseEntity.ok(results);
     }
