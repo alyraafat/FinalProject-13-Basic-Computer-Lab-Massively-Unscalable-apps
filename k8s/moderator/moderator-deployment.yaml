@@ -1,35 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service
+  name: moderator-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: user-service
+      app: moderator-service
   template:
     metadata:
       labels:
-        app: user-service
+        app: moderator-service
     spec:
       containers:
-        - name: user-service
-          image: redditclone/user-service:latest
+        - name: moderator-service
+          image: redditclone/moderator-service:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 8086
           env:
-            # Load the "dev" profile so Spring reads dev.yml overrides
-            - name: SPRING_PROFILES_ACTIVE
-              value: dev
-
-            # add app url
-            - name: SERVICE_URL
-              value: http://localhost:8081/api/user
-
             # Point at your Postgres headless Service:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres-user:5432/user_service
-
+              value: jdbc:postgresql://postgres-moderator:5432/moderator_service
             # Pull username & password from the Secret:
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
@@ -41,4 +32,13 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
+            # RabbitMQ connection
+            - name: SPRING_RABBITMQ_HOST
+              value: rabbitmq
+            - name: SPRING_RABBITMQ_PORT
+              value: "5672"
+            - name: SPRING_RABBITMQ_USERNAME
+              value: guest
+            - name: SPRING_RABBITMQ_PASSWORD
+              value: guest
 

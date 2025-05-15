@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres
+  name: postgres-user
 spec:
-  serviceName: "postgres"
+  serviceName: "postgres-user"
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: postgres-user
   template:
     metadata:
       labels:
-        app: postgres
+        app: postgres-user
     spec:
       containers:
         - name: postgres
@@ -23,7 +23,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
-                  key: POSTGRES_DB
+                  key: POSTGRES_USER_DB
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -35,11 +35,11 @@ spec:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
           volumeMounts:
-            - name: postgres-persistent-storage
+            - name: postgres-user-persistent-storage
               mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
     - metadata:
-        name: postgres-persistent-storage
+        name: postgres-user-persistent-storage
       spec:
         accessModes: [ "ReadWriteOnce" ] # only one Pod (one node) can mount this volume as read/write at a time,” which is perfect for a single-instance database.
         resources:
