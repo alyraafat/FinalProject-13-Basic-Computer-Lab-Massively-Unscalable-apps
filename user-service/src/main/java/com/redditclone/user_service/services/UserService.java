@@ -2,7 +2,9 @@ package com.redditclone.user_service.services;
 
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.repositories.UserRepository;
+import com.redditclone.user_service.search.EmailSearchStrategy;
 import com.redditclone.user_service.search.UserSearchStrategy;
+import com.redditclone.user_service.search.UsernameSearchStrategy;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
@@ -21,7 +23,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final BlockService blockService;
-    private final ApplicationContext context;
+    private final SearchStrategyService searchStrategyService;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -58,9 +60,9 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public List<User> searchUsers(String keyword, UUID currentUserId, String strategyType) {
-        UserSearchStrategy strategy = (UserSearchStrategy) context.getBean(strategyType);
-        return strategy.search(keyword, currentUserId);
+    public List<User> searchUsers(String keyword, UUID currentUserId, UserSearchStrategy userSearchStrategy) {
+        searchStrategyService.setSearchStrategy(userSearchStrategy);
+        return searchStrategyService.searchUser(keyword, currentUserId);
     }
 
     @Override

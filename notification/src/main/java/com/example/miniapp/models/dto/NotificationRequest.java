@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+
 public class NotificationRequest {
     private String rawMessage;
     private List<UUID> receiversId;

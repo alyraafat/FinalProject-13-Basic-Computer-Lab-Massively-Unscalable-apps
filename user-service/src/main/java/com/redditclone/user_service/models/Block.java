@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.Instant;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,8 +32,12 @@ public class Block {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User blocked;
 
+
+    private Instant blockedDate;
+
     public Block(User blocker, User blocked) {
         this.blocker = blocker;
         this.blocked = blocked;
+        this.blockedDate = Instant.now();
     }
 }
