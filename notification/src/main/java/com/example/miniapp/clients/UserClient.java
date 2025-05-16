@@ -14,6 +14,6 @@ public interface UserClient {
     @GetMapping("/get_emails")
     List<String> getEmailsByIds(@RequestParam("ids") List<UUID> ids);
 
-    @GetMapping("/{username}")
+    @GetMapping("/username/{username}")
     String getIdByUsername(@PathVariable String username);
 }

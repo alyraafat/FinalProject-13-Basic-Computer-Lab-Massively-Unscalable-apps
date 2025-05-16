@@ -32,3 +32,8 @@ management:
   endpoint:
     health:
       show-details: always
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.boot.web.servlet.error: DEBUG
