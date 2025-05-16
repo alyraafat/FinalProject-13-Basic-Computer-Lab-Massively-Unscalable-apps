@@ -1,9 +1,11 @@
 server:
-  port: 8080
+  error:
+    include-message: always
+  port: 8086
 
 spring:
   application:
-    name: moderator-app
+    name: moderator-service
 
   rabbitmq:
     host: rabbitmq
@@ -14,7 +16,7 @@ spring:
   # This will need to be changed, was written for testing purposes, not final config
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/moderator-app
+    url: jdbc:postgresql://localhost:5432/moderator_service
     username: postgres
     password: 1234
 

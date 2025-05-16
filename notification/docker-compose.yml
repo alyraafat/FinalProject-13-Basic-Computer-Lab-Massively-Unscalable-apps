@@ -1,0 +1,60 @@
+
+services:
+
+  notification-service:
+    build: .
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongodb:27017/notification_service_mongo?authSource=admin
+      SPRING_DATA_MONGODB_DATABASE: notification_service_mongo
+    depends_on:
+      - mongodb
+    networks:
+      - my_shared_net
+
+
+
+  # MongoDB Database
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: notification_service_mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - my_shared_net
+
+  # Mongo Express UI
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "9000:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongodb:27017/?authSource=admin
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongodb
+    networks:
+      - my_shared_net
+
+
+
+
+volumes:
+  mongo_data:
+
+
+networks:
+  my_shared_net:
+    external: true

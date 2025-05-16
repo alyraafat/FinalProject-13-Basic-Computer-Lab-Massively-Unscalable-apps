@@ -1,3 +1,4 @@
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -31,3 +32,20 @@ build/
 
 ### VS Code ###
 .vscode/
+=======
+# Visual Studio Code
+.vscode/
+
+# OS or IDE junk
+.DS_Store
+*.iml
+
+# IntelliJ
+**/.idea/
+
+# Build output
+**/target/
+
+# Ignore all dev.yml config files
+**/dev.yml
+

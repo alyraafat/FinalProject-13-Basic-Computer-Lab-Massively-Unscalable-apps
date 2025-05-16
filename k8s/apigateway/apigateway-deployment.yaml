@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigateway-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apigateway-service
+  template:
+    metadata:
+      labels:
+        app: apigateway-service
+    spec:
+      containers:
+        - name: apigateway-service
+          image: redditclone/apigateway-service:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            - name: SPRING_MAIN_WEB_APPLICATION_TYPE
+              value: reactive
+
+            # Route 0 — user-service
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_0_ID
+              value: user-service
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_0_URI
+              value: http://user-service:8080
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0
+              value: Path=/api/user/**
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0
+              value: StripPrefix=2
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_1
+              value: JwtClaims
+
+            # Route 1 — moderator-service
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_ID
+              value: moderator-service
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_URI
+              value: http://moderator-service:8086           # <-- This was missing
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0
+              value: Path=/api/moderator/**
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_0
+              value: StripPrefix=1
+            - name: SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_1
+              value: JwtClaims

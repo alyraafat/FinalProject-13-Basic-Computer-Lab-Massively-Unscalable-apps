@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderator-service
+  labels:
+    app: moderator-service
+spec:
+  type: ClusterIP
+  selector:
+    app: moderator-service
+  ports:
+    - name: http
+      port: 8086
+      targetPort: 8086
+

@@ -1,0 +1,31 @@
+name: thread-service CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main", "dev"]
+    paths:
+      - 'ThreadService/**'
+      - '.github/workflows/thread-service-ci-cd.yml'
+  pull_request:
+    branches: ["**"]
+    paths:
+      - 'ThreadService/**'
+      - '.github/workflows/thread-service-ci-cd.yml'
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci-java-maven.yml
+    with:
+      branch: ${{ github.ref }}
+      service-dir: 'ThreadService'
+    secrets: inherit
+
+  docker:
+    needs: ci
+    uses: ./.github/workflows/cd-docker-push.yml
+    with:
+      artifact-name: 'packaged-artifact'
+      service-dir: 'ThreadService'
+      image-name: 'thread-service'
+    secrets: inherit
