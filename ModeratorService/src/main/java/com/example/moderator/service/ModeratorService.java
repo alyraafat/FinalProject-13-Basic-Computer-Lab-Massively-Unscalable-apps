@@ -18,16 +18,14 @@ import java.util.UUID;
 public class ModeratorService {
 
     private final ModeratorRepository moderatorRepository;
-    private final CommandController commandController;
+    private CommandController<Void> commandController;
     private final ReportService reportService;
     private final ModeratorProducer moderatorProducer;
 
     @Autowired
     public ModeratorService(ModeratorRepository moderatorRepository,
-                            CommandController commandController,
                             ReportService reportService, ModeratorProducer moderatorProducer) {
         this.moderatorRepository = moderatorRepository;
-        this.commandController = commandController;
         this.reportService = reportService;
         this.moderatorProducer = moderatorProducer;
     }
@@ -36,7 +34,7 @@ public class ModeratorService {
     public List<Moderator> getModeratorsForCommunity(UUID communityId) {
         return moderatorRepository.findByCommunityId(communityId);
     }
-    
+
     @Transactional
     public Moderator addModerator(UUID userId, UUID communityId, UUID moderatorId) {
         verifyModerator(moderatorId, communityId);
@@ -72,6 +70,7 @@ public class ModeratorService {
     public void removeComment(UUID moderatorId, UUID communityId, UUID threadId, UUID commentId) {
         verifyModerator(moderatorId, communityId);
         Command<Void> command = new RemoveCommentCommand(commentId, threadId, moderatorProducer);
+        commandController = new CommandController<>();
         commandController.setCommand(command);
         commandController.executeCommand();
         List<UUID> reports = reportService.getReportsForItem(commentId);
@@ -82,6 +81,7 @@ public class ModeratorService {
     public void banUser(UUID moderatorId, UUID communityId, UUID userId) {
         verifyModerator(moderatorId, communityId);
         Command<Void> command = new BanUserCommand(userId, communityId, moderatorProducer);
+        commandController = new CommandController<>();
         commandController.setCommand(command);
         commandController.executeCommand();
     }
@@ -90,6 +90,7 @@ public class ModeratorService {
     public void unbanUser(UUID moderatorId, UUID communityId, UUID userId) {
         verifyModerator(moderatorId, communityId);
         Command<Void> command = new UnbanUserCommand(userId, communityId, moderatorProducer);
+        commandController = new CommandController<>();
         commandController.setCommand(command);
         commandController.executeCommand();
     }
