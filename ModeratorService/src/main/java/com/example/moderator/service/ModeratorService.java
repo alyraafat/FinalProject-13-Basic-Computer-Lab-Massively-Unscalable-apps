@@ -1,7 +1,7 @@
 package com.example.moderator.service;
 
 import com.example.moderator.command.Command;
-import com.example.moderator.command.CommandInvoker;
+import com.example.moderator.command.CommandController;
 import com.example.moderator.command.impl.*;
 import com.example.moderator.model.Moderator;
 import com.example.moderator.model.Report;
@@ -18,16 +18,16 @@ import java.util.UUID;
 public class ModeratorService {
 
     private final ModeratorRepository moderatorRepository;
-    private final CommandInvoker commandInvoker;
+    private final CommandController commandController;
     private final ReportService reportService;
     private final ModeratorProducer moderatorProducer;
 
     @Autowired
     public ModeratorService(ModeratorRepository moderatorRepository,
-                            CommandInvoker commandInvoker,
+                            CommandController commandController,
                             ReportService reportService, ModeratorProducer moderatorProducer) {
         this.moderatorRepository = moderatorRepository;
-        this.commandInvoker = commandInvoker;
+        this.commandController = commandController;
         this.reportService = reportService;
         this.moderatorProducer = moderatorProducer;
     }
@@ -36,11 +36,7 @@ public class ModeratorService {
     public List<Moderator> getModeratorsForCommunity(UUID communityId) {
         return moderatorRepository.findByCommunityId(communityId);
     }
-
-//    public List<Community> getCommunitiesModeratedByUser(UUID userId) {
-//        return moderatorRepository.findByUserId(userId);
-//    }
-
+    
     @Transactional
     public Moderator addModerator(UUID userId, UUID communityId, UUID moderatorId) {
         verifyModerator(moderatorId, communityId);
@@ -66,16 +62,18 @@ public class ModeratorService {
 
     // ========== Command Pattern Operations ==========
     public List<Report> viewReports(UUID moderatorId) {
-        //verifyModerator(moderatorId, communityId);
         Command<List<Report>> command = new ViewReportsCommand(reportService, moderatorRepository, moderatorId);
-        return commandInvoker.execute(command);
+        CommandController<List<Report>> reportController = new CommandController<>();
+        reportController.setCommand(command);
+        return reportController.executeCommand();
     }
 
     @Transactional
     public void removeComment(UUID moderatorId, UUID communityId, UUID threadId, UUID commentId) {
         verifyModerator(moderatorId, communityId);
         Command<Void> command = new RemoveCommentCommand(commentId, threadId, moderatorProducer);
-        commandInvoker.execute(command);
+        commandController.setCommand(command);
+        commandController.executeCommand();
         List<UUID> reports = reportService.getReportsForItem(commentId);
         reportService.markReportAsHandledMultiple(reports);
     }
@@ -84,14 +82,16 @@ public class ModeratorService {
     public void banUser(UUID moderatorId, UUID communityId, UUID userId) {
         verifyModerator(moderatorId, communityId);
         Command<Void> command = new BanUserCommand(userId, communityId, moderatorProducer);
-        commandInvoker.execute(command);
+        commandController.setCommand(command);
+        commandController.executeCommand();
     }
 
     @Transactional
     public void unbanUser(UUID moderatorId, UUID communityId, UUID userId) {
         verifyModerator(moderatorId, communityId);
         Command<Void> command = new UnbanUserCommand(userId, communityId, moderatorProducer);
-        commandInvoker.execute(command);
+        commandController.setCommand(command);
+        commandController.executeCommand();
     }
 
     // ========== Helper Methods ==========
