@@ -24,10 +24,10 @@ public class NotificationRequest {
         this.createdAt = Instant.now();
     }
 
-    public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String senderName) {
+    public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String senderName, NotificationType type) {
         this.rawMessage = rawMessage;
         this.receiversId = receiversId;
-        this.type = NotificationType.fromString("community");
+        this.type = type;
         this.senderId = senderId;
         this.senderName = senderName;
         this.createdAt = Instant.now();

@@ -112,7 +112,7 @@ class NotificationControllerIntegrationTest {
         testUserId = UUID.fromString(userClient.getIdByUsername("alice"));
         testSenderId = UUID.randomUUID();
         baseReq = new NotificationRequest(
-                "Hello!", List.of(testUserId), testSenderId, "Alice"
+                "Hello!", List.of(testUserId), testSenderId, "Alice", NotificationType.USER_SPECIFIC
         );
         baseReq.setType(NotificationType.COMMUNITY);
         baseReq.setCreatedAt(Instant.now());
