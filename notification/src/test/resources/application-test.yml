@@ -1,3 +1,18 @@
 spring:
-  profiles:
-    active: test
+  data:
+    mongodb:
+      uri: dummy
+server:
+  port: 0
+  error:
+    include-message: always
+    include-stacktrace: always
+
+user:
+  service:
+    url: http://localhost:8080
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.boot.web.servlet.error: DEBUG

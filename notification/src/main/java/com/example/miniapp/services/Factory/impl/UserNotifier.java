@@ -1,32 +1,19 @@
 package com.example.miniapp.services.Factory.impl;
 
 import com.example.miniapp.models.entity.Notification;
-import com.example.miniapp.models.entity.UserNotification;
-import com.example.miniapp.repositories.UserNotifyRepository;
-import com.example.miniapp.services.Factory.Notifier;
-import com.example.miniapp.services.strategy.StrategySelector;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.example.miniapp.models.enums.NotificationType;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+import java.util.UUID;
 
 
-// should implement Notifier
-@Component
-public class UserNotifier implements Notifier {
-    @Autowired
-    private StrategySelector strategySelector;
-    @Autowired
-    private UserNotifyRepository userNotifyRepository;
-//    private UserNotification userNotification;
-
-    @Override
-    public void notify(Notification notification) {
-        // Create and save user notification first
-        UserNotification userNotification = new UserNotification(notification.getReceiversId().get(0), notification);
-
-        userNotifyRepository.save(userNotification);
-
-            strategySelector.performDelivery(userNotification);
-
+@Getter
+@Setter
+public class UserNotifier extends Notification {
+    public UserNotifier() { super(); }
+    public UserNotifier(String senderId, String title, String message, String senderName, List<UUID> receiversId) {
+        super(NotificationType.USER_SPECIFIC, senderId, title, message, senderName, receiversId);
     }
-
 }

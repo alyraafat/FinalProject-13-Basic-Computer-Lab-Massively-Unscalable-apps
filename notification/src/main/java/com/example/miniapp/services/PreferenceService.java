@@ -18,7 +18,7 @@ public class PreferenceService {
     }
 
     public UserPreference getPreferences(UUID userId) {
-        return preferenceRepository.findById(userId)
+        return preferenceRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Preferences not found"));
     }
 }

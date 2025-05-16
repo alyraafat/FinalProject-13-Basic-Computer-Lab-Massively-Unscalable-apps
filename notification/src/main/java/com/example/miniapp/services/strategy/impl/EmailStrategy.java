@@ -18,14 +18,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Component("emailStrategy")
 public class EmailStrategy implements DeliveryStrategy {
 
-    @Autowired
-    private PreferenceRepository preferenceRepository;
+    private final PreferenceRepository preferenceRepository;
 
-    @Autowired
-    private UserClient userClient;
+    private final UserClient userClient;
 
     @Value("${sendgrid.api.key}")
     private String sendGridApiKey;
@@ -33,13 +31,22 @@ public class EmailStrategy implements DeliveryStrategy {
     @Value("${sendgrid.sender.email}")
     private String senderEmail;
 
+    public EmailStrategy(
+            PreferenceRepository preferenceRepository,
+            UserClient userClient
+    ) {
+        this.preferenceRepository = preferenceRepository;
+        this.userClient = userClient;
+    }
+
 
     @Override
-    public void deliver(UserNotification userNotification, Notification notification) {
+    public void deliver(UserNotification userNotification) {
         try {
             UUID userId = userNotification.getUserId();
+            Notification notification = userNotification.getNotification();
             // Fetch user preferences
-            UserPreference userPreference = preferenceRepository.findById(userId)
+            UserPreference userPreference = preferenceRepository.findByUserId(userId)
                     .orElseThrow(() -> new RuntimeException("User preference not found for userId: " + userId));
 
             String email = userPreference.getUserEmail();

@@ -1,19 +1,23 @@
 package com.example.miniapp.services;
 
+import com.example.miniapp.clients.UserClient;
 import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.dto.PreferenceUpdateRequest;
 import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.entity.UserPreference;
+import com.example.miniapp.models.enums.NotificationPreference;
+import com.example.miniapp.models.enums.NotificationType;
 import com.example.miniapp.repositories.NotificationRepository;
 import com.example.miniapp.repositories.PreferenceRepository;
 import com.example.miniapp.repositories.UserNotifyRepository;
-import com.example.miniapp.services.Factory.Notifier;
-import com.example.miniapp.services.Factory.NotifierFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.miniapp.services.Factory.CommunityNotificationFactory;
+import com.example.miniapp.services.Factory.NotificationFactory;
+import com.example.miniapp.services.Factory.ThreadNotificationFactory;
+import com.example.miniapp.services.Factory.UserNotificationFactory;
+import com.example.miniapp.services.strategy.impl.EmailStrategy;
+import com.example.miniapp.services.strategy.impl.PushStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.miniapp.models.enums.NotificationType;
 import com.example.miniapp.models.entity.Notification;
 
 import java.time.Instant;
@@ -24,24 +28,32 @@ import java.util.UUID;
 
 @Service
 public class NotificationService {
-    private final NotifierFactory notifierFactory;
+
     private final NotificationRepository notificationRepository;
     private final UserNotifyRepository userNotificationRepository;
-
-    @Autowired
-    private PreferenceRepository preferenceRepository;
-
-    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
+    private final SendNotificationStrategyService notifier;
+    private final PreferenceRepository preferenceRepository;
+    private final UserClient userClient;
+    private final EmailStrategy emailStrategy;
+    private final PushStrategy pushStrategy;
 
     @Autowired
     public NotificationService(
-            NotifierFactory notifierFactory,
             NotificationRepository notificationRepository,
-            UserNotifyRepository userNotificationRepository
+            UserNotifyRepository userNotificationRepository,
+            SendNotificationStrategyService notifier,
+            PreferenceRepository preferenceRepository,
+            UserClient userClient,
+            EmailStrategy emailStrategy,
+            PushStrategy pushStrategy
     ) {
-        this.notifierFactory = notifierFactory;
         this.notificationRepository = notificationRepository;
         this.userNotificationRepository = userNotificationRepository;
+        this.notifier = notifier;
+        this.preferenceRepository = preferenceRepository;
+        this.userClient = userClient;
+        this.emailStrategy = emailStrategy;
+        this.pushStrategy = pushStrategy;
     }
 
     public List<UserNotification> getUserNotifications(UUID userId, String status) {
@@ -52,17 +64,25 @@ public class NotificationService {
         }
     }
 
+    private NotificationFactory createNotificationFactory(NotificationType type){
+        return switch (type) {
+            case USER_SPECIFIC ->
+                    new UserNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy);
+            case THREAD ->
+                    new ThreadNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy);
+            case COMMUNITY ->
+                    new CommunityNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy);
+        };
+    }
 
     public void process(NotificationRequest request) {
-        String title = generateTitleFromType(request.getType());
-        Notification notification = new Notification(request.getType(), request.getSenderId().toString(), title, request.getRawMessage(), request.getSenderName(), request.getReceiversId());
+        NotificationFactory notifierFactory = createNotificationFactory(request.getType());
+        Notification notification = notifierFactory.notify(request);
         notificationRepository.save(notification);
-        Notifier notifier = notifierFactory.create(request.getType());
-        notifier.notify(notification);
     }
 
 
-    public void readNotification(UUID userId, UUID notificationId) {
+    public void readNotification(UUID userId, String notificationId) {
         Optional<UserNotification> optional = userNotificationRepository.findByUserIdAndNotificationId(userId, notificationId);
         if (optional.isPresent()) {
             UserNotification userNotification = optional.get();
@@ -75,35 +95,19 @@ public class NotificationService {
         }
     }
 
-    public void updatePreferences(PreferenceUpdateRequest request) {
+    public void updatePreferences(String email, PreferenceUpdateRequest request) {
         if (request.getPreference() == null) {
             throw new IllegalArgumentException("Preference must be set.");
         }
 
-        UserPreference pref = preferenceRepository.findById(request.getUserId())
-                .orElse(new UserPreference(request.getUserId()));
+        UserPreference pref = preferenceRepository.findByUserId(request.getUserId())
+                .orElse(new UserPreference(request.getUserId(), email));
 
         pref.setPreference(request.getPreference());
-
-        if (request.getUserEmail() != null && !request.getUserEmail().isBlank()) {
-            pref.setUserEmail(request.getUserEmail());
-        }
 
         preferenceRepository.save(pref);
     }
 
-    private String generateTitleFromType(NotificationType type) {
-        switch (type) {
-            case COMMUNITY:
-                return "Community Update";
-            case THREAD:
-                return "New Thread Activity";
-            case USER_SPECIFIC:
-                return "User Notification";
-            default:
-                return "Notification";
-        }
-    }
 
 
 }

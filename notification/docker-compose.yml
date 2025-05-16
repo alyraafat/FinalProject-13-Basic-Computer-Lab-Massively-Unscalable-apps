@@ -27,7 +27,7 @@ services:
     ports:
       - "27018:27017"
     volumes:
-      - mongo_data:/data/db
+      - ./volumes/mongo_data/:/data/db
     networks:
       - my_shared_net
 
@@ -48,11 +48,14 @@ services:
     networks:
       - my_shared_net
 
-
-
-
-volumes:
-  mongo_data:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # AMQP client port
+      - "15672:15672" # Management UI
+    networks:
+      - my_shared_net
 
 
 networks:
