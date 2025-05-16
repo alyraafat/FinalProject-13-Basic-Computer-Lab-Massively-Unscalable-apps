@@ -4,6 +4,7 @@ import com.example.miniapp.clients.UserClient;
 import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.entity.Notification;
 import com.example.miniapp.models.enums.NotificationType;
+import com.example.miniapp.repositories.NotificationRepository;
 import com.example.miniapp.repositories.PreferenceRepository;
 import com.example.miniapp.repositories.UserNotifyRepository;
 import com.example.miniapp.services.Factory.impl.CommunityNotifier;
@@ -19,8 +20,8 @@ import org.springframework.stereotype.Component;
  */
 public class CommunityNotificationFactory extends NotificationFactory {
 
-    public CommunityNotificationFactory(UserNotifyRepository userNotificationRepository, SendNotificationStrategyService notifier, PreferenceRepository preferenceRepository, UserClient userClient, EmailStrategy emailStrategy, PushStrategy pushStrategy) {
-        super(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy);
+    public CommunityNotificationFactory(UserNotifyRepository userNotificationRepository, SendNotificationStrategyService notifier, PreferenceRepository preferenceRepository, UserClient userClient, EmailStrategy emailStrategy, PushStrategy pushStrategy, NotificationRepository notificationRepository) {
+        super(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
     }
 
     public Notification create(NotificationRequest request) {

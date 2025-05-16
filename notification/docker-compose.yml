@@ -13,8 +13,6 @@ services:
     networks:
       - my_shared_net
 
-
-
   # MongoDB Database
   mongodb:
     image: mongo
@@ -24,8 +22,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: notification_service_mongo
+      USER_SERVICE_URL: http://user-service:8080
     ports:
-      - "27018:27017"
+      - "27017:27017"
     volumes:
       - ./volumes/mongo_data/:/data/db
     networks:
@@ -56,7 +55,6 @@ services:
       - "15672:15672" # Management UI
     networks:
       - my_shared_net
-
 
 networks:
   my_shared_net:

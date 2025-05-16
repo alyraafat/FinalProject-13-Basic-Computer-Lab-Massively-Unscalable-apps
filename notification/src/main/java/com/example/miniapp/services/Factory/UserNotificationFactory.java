@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 public class UserNotificationFactory extends NotificationFactory {
 
 
-    public UserNotificationFactory(UserNotifyRepository userNotificationRepository, SendNotificationStrategyService notifier, PreferenceRepository preferenceRepository, UserClient userClient, EmailStrategy emailStrategy, PushStrategy pushStrategy) {
-        super(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy);
+    public UserNotificationFactory(UserNotifyRepository userNotificationRepository, SendNotificationStrategyService notifier, PreferenceRepository preferenceRepository, UserClient userClient, EmailStrategy emailStrategy, PushStrategy pushStrategy, NotificationRepository notificationRepository) {
+        super(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
     }
 
     public Notification create(NotificationRequest request) {

@@ -17,8 +17,7 @@ public interface UserNotifyRepository extends MongoRepository<UserNotification, 
      * Find the user-notification document for this user
      * whose Notification reference has the given id.
      */
-    @Query("{ 'userId': ?0, 'notification': { $ref: 'notifications', $id: ?1 } }")
-    Optional<UserNotification> findByUserIdAndNotificationId(
+    Optional<UserNotification> findByUserIdAndNotification_Id(
             UUID userId,
             String notificationId
     );

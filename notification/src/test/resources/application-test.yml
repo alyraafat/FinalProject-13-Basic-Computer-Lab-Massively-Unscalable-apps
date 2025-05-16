@@ -1,7 +1,3 @@
-spring:
-  data:
-    mongodb:
-      uri: dummy
 server:
   port: 0
   error:

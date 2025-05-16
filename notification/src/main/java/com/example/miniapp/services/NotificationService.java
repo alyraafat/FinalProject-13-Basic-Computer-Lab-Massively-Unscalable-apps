@@ -67,25 +67,28 @@ public class NotificationService {
     private NotificationFactory createNotificationFactory(NotificationType type){
         return switch (type) {
             case USER_SPECIFIC ->
-                    new UserNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy);
+                    new UserNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
             case THREAD ->
-                    new ThreadNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy);
+                    new ThreadNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
             case COMMUNITY ->
-                    new CommunityNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy);
+                    new CommunityNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
         };
     }
 
     public void process(NotificationRequest request) {
         NotificationFactory notifierFactory = createNotificationFactory(request.getType());
         Notification notification = notifierFactory.notify(request);
-        notificationRepository.save(notification);
+        
     }
 
 
     public void readNotification(UUID userId, String notificationId) {
-        Optional<UserNotification> optional = userNotificationRepository.findByUserIdAndNotificationId(userId, notificationId);
+        Optional<UserNotification> optional = userNotificationRepository.findByUserIdAndNotification_Id(userId, notificationId);
+//        List<UserNotification> userNotifications = userNotificationRepository.findByUserIdAndStatus(userId, "read");
         if (optional.isPresent()) {
+//        if (!userNotifications.isEmpty()) {
             UserNotification userNotification = optional.get();
+//            UserNotification userNotification = userNotifications.getFirst();
             userNotification.setStatus("read");
             userNotification.setReadAt(Instant.now());
             userNotificationRepository.save(userNotification);
@@ -95,15 +98,11 @@ public class NotificationService {
         }
     }
 
-    public void updatePreferences(String email, PreferenceUpdateRequest request) {
-        if (request.getPreference() == null) {
-            throw new IllegalArgumentException("Preference must be set.");
-        }
-
-        UserPreference pref = preferenceRepository.findByUserId(request.getUserId())
-                .orElse(new UserPreference(request.getUserId(), email));
-
-        pref.setPreference(request.getPreference());
+    public void updatePreferences(UUID userId, String email, NotificationPreference preference) {
+        UserPreference pref = preferenceRepository.findByUserId(userId)
+                .orElse(new UserPreference(userId, email));
+        pref.setUserEmail(email);
+        pref.setPreference(preference);
 
         preferenceRepository.save(pref);
     }

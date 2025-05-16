@@ -29,14 +29,16 @@ public abstract class NotificationFactory {
     private final UserClient userClient;
     private final EmailStrategy emailStrategy;
     private final PushStrategy pushStrategy;
+    private final NotificationRepository notificationRepository;
 
-    public NotificationFactory(UserNotifyRepository userNotificationRepository, SendNotificationStrategyService notifier, PreferenceRepository preferenceRepository, UserClient userClient, EmailStrategy emailStrategy, PushStrategy pushStrategy) {
+    public NotificationFactory(UserNotifyRepository userNotificationRepository, SendNotificationStrategyService notifier, PreferenceRepository preferenceRepository, UserClient userClient, EmailStrategy emailStrategy, PushStrategy pushStrategy, NotificationRepository notificationRepository) {
         this.userNotificationRepository = userNotificationRepository;
         this.notifier = notifier;
         this.preferenceRepository = preferenceRepository;
         this.userClient = userClient;
         this.emailStrategy = emailStrategy;
         this.pushStrategy = pushStrategy;
+        this.notificationRepository = notificationRepository;
     }
 
     /**
@@ -49,6 +51,7 @@ public abstract class NotificationFactory {
 
     public Notification notify(NotificationRequest request) {
         Notification notification = create(request);
+        notificationRepository.save(notification);
         List<UUID> receiversId = notification.getReceiversId();
         System.out.println(receiversId);
         List<String> emails = userClient.getEmailsByIds(receiversId);
@@ -62,7 +65,8 @@ public abstract class NotificationFactory {
                 preferenceRepository.save(pref);
             }
             notifier.setDeliveryStrategy(pref.getPreference() == NotificationPreference.PUSH ? pushStrategy : emailStrategy);
-            UserNotification userNotification = new UserNotification(notification, receiverId, "unread");
+            String statusString = pref.getPreference() == NotificationPreference.PUSH ? "unread" : "email";
+            UserNotification userNotification = new UserNotification(notification, receiverId, statusString);
             userNotificationRepository.save(userNotification);
             notifier.deliver(userNotification);
         }

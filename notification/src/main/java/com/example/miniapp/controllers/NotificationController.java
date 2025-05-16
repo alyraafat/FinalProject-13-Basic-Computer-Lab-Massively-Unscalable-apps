@@ -3,6 +3,7 @@ package com.example.miniapp.controllers;
 import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.dto.PreferenceUpdateRequest;
 import com.example.miniapp.models.entity.UserNotification;
+import com.example.miniapp.models.enums.NotificationPreference;
 import com.example.miniapp.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/notifications")
+@RequestMapping("/api/notification")
 public class NotificationController {
 
 
@@ -51,18 +52,14 @@ public class NotificationController {
         return ResponseEntity.ok("Read!");
     }
 
-    @PutMapping("/preferences")
-    public ResponseEntity<String> updatePreferences(@RequestHeader(value = "X-User-Email", required = false) String userHeaderEmail, @RequestBody PreferenceUpdateRequest request) {
+    @PutMapping("/preferences/{preference}")
+    public ResponseEntity<String> updatePreferences(@RequestHeader(value = "X-User-Id", required = false) UUID userId,
+            @RequestHeader(value = "X-User-Email", required = false) String userHeaderEmail,@PathVariable NotificationPreference preference ) {
         try {
-            notificationService.updatePreferences(userHeaderEmail, request);
+            notificationService.updatePreferences(userId, userHeaderEmail, preference);
             return ResponseEntity.ok("Preferences updated");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
-
-
-
 }

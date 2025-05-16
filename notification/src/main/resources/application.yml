@@ -1,9 +1,12 @@
 server:
   port: 9090
+  error:
+    include-message: always
+    include-stacktrace: always
 
 user:
   service:
-    url: http://user-service:8080
+    url: ${USER_SERVICE_URL:http://localhost:8080}
 
 spring:
   application:

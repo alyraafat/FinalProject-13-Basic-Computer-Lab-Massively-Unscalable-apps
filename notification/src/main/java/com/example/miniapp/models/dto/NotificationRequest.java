@@ -20,7 +20,9 @@ public class NotificationRequest {
     private Instant createdAt;
     private String senderName;
 
-
+    public NotificationRequest() {
+        this.createdAt = Instant.now();
+    }
 
     public NotificationRequest(String rawMessage, List<UUID> receiversId, UUID senderId, String senderName) {
         this.rawMessage = rawMessage;
