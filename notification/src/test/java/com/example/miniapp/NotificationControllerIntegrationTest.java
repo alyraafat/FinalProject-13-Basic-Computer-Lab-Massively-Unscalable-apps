@@ -137,7 +137,9 @@ class NotificationControllerIntegrationTest {
         assertThat(getUnread.getBody()[0].getStatus()).isEqualTo("unread");
 
         // PUT → mark read
-        HttpEntity<UUID> readReq = new HttpEntity<>(testUserId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-User-Id", testUserId.toString());
+        HttpEntity<UUID> readReq = new HttpEntity<>(headers);
         ResponseEntity<String> readResp = rest.exchange(
                 "/api/notification/read?notificationId={nid}",
                 HttpMethod.PUT, readReq, String.class, notificationId

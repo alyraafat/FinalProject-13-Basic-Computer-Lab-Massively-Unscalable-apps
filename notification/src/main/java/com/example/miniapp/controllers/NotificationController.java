@@ -47,7 +47,7 @@ public class NotificationController {
     }
 
     @PutMapping("/read")
-    public ResponseEntity<String> readNotification(@RequestBody UUID userId, @RequestParam String notificationId) {
+    public ResponseEntity<String> readNotification(@RequestHeader(value = "X-User-Id", required = false) UUID userId, @RequestParam String notificationId) {
         notificationService.readNotification(userId, notificationId);
         return ResponseEntity.ok("Read!");
     }
