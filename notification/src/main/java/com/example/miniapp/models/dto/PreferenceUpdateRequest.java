@@ -1,35 +1,23 @@
 package com.example.miniapp.models.dto;
 
 import com.example.miniapp.models.enums.NotificationPreference;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Setter
+@Getter
 public class PreferenceUpdateRequest {
     private UUID userId;
     private NotificationPreference preference;
-    private String userEmail;  // optional
 
-    public UUID getUserId() {
-        return userId;
+    public PreferenceUpdateRequest() {
     }
 
-    public void setUserId(UUID userId) {
+    public PreferenceUpdateRequest(UUID userId, NotificationPreference preference) {
         this.userId = userId;
-    }
-
-    public NotificationPreference getPreference() {
-        return preference;
-    }
-
-    public void setPreference(NotificationPreference preference) {
         this.preference = preference;
     }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
 }

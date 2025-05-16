@@ -90,4 +90,10 @@ public class UserController {
         return ResponseEntity.ok(emails);
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<String> getIdByUsername(@PathVariable String username) {
+        User user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(user.getId().toString());
+    }
+
 }

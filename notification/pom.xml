@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>miniapp</artifactId>
+	<artifactId>notification</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>miniapp</name>
 	<description>Demo project for Spring Boot</description>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>1.18.30</version> <!-- Or latest -->
 		</dependency>
 
 		<!-- Validation -->
@@ -76,6 +76,29 @@
 			<version>4.7.3</version> <!-- Or the latest version -->
 		</dependency>
 
+		<!-- your existing mongodb module -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mongodb</artifactId>
+			<version>1.19.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- add this to pull in the @Testcontainers annotation and JUnit5 extension -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.19.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Testcontainers module for Postgres -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>1.19.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -101,6 +124,21 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version> <configuration>
+				<source>${java.version}</source>
+				<target>${java.version}</target>
+				<annotationProcessorPaths>
+					<path>
+						<groupId>org.projectlombok</groupId>
+						<artifactId>lombok</artifactId>
+						<version>${lombok.version}</version> </path>
+				</annotationProcessorPaths>
+			</configuration>
 			</plugin>
 		</plugins>
 	</build>

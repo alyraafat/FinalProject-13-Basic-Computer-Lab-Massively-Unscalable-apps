@@ -17,9 +17,12 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.IntStream;
 
+/**
+ * Seeds the UserService database with both fixed notification users,
+ * random users, and blocks for dev environment.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class DataSeeder {
@@ -28,62 +31,103 @@ public class DataSeeder {
     private final BlockRepository blockRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Main runner that seeds data; run() is transactional to prevent stale-object errors.
+     */
     @Bean
     @Profile("dev")
-    CommandLineRunner seedWithFaker() {
-        return args -> {
-            // 1) Seed users if none exist
-            if (userRepository.count() == 0) {
-                Faker faker = new Faker();
-                IntStream.rangeClosed(1, 50).forEach(i -> {
-                    String fn = faker.name().firstName();
-                    String ln = faker.name().lastName();
-                    User u = User.builder()
-                            // no .id() so JPA will INSERT
-                            .username((fn.charAt(0) + ln).toLowerCase())
-                            //faker.internet().password(8, 16)
-                            .password(passwordEncoder.encode("password"))
-                            .email(fn.toLowerCase() + "." + ln.toLowerCase() + "@example.com")
-                            .fullName(fn + " " + ln)
-                            .createdAt(Instant.now().minusSeconds(faker.number().numberBetween(0, 86_400)))
-                            .activated(faker.bool().bool())
-                            .lastLogin(Instant.now().minusSeconds(faker.number().numberBetween(0, 86_400)))
-                            .build();
-                    userRepository.save(u);
-                });
-                System.out.println("✅ Seeded 50 fake users");
-            }
-
-            System.out.println("Seeding blocks... "+ blockRepository.count());
-            if (blockRepository.count() == 0) {
-                Faker faker = new Faker();
-                List<User> activeUsers = userRepository.findByActivatedTrue();
-
-                activeUsers.forEach(blocker -> {
-                    // 0–3 blocks for this blocker
-                    int blocksForUser = faker.number().numberBetween(0, 4);
-
-                    // build a mutable list of everyone except the blocker
-                    List<User> candidates = new ArrayList<>(activeUsers);
-                    candidates.removeIf(u -> u.getId().equals(blocker.getId()));
-
-                    // shuffle so we’ll pick a random subset
-                    Collections.shuffle(candidates);
-
-                    // pick at most blocksForUser distinct targets
-                    int limit = Math.min(blocksForUser, candidates.size());
-                    for (int i = 0; i < limit; i++) {
-                        User blocked = candidates.get(i);
-                        Block b = Block.builder()
-                                .blocker(blocker)
-                                .blocked(blocked)
-                                .build();
-                        blockRepository.save(b);
-                    }
-                });
-
-                System.out.println("✅ Seeded blocks for activated users (no duplicates)");
+    public CommandLineRunner seedWithFakerAndNotifications() {
+        return new CommandLineRunner() {
+            @Override
+            @Transactional
+            public void run(String... args) {
+                seedFixedNotificationUsers();
+                seedFakeUsers();
+                seedBlocks();
             }
         };
+    }
+
+    private void seedFixedNotificationUsers() {
+        // Alice
+        String ALICE_USERNAME = "alice";
+        String ALICE_EMAIL = "alice@example.com";
+        User alice = User.builder()
+                .username(ALICE_USERNAME)
+                .password(passwordEncoder.encode("password"))
+                .email(ALICE_EMAIL)
+                .fullName("Alice Notification")
+                .createdAt(Instant.now())
+                .activated(true)
+                .lastLogin(Instant.now())
+                .build();
+        userRepository.save(alice);
+        System.out.println("[DataSeeder] Created user: alice");
+
+        // Bob
+        String BOB_USERNAME = "bob";
+        String BOB_EMAIL = "bob@example.com";
+        User bob = User.builder()
+                .username(BOB_USERNAME)
+                .password(passwordEncoder.encode("password"))
+                .email(BOB_EMAIL)
+                .fullName("Bob Notification")
+                .createdAt(Instant.now())
+                .activated(true)
+                .lastLogin(Instant.now())
+                .build();
+        userRepository.save(bob);
+        System.out.println("[DataSeeder] Created user: bob");
+    }
+
+    private void seedFakeUsers() {
+        long totalUsers = userRepository.count();
+        if (totalUsers < 52) { // two fixed + 50 fake
+            Faker faker = new Faker();
+            IntStream.rangeClosed(1, 50).forEach(i -> {
+                String fn = faker.name().firstName();
+                String ln = faker.name().lastName();
+                User u = User.builder()
+                        .username((fn.charAt(0) + ln).toLowerCase())
+                        .password(passwordEncoder.encode("password"))
+                        .email(fn.toLowerCase() + "." + ln.toLowerCase() + "@example.com")
+                        .fullName(fn + " " + ln)
+                        .createdAt(Instant.now().minusSeconds(faker.number().numberBetween(0, 86_400)))
+                        .activated(faker.bool().bool())
+                        .lastLogin(Instant.now().minusSeconds(faker.number().numberBetween(0, 86_400)))
+                        .build();
+                userRepository.save(u);
+            });
+            System.out.println("[DataSeeder] Seeded 50 fake users");
+        } else {
+            System.out.println("[DataSeeder] Fake users already seeded");
+        }
+    }
+
+    private void seedBlocks() {
+        long blockCount = blockRepository.count();
+        System.out.println("Seeding blocks... " + blockCount);
+        if (blockCount == 0) {
+            Faker faker = new Faker();
+            List<User> activeUsers = userRepository.findByActivatedTrue();
+            activeUsers.forEach(blocker -> {
+                int blocksForUser = faker.number().numberBetween(0, 4);
+                List<User> candidates = new ArrayList<>(activeUsers);
+                candidates.removeIf(u -> u.getId().equals(blocker.getId()));
+                Collections.shuffle(candidates);
+                int limit = Math.min(blocksForUser, candidates.size());
+                for (int i = 0; i < limit; i++) {
+                    User blocked = candidates.get(i);
+                    Block b = Block.builder()
+                            .blocker(blocker)
+                            .blocked(blocked)
+                            .build();
+                    blockRepository.save(b);
+                }
+            });
+            System.out.println("[DataSeeder] Seeded blocks for activated users");
+        } else {
+            System.out.println("[DataSeeder] Blocks already seeded");
+        }
     }
 }
