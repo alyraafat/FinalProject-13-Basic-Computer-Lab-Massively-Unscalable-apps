@@ -39,20 +39,21 @@ public class CommunityController {
 
     // check if user is banned from community
     @GetMapping("/{id}/is-banned/{userId}")
-    public ResponseEntity<Boolean> isUserBanned(@PathVariable UUID id, @PathVariable UUID userId) {
+    public boolean isUserBanned(@PathVariable UUID id, @PathVariable UUID userId) {
         boolean isBanned = communityService.isUserBanned(id, userId);
-        return ResponseEntity.ok(isBanned);
+        return isBanned;
     }
 
     @PostMapping
-    public ResponseEntity<Community> addCommunity(
-            @Valid @RequestBody CommunityCreateRequest req) {
+    public ResponseEntity<Community> createCommunity(
+            @Valid @RequestBody CommunityCreateRequest req, @RequestHeader("X-User-Id") UUID userId
+    ) {
 
         Community community = communityService.createCommunity(
                 req.getName(),
                 req.getTopicId(),
                 req.getDescription(),
-                req.getUserId()
+                userId
         );
 
         return ResponseEntity
@@ -87,8 +88,8 @@ public class CommunityController {
         return ResponseEntity.ok(communityService.getCommunitiesByModeratorId(moderatorId));
     }
 
-    @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<Community>> getCommunitiesByMemberId(@PathVariable UUID memberId) {
+    @GetMapping("/member")
+    public ResponseEntity<List<Community>> getCommunitiesByMemberId(@RequestHeader("X-User-Id") UUID memberId) {
         return ResponseEntity.ok(communityService.getCommunitiesByMemberId(memberId));
     }
 
@@ -107,13 +108,13 @@ public class CommunityController {
        return ResponseEntity.ok(communityService.removeModerator(communityId, userId));
    }
 
-   @PostMapping("/{communityId}/members/{userId}")
-   public ResponseEntity<Community> addMember(@PathVariable UUID communityId, @PathVariable UUID userId) {
+   @PostMapping("/{communityId}/members")
+   public ResponseEntity<Community> addMember(@PathVariable UUID communityId, @RequestHeader("X-User-Id") UUID userId) {
        return ResponseEntity.ok(communityService.addMember(communityId, userId));
    }
 
-   @DeleteMapping("/{communityId}/members/{userId}")
-   public ResponseEntity<Community> removeMember(@PathVariable UUID communityId, @PathVariable UUID userId) {
+   @DeleteMapping("/{communityId}/members")
+   public ResponseEntity<Community> removeMember(@PathVariable UUID communityId, @RequestHeader("X-User-Id") UUID userId) {
        return ResponseEntity.ok(communityService.removeMember(communityId, userId));
    }
 

@@ -15,9 +15,6 @@ public class CommunityCreateRequest {
     @NotBlank
     private String description;
 
-    @NotNull
-    private UUID userId;
-
     // getters & setters
     public String getName() {
         return name;
@@ -43,11 +40,4 @@ public class CommunityCreateRequest {
         this.description = description;
     }
 
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
 }

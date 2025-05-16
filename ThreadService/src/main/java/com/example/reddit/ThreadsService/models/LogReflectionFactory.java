@@ -1,12 +1,22 @@
 package com.example.reddit.ThreadsService.models;
 
-import java.util.UUID;
+import com.example.reddit.ThreadsService.repositories.LogRepository;
+import com.example.reddit.ThreadsService.services.LogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+@Component
 public class LogReflectionFactory {
-    public static Log createLog(ActionType actionType, UUID userId, UUID threadId) {
+
+    @Autowired
+    private LogService logService;
+    public Log createLog(ActionType actionType, UUID userId, UUID threadId) {
         try {
             Class<?> clazz = Class.forName(actionType.getClassName());
-            return (Log) clazz.getDeclaredConstructor(UUID.class, UUID.class).newInstance(userId, threadId);
+            Log createdLog = (Log) clazz.getDeclaredConstructor(UUID.class, UUID.class).newInstance(userId, threadId);
+            logService.createLog(createdLog);
+            return createdLog ;
         } catch (Exception e) {
             throw new RuntimeException("Failed to create log for " + actionType, e);
         }

@@ -1,5 +1,6 @@
 package com.example.reddit.ThreadsService.services;
 
+import com.example.reddit.ThreadsService.clients.CommunityClient;
 import com.example.reddit.ThreadsService.clients.UserClient;
 import com.example.reddit.ThreadsService.dto.ReportRequest;
 import com.example.reddit.ThreadsService.models.*;
@@ -22,13 +23,19 @@ public class ThreadService {
     private final LogRepository logRepository;
     private final UserClient userClient;
     private final ThreadProducer threadProducer;
+    private final LogReflectionFactory logReflectionFactory;
+    private final CommentService commentService;
+    private final CommunityClient communityClient;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient, ThreadProducer threadProducer) {
+    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient, ThreadProducer threadProducer, LogReflectionFactory logReflectionFactory, CommentService commentService, CommunityClient communityClient) {
         this.threadRepository = threadRepository;
         this.logRepository=logRepository;
         this.userClient=userClient;
         this.threadProducer=threadProducer;
+        this.logReflectionFactory=logReflectionFactory;
+        this.commentService=commentService;
+        this.communityClient=communityClient;
     }
 
     public List<String> testGetBlockedUsers() {
@@ -47,7 +54,17 @@ public class ThreadService {
         return threadRepository.findById(id);
     }
 
-    public Thread createThread(Thread thread) {
+    public boolean isUserBanned(UUID communityId, UUID userId) {
+        return communityClient.isUserBanned(communityId, userId);
+    }
+
+    public Thread createThread(Thread thread, UUID userId) {
+
+        // Check if the user is banned from the community
+        if (isUserBanned(thread.getCommunityId(), userId)) {
+            throw new RuntimeException("User is banned from this community");
+        }
+
          thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -61,6 +78,8 @@ public class ThreadService {
                 .comments(thread.getComments())
                 .build();
         Thread saved = threadRepository.save(thread);
+
+        logReflectionFactory.createLog(ActionType.POST, thread.getAuthorId(), saved.getId());
 
         threadProducer.sendThreadNotificationRequest(saved.getId());
 
@@ -87,10 +106,18 @@ public class ThreadService {
         return threadRepository.findByTopic(topic);
     }
     @CacheEvict(value = "trending_cache", key = "#result.communityId")
-    public Thread addComment(UUID threadId, Comment comment) {
+    public Thread addComment(UUID threadId, Comment comment, UUID userId) {
+
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
-        thread.getComments().add(comment);
+
+        // Check if the user is banned from the community
+        if (isUserBanned(thread.getCommunityId(), userId)) {
+            throw new RuntimeException("User is banned from this community");
+        }
+
+        Comment newComment=commentService.createComment(comment);
+        thread.getComments().add(newComment);
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -105,6 +132,8 @@ public class ThreadService {
                 .build();
 
         Thread saved = threadRepository.save(thread);
+
+        logReflectionFactory.createLog(ActionType.COMMENT, thread.getAuthorId(), saved.getId());
 
         threadProducer.sendThreadNotificationRequest(threadId);
 
@@ -142,6 +171,8 @@ public class ThreadService {
         if (!commentRemoved) {
             throw new RuntimeException("Comment not found with ID: " + commentId);
         }
+
+        commentService.deleteComment(commentId);
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -158,9 +189,15 @@ public class ThreadService {
     }
 
     @CacheEvict(value = "trending_cache", key = "#result.communityId")
-    public Thread upvote(UUID threadId) {
+    public Thread upvote(UUID threadId, UUID userId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
+
+        // Check if the user is banned from the community
+        if (isUserBanned(thread.getCommunityId(), userId)) {
+            throw new RuntimeException("User is banned from this community");
+        }
+
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -175,14 +212,22 @@ public class ThreadService {
                 .build();
         Thread saved = threadRepository.save(thread);
 
+        logReflectionFactory.createLog(ActionType.UPVOTE, thread.getAuthorId(), saved.getId());
+
         threadProducer.sendThreadNotificationRequest(threadId);
 
         return saved;
     }
     @CacheEvict(value = "trending_cache", key = "#result.communityId")
-    public Thread downvote(UUID threadId) {
+    public Thread downvote(UUID threadId, UUID userId) {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
+
+        // Check if the user is banned from the community
+        if (isUserBanned(thread.getCommunityId(), userId)) {
+            throw new RuntimeException("User is banned from this community");
+        }
+
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -197,6 +242,8 @@ public class ThreadService {
                 .build();
 
         Thread saved = threadRepository.save(thread);
+
+        logReflectionFactory.createLog(ActionType.DOWNVOTE, thread.getAuthorId(), saved.getId());
 
         threadProducer.sendThreadNotificationRequest(threadId);
 
