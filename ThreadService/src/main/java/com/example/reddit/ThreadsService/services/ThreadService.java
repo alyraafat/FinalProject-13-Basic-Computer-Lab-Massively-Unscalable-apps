@@ -22,13 +22,15 @@ public class ThreadService {
     private final LogRepository logRepository;
     private final UserClient userClient;
     private final ThreadProducer threadProducer;
+    private final LogReflectionFactory logReflectionFactory;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient, ThreadProducer threadProducer) {
+    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient, ThreadProducer threadProducer, LogReflectionFactory logReflectionFactory) {
         this.threadRepository = threadRepository;
         this.logRepository=logRepository;
         this.userClient=userClient;
         this.threadProducer=threadProducer;
+        this.logReflectionFactory=logReflectionFactory;
     }
 
     public List<String> testGetBlockedUsers() {
@@ -61,6 +63,8 @@ public class ThreadService {
                 .comments(thread.getComments())
                 .build();
         Thread saved = threadRepository.save(thread);
+
+        logReflectionFactory.createLog(ActionType.POST, thread.getAuthorId(), saved.getId());
 
         threadProducer.sendThreadNotificationRequest(saved.getId());
 
@@ -105,6 +109,8 @@ public class ThreadService {
                 .build();
 
         Thread saved = threadRepository.save(thread);
+
+        logReflectionFactory.createLog(ActionType.COMMENT, thread.getAuthorId(), saved.getId());
 
         threadProducer.sendThreadNotificationRequest(threadId);
 
@@ -175,6 +181,8 @@ public class ThreadService {
                 .build();
         Thread saved = threadRepository.save(thread);
 
+        logReflectionFactory.createLog(ActionType.UPVOTE, thread.getAuthorId(), saved.getId());
+
         threadProducer.sendThreadNotificationRequest(threadId);
 
         return saved;
@@ -197,6 +205,8 @@ public class ThreadService {
                 .build();
 
         Thread saved = threadRepository.save(thread);
+
+        logReflectionFactory.createLog(ActionType.DOWNVOTE, thread.getAuthorId(), saved.getId());
 
         threadProducer.sendThreadNotificationRequest(threadId);
 
