@@ -1,9 +1,7 @@
 package com.example.reddit.CommunitiesService.publishers;
-
 import com.example.reddit.CommunitiesService.events.CommunityMemberAddedEvent;
 import com.example.reddit.CommunitiesService.listeners.Observer;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 

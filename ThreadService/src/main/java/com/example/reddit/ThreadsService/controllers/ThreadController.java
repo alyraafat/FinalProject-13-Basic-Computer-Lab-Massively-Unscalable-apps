@@ -8,10 +8,13 @@ import com.example.reddit.ThreadsService.models.ThreadMapper;
 import com.example.reddit.ThreadsService.services.ThreadService;
 import feign.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -31,6 +34,7 @@ public class ThreadController {
         return ResponseEntity.ok(blocks);
     }
 
+
     @GetMapping("/allThreads")
     public ResponseEntity<List<Thread>> getAllThreads() {
         List<Thread> threads = threadService.getAllThreads();
@@ -44,10 +48,27 @@ public class ThreadController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Thread> createThread(@RequestBody Thread thread) {
-
-        return ResponseEntity.ok(threadService.createThread(thread));
+    @PostMapping("/{userId}")
+    public ResponseEntity<?> createThread(
+            @RequestBody Thread thread,
+            @PathVariable UUID userId
+    ) {
+        try {
+            Thread created = threadService.createThread(thread, userId);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(created);
+        } catch (RuntimeException ex) {
+            if ("User is banned from this community".equals(ex.getMessage())) {
+                Map<String, String> error = Collections.singletonMap(
+                        "message", ex.getMessage()
+                );
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(error);
+            }
+            throw ex;
+        }
     }
 
     @DeleteMapping("/communities/{communityId}/threads/{id}")
@@ -75,9 +96,26 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.getThreadsByTopic(topic));
     }
 
-    @PostMapping("/{threadId}/comments/addComment")
-    public ResponseEntity<Thread> addComment(@PathVariable UUID threadId, @RequestBody Comment comment) {
-        return ResponseEntity.ok(threadService.addComment(threadId, comment));
+    @PostMapping("/{threadId}/comments/addComment/{userId}")
+    public ResponseEntity<?> addComment(
+            @PathVariable UUID threadId,
+            @PathVariable UUID userId,
+            @RequestBody Comment comment
+    ) {
+        try {
+            Thread updated = threadService.addComment(threadId, comment, userId);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException ex) {
+            if ("User is banned from this community".equals(ex.getMessage())) {
+                Map<String, String> error = Collections.singletonMap(
+                        "message", ex.getMessage()
+                );
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(error);
+            }
+            throw ex;
+        }
     }
 
     @DeleteMapping("/{threadId}/comments/{commentId}")
@@ -85,15 +123,48 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.removeComment(threadId, commentId));
     }
 
-    @PostMapping("/{threadId}/upvote")
-    public ResponseEntity<Thread> upvoteThread(@PathVariable UUID threadId) {
-        return ResponseEntity.ok(threadService.upvote(threadId));
+    @PostMapping("/{threadId}/upvote/{userId}")
+    public ResponseEntity<?> upvoteThread(
+            @PathVariable UUID threadId,
+            @PathVariable UUID userId
+    ) {
+        try {
+            Thread updated = threadService.upvote(threadId, userId);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException ex) {
+            if ("User is banned from this community".equals(ex.getMessage())) {
+                Map<String, String> error = Collections.singletonMap(
+                        "message", ex.getMessage()
+                );
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(error);
+            }
+            throw ex;
+        }
     }
 
-    @PostMapping("/{threadId}/downvote")
-    public ResponseEntity<Thread> downvoteThread(@PathVariable UUID threadId) {
-        return ResponseEntity.ok(threadService.downvote(threadId));
+    @PostMapping("/{threadId}/downvote/{userId}")
+    public ResponseEntity<?> downvoteThread(
+            @PathVariable UUID threadId,
+            @PathVariable UUID userId
+    ) {
+        try {
+            Thread updated = threadService.downvote(threadId, userId);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException ex) {
+            if ("User is banned from this community".equals(ex.getMessage())) {
+                Map<String, String> error = Collections.singletonMap(
+                        "message", ex.getMessage()
+                );
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .body(error);
+            }
+            throw ex;
+        }
     }
+
     @PutMapping("/{id}")
     public Thread updateThread(@PathVariable UUID id , @RequestBody Thread newThread)
     {

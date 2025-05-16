@@ -10,7 +10,6 @@ import com.example.reddit.CommunitiesService.repositories.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -136,12 +135,7 @@ public class CommunityService {
         community.getMemberIds().add(userId);
         Community saved = communityRepository.save(community);
 
-//        // fire the event *after* save
-//        events.publishEvent(new CommunityMemberAddedEvent(userId));
-
-
         CommunityMemberAddedEvent memberAdded = new CommunityMemberAddedEvent(userId);
-
 
         communityPublisher.setMember(memberAdded);
 

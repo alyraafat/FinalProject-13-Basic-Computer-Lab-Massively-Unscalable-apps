@@ -39,9 +39,9 @@ public class CommunityController {
 
     // check if user is banned from community
     @GetMapping("/{id}/is-banned/{userId}")
-    public ResponseEntity<Boolean> isUserBanned(@PathVariable UUID id, @PathVariable UUID userId) {
+    public boolean isUserBanned(@PathVariable UUID id, @PathVariable UUID userId) {
         boolean isBanned = communityService.isUserBanned(id, userId);
-        return ResponseEntity.ok(isBanned);
+        return isBanned;
     }
 
     @PostMapping
