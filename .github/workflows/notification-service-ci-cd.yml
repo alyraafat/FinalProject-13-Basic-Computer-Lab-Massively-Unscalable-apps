@@ -12,11 +12,6 @@ on:
     paths:
       - 'notification/**'
       - '.github/workflows/notification-service-ci-cd.yml'
-  workflow_run:
-    workflows:
-      - "user-service CI/CD"
-    types:
-      - completed
 
 jobs:
   ci:
