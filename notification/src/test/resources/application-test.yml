@@ -1,5 +1,4 @@
 server:
-  port: 0
   error:
     include-message: always
     include-stacktrace: always

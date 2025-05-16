@@ -1,5 +1,6 @@
 package com.example.miniapp;
 
+import com.example.miniapp.clients.UserClient;
 import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.dto.PreferenceUpdateRequest;
 import com.example.miniapp.models.enums.NotificationPreference;
@@ -8,6 +9,8 @@ import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.repositories.NotificationRepository;
 import com.example.miniapp.repositories.PreferenceRepository;
 import com.example.miniapp.repositories.UserNotifyRepository;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,9 @@ import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.Network;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.images.PullPolicy;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -34,20 +40,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 class NotificationControllerIntegrationTest {
 
-    @Container
-    static MongoDBContainer mongo = new MongoDBContainer("mongo:5.0.8");
+    static final Network network = Network.newNetwork();
 
-    // 🔥 Use the existing image on Docker Hub:
+    @Container
+    static MongoDBContainer mongo = new MongoDBContainer("mongo:5.0.8")
+            .withNetwork(network)
+            .withNetworkAliases("mongo");;
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
+            .withNetwork(network)
+            .withNetworkAliases("postgres")
+            .withDatabaseName("user_service")
+            .withUsername("postgres")
+            .withPassword("1234");
+
     @Container
     static GenericContainer<?> userService = new GenericContainer<>("redditclone/user-service:latest")
+            .withImagePullPolicy(PullPolicy.alwaysPull())
+            .withNetwork(network)
+            .dependsOn(postgres)
+            .withNetworkAliases("user-service")
+            .withEnv("SPRING_DATASOURCE_URL", "jdbc:postgresql://postgres:5432/user_service")
+            .withEnv("SPRING_DATASOURCE_USERNAME", "postgres")
+            .withEnv("SPRING_DATASOURCE_PASSWORD", "1234")
             .withExposedPorts(8080)
-            .withEnv("SPRING_PROFILES_ACTIVE", "test,dev")
-            .waitingFor(
-                    org.testcontainers.containers.wait.strategy.Wait
-                            .forHttp("/actuator/health")
-                            .forStatusCode(200)
-                            .withStartupTimeout(Duration.ofMinutes(2))
-            );
+            .withEnv("SPRING_PROFILES_ACTIVE", "dev");
 
     @DynamicPropertySource
     static void overrideProps(DynamicPropertyRegistry registry) {
@@ -68,10 +86,22 @@ class NotificationControllerIntegrationTest {
     private UserNotifyRepository userNotifyRepository;
     @Autowired
     private PreferenceRepository preferenceRepository;
+    @Autowired
+    private UserClient userClient;
 
     private UUID testUserId;
     private UUID testSenderId;
     private NotificationRequest baseReq;
+
+    @BeforeAll
+    static void beforeAll() {
+        postgres.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        postgres.stop();
+    }
 
     @BeforeEach
     void cleanup() {
@@ -79,7 +109,7 @@ class NotificationControllerIntegrationTest {
         notificationRepository.deleteAll();
         preferenceRepository.deleteAll();
 
-        testUserId   = UUID.fromString("04273a2b-13c8-4849-91d1-578560b623fd");
+        testUserId = UUID.fromString(userClient.getIdByUsername("alice"));
         testSenderId = UUID.randomUUID();
         baseReq = new NotificationRequest(
                 "Hello!", List.of(testUserId), testSenderId, "Alice"

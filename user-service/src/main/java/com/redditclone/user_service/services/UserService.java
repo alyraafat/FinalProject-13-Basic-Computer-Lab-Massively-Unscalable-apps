@@ -74,4 +74,9 @@ public class UserService implements UserDetailsService {
     public List<String> getEmailsByIds(List<UUID> userIDs) {
         return userRepository.findEmailsByIds(userIDs);
     }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    }
 }
