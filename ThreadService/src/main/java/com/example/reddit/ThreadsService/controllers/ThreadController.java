@@ -75,7 +75,7 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.getThreadsByTopic(topic));
     }
 
-    @PostMapping("/{threadId}/comments/{commentId}")
+    @PostMapping("/{threadId}/comments/addComment")
     public ResponseEntity<Thread> addComment(@PathVariable UUID threadId, @RequestBody Comment comment) {
         return ResponseEntity.ok(threadService.addComment(threadId, comment));
     }

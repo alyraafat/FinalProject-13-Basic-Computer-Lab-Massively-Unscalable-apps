@@ -23,14 +23,16 @@ public class ThreadService {
     private final UserClient userClient;
     private final ThreadProducer threadProducer;
     private final LogReflectionFactory logReflectionFactory;
+    private final CommentService commentService;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient, ThreadProducer threadProducer, LogReflectionFactory logReflectionFactory) {
+    public ThreadService(ThreadRepository threadRepository, LogRepository logRepository, UserClient userClient, ThreadProducer threadProducer, LogReflectionFactory logReflectionFactory, CommentService commentService) {
         this.threadRepository = threadRepository;
         this.logRepository=logRepository;
         this.userClient=userClient;
         this.threadProducer=threadProducer;
         this.logReflectionFactory=logReflectionFactory;
+        this.commentService=commentService;
     }
 
     public List<String> testGetBlockedUsers() {
@@ -92,9 +94,12 @@ public class ThreadService {
     }
     @CacheEvict(value = "trending_cache", key = "#result.communityId")
     public Thread addComment(UUID threadId, Comment comment) {
+
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
-        thread.getComments().add(comment);
+
+         Comment newComment=commentService.createComment(comment);
+        thread.getComments().add(newComment);
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())
@@ -148,6 +153,8 @@ public class ThreadService {
         if (!commentRemoved) {
             throw new RuntimeException("Comment not found with ID: " + commentId);
         }
+
+        commentService.deleteComment(commentId);
         thread = new Thread.Builder()
                 .id(thread.getId())
                 .topic(thread.getTopic())

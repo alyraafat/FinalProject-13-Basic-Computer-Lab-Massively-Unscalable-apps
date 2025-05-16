@@ -3,9 +3,10 @@ package com.example.reddit.ThreadsService.models;
 import com.example.reddit.ThreadsService.repositories.LogRepository;
 import com.example.reddit.ThreadsService.services.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-
+@Component
 public class LogReflectionFactory {
 
     @Autowired
