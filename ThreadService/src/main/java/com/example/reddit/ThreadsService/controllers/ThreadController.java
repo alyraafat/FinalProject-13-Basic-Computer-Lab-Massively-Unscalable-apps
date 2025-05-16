@@ -48,11 +48,10 @@ public class ThreadController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping
     public ResponseEntity<?> createThread(
             @RequestBody Thread thread,
-            @PathVariable UUID userId
-    ) {
+            @RequestHeader("X-User-Id") UUID userId) {
         try {
             Thread created = threadService.createThread(thread, userId);
             return ResponseEntity
@@ -82,10 +81,6 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.getThreadsByCommunity(communityId));
     }
 
-
-
-
-
     @GetMapping("/author/{authorId}")
     public ResponseEntity<List<Thread>> getThreadsByAuthor(@PathVariable UUID authorId) {
         return ResponseEntity.ok(threadService.getThreadsByAuthor(authorId));
@@ -96,10 +91,10 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.getThreadsByTopic(topic));
     }
 
-    @PostMapping("/{threadId}/comments/addComment/{userId}")
+    @PostMapping("/{threadId}/comments/addComment")
     public ResponseEntity<?> addComment(
             @PathVariable UUID threadId,
-            @PathVariable UUID userId,
+            @RequestHeader("X-User-Id") UUID userId,
             @RequestBody Comment comment
     ) {
         try {
@@ -123,10 +118,10 @@ public class ThreadController {
         return ResponseEntity.ok(threadService.removeComment(threadId, commentId));
     }
 
-    @PostMapping("/{threadId}/upvote/{userId}")
+    @PostMapping("/{threadId}/upvote")
     public ResponseEntity<?> upvoteThread(
             @PathVariable UUID threadId,
-            @PathVariable UUID userId
+            @RequestHeader("X-User-Id") UUID userId
     ) {
         try {
             Thread updated = threadService.upvote(threadId, userId);
@@ -147,7 +142,7 @@ public class ThreadController {
     @PostMapping("/{threadId}/downvote/{userId}")
     public ResponseEntity<?> downvoteThread(
             @PathVariable UUID threadId,
-            @PathVariable UUID userId
+            @RequestHeader("X-User-Id") UUID userId
     ) {
         try {
             Thread updated = threadService.downvote(threadId, userId);
@@ -171,8 +166,8 @@ public class ThreadController {
       return threadService.updateThread(id,newThread);
     }
 
-    @PostMapping("/recommendThreads/{userId}")
-    public ResponseEntity<List<Thread>> recommendThreadsByUpvote(@PathVariable  UUID userId)
+    @PostMapping("/recommendThreads")
+    public ResponseEntity<List<Thread>> recommendThreadsByUpvote(@RequestHeader("X-User-Id") UUID userId)
     {
         return ResponseEntity.ok(threadService.recommendThreadsByUpvotes(userId));
     }
