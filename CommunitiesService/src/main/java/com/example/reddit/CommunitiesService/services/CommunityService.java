@@ -2,6 +2,8 @@ package com.example.reddit.CommunitiesService.services;
 
 import com.example.reddit.CommunitiesService.clients.ThreadClient;
 import com.example.reddit.CommunitiesService.events.CommunityMemberAddedEvent;
+import com.example.reddit.CommunitiesService.listeners.NotificationListener;
+import com.example.reddit.CommunitiesService.publishers.CommunityPublisher;
 import com.example.reddit.CommunitiesService.models.Community;
 import com.example.reddit.CommunitiesService.models.CommunityThread;
 import com.example.reddit.CommunitiesService.repositories.CommunityRepository;
@@ -17,14 +19,14 @@ import java.util.stream.Collectors;
 public class CommunityService {
     private final CommunityRepository communityRepository;
     private final ThreadClient threadClient;
-    private final ApplicationEventPublisher events;
+    private final CommunityPublisher communityPublisher;
 
     @Autowired
     public CommunityService(CommunityRepository communityRepository, ThreadClient threadClient,
-            ApplicationEventPublisher events) {
+            CommunityPublisher communityPublisher) {
         this.communityRepository = communityRepository;
         this.threadClient = threadClient;
-        this.events = events;
+        this.communityPublisher = communityPublisher;
     }
 
     public List<Community> getAllCommunities() {
@@ -134,8 +136,14 @@ public class CommunityService {
         community.getMemberIds().add(userId);
         Community saved = communityRepository.save(community);
 
-        // fire the event *after* save
-        events.publishEvent(new CommunityMemberAddedEvent(userId));
+//        // fire the event *after* save
+//        events.publishEvent(new CommunityMemberAddedEvent(userId));
+
+
+        CommunityMemberAddedEvent memberAdded = new CommunityMemberAddedEvent(userId);
+
+
+        communityPublisher.setMember(memberAdded);
 
         return saved;
     }

@@ -18,7 +18,7 @@ public class CommunityProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void notifyMemberAdded(UUID userID) {
+    public void sendMessageInQueue(UUID userID) {
         MemberDTO memberDTO = new MemberDTO(userID);
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.EXCHANGE,
