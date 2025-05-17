@@ -21,7 +21,7 @@ public class LogReflectionFactory{
             for (Method method : methods) {
                 System.out.println(" - " + method.getName());
             }
-            Method ManufactureLogMethod = clazz.getMethod("manufactureLog", UUID.class, UUID.class);
+            Method ManufactureLogMethod = clazz.getDeclaredMethod("manufactureLog", UUID.class, UUID.class);
             Log log = (Log) ManufactureLogMethod.invoke(createdLog, userId, threadId);
             logService.createLog(log);
             return log ;
