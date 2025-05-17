@@ -14,6 +14,11 @@ public class CommentLog extends Log implements LogInterface{
     }
 
     @Override
+    public Log manufactureLog(UUID userId, UUID threadId) {
+        return null;
+    }
+
+    @Override
     public Log createLog(UUID userId, UUID threadId) {
         return new CommentLog(userId, threadId);
     }

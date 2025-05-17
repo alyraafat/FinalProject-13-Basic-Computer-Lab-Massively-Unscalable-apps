@@ -18,4 +18,9 @@ public class PostLog extends Log implements LogInterface{
     public String getLogType() {
         return "PostLog";
     }
+
+    @Override
+    public Log manufactureLog(UUID userId, UUID threadId) {
+        return null;
+    }
 }
