@@ -93,12 +93,16 @@ public class CommunityController {
         return ResponseEntity.ok(communityService.getCommunitiesByMemberId(memberId));
     }
 
-    @PostMapping("/{communityId}/thread/{threadId}")
-    public ResponseEntity<Community> addThread(@PathVariable UUID communityId, @PathVariable UUID threadId) {
-        return ResponseEntity.ok(communityService.addThread(communityId, threadId));
+    @PutMapping("/{communityId}/thread/{threadId}")
+    public ResponseEntity<String> addThread(
+            @PathVariable UUID communityId,
+            @PathVariable UUID threadId
+    ) {
+        communityService.addThread(communityId, threadId);
+        return ResponseEntity.ok("Thread added successfully");
     }
 
-   @PostMapping("/{communityId}/moderators/{userId}")
+   @PutMapping("/{communityId}/moderators/{userId}")
    public ResponseEntity<Community> addModerator(@PathVariable UUID communityId, @PathVariable UUID userId) {
        return ResponseEntity.ok(communityService.addModerator(communityId, userId));
    }
@@ -108,7 +112,7 @@ public class CommunityController {
        return ResponseEntity.ok(communityService.removeModerator(communityId, userId));
    }
 
-   @PostMapping("/{communityId}/members")
+   @PutMapping("/{communityId}/members")
    public ResponseEntity<Community> addMember(@PathVariable UUID communityId, @RequestHeader("X-User-Id") UUID userId) {
        return ResponseEntity.ok(communityService.addMember(communityId, userId));
    }
@@ -118,7 +122,7 @@ public class CommunityController {
        return ResponseEntity.ok(communityService.removeMember(communityId, userId));
    }
 
-   @PostMapping("/{communityId}/ban/{userId}")
+   @PutMapping("/{communityId}/ban/{userId}")
    public ResponseEntity<Community> banUser(@PathVariable UUID communityId, @PathVariable UUID userId) {
        return ResponseEntity.ok(communityService.banUser(communityId, userId));
    }

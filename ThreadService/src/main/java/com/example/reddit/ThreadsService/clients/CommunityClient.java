@@ -5,6 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.UUID;
 
@@ -13,4 +14,10 @@ public interface CommunityClient {
 
     @GetMapping("/{id}/is-banned/{userId}")
     public boolean isUserBanned(@PathVariable UUID id, @PathVariable UUID userId);
+
+    @PutMapping("/{communityId}/thread/{threadId}")
+    String addThread(
+            @PathVariable("communityId") UUID communityId,
+            @PathVariable("threadId")    UUID threadId
+    );
 }

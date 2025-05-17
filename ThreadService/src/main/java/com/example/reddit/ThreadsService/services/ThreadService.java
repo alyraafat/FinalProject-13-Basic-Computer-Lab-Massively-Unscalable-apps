@@ -83,6 +83,8 @@ public class ThreadService {
 
         threadProducer.sendThreadNotificationRequest(saved.getId());
 
+        communityClient.addThread(saved.getCommunityId(), saved.getId());
+
         return saved;
     }
     @CacheEvict(value = "trending_cache", key = "#communityId")

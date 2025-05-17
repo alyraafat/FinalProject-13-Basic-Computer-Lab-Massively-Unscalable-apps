@@ -7,6 +7,7 @@ import com.example.reddit.CommunitiesService.listeners.NotificationListener;
 import com.example.reddit.CommunitiesService.publishers.CommunityPublisher;
 import com.example.reddit.CommunitiesService.models.Community;
 import com.example.reddit.CommunitiesService.models.CommunityThread;
+import com.example.reddit.CommunitiesService.rabbitmq.CommunityProducer;
 import com.example.reddit.CommunitiesService.repositories.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,14 +22,16 @@ public class CommunityService {
     private final ThreadClient threadClient;
     private final CommunityPublisher communityPublisher;
     private final ModeratorClient moderatorClient;
+    private final CommunityProducer communityProducer;
 
     @Autowired
     public CommunityService(CommunityRepository communityRepository, ThreadClient threadClient,
-            CommunityPublisher communityPublisher, ModeratorClient moderatorClient) {
+            CommunityPublisher communityPublisher, ModeratorClient moderatorClient, CommunityProducer communityProducer) {
         this.communityRepository = communityRepository;
         this.threadClient = threadClient;
         this.communityPublisher = communityPublisher;
         this.moderatorClient = moderatorClient;
+        this.communityProducer = communityProducer;
     }
 
     public List<Community> getAllCommunities() {
@@ -115,7 +118,11 @@ public class CommunityService {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
         community.getThreadIds().add(threadId);
-        return communityRepository.save(community);
+
+        Community newCommunity = communityRepository.save(community);
+        communityProducer.notifyNewThread(newCommunity);
+
+        return newCommunity;
     }
 
     public Community addModerator(UUID communityId, UUID userId) {
