@@ -21,7 +21,7 @@ import java.util.Map;
 @Configuration
 public class RabbitMQConfig {
     public static final String EXCHANGE = "user_exchange";
-    public static final String ROUTING_NOTIFICATION  = "community.notification";
+    public static final String ROUTING_NOTIFICATION  = "user.notification";
 
 
     @Bean
