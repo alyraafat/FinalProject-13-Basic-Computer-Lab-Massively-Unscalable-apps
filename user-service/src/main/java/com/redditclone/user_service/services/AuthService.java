@@ -14,6 +14,8 @@ import com.redditclone.user_service.validation.UserValidation;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,6 +56,7 @@ public class AuthService {
     private final UserValidation userValidation;
     private final RefreshTokenRepository refreshTokenRepository;
     private JwtService jwtService;
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     @PostConstruct
     private void initJwtService() {
@@ -219,5 +222,7 @@ public class AuthService {
                     token.setRevoked(true);
                     refreshTokenRepository.save(token);
                 });
+        log.info("Logged out successfully");
     }
+
 }

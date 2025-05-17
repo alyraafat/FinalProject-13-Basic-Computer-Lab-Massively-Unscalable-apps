@@ -7,6 +7,8 @@ import com.redditclone.user_service.search.UserSearchStrategy;
 import com.redditclone.user_service.search.UsernameSearchStrategy;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,13 +26,16 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BlockService blockService;
     private final SearchStrategyService searchStrategyService;
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     public List<User> getAllUsers() {
+        log.info("fetching all users");
         return userRepository.findAll();
     }
 
     public User getUserById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
     }
 
     public User createUser(User user) {
