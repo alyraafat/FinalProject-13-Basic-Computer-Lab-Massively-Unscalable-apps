@@ -24,15 +24,13 @@ public class ModeratorController {
     // ========== Basic Moderator Management ==========
 
     @PostMapping
-    public ResponseEntity<Object> addModerator(@RequestParam UUID userId, @RequestParam UUID communityId, @RequestHeader(value = "X-User-Id", required = false) String userHeaderId) {
-        UUID moderatorId = moderatorService.parseModeratorIDFromHeader(userHeaderId);
+    public ResponseEntity<Object> addModerator(@RequestParam UUID userId, @RequestParam UUID communityId, @RequestHeader(value = "X-User-Id", required = false) UUID moderatorId) {
         Moderator moderator = moderatorService.addModerator(userId, communityId, moderatorId);
         return ResponseEntity.ok(moderator);
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> removeModerator(@RequestParam UUID userId, @RequestParam UUID communityId, @RequestHeader(value = "X-User-Id", required = false) String userHeaderId) {
-        UUID moderatorId = moderatorService.parseModeratorIDFromHeader(userHeaderId);
+    public ResponseEntity<Void> removeModerator(@RequestParam UUID userId, @RequestParam UUID communityId, @RequestHeader(value = "X-User-Id", required = false) UUID moderatorId) {
         moderatorService.removeModerator(userId, communityId, moderatorId);
         return ResponseEntity.noContent().build();
     }
@@ -52,39 +50,35 @@ public class ModeratorController {
     // ========== Moderator Privileged Operations ==========
 
     @GetMapping("/reports")
-    public ResponseEntity<List<Report>> viewReports(@RequestHeader(value = "X-User-Id", required = false) String userHeaderId) {
-        UUID moderatorId = moderatorService.parseModeratorIDFromHeader(userHeaderId);
+    public ResponseEntity<List<Report>> viewReports(@RequestHeader(value = "X-User-Id", required = false) UUID moderatorId) {
         List<Report> reports = moderatorService.viewReports(moderatorId);
         return ResponseEntity.ok(reports);
     }
 
     //RabbitMQ
     @PostMapping("/comment/remove")
-    public ResponseEntity<Void> removeComment(@RequestHeader(value = "X-User-Id", required = false) String userHeaderId,
+    public ResponseEntity<Void> removeComment(@RequestHeader(value = "X-User-Id", required = false) UUID moderatorId,
                                               @RequestParam UUID communityId,
                                               @RequestParam UUID threadId,
                                               @RequestParam UUID commentId) {
-        UUID moderatorId = moderatorService.parseModeratorIDFromHeader(userHeaderId);
         moderatorService.removeComment(moderatorId, communityId, threadId, commentId);
         return ResponseEntity.noContent().build();
     }
 
     //RabbitMQ
     @PostMapping("/user/ban")
-    public ResponseEntity<Void> banUser(@RequestHeader(value = "X-User-Id", required = false) String userHeaderId,
+    public ResponseEntity<Void> banUser(@RequestHeader(value = "X-User-Id", required = false) UUID moderatorId,
                                         @RequestParam UUID communityId,
                                         @RequestParam UUID userId) {
-        UUID moderatorId = moderatorService.parseModeratorIDFromHeader(userHeaderId);
         moderatorService.banUser(moderatorId, communityId, userId);
         return ResponseEntity.noContent().build();
     }
 
     //RabbitMQ
     @PostMapping("/user/unban")
-    public ResponseEntity<Void> unbanUser(@RequestHeader(value = "X-User-Id", required = false) String userHeaderId,
+    public ResponseEntity<Void> unbanUser(@RequestHeader(value = "X-User-Id", required = false) UUID moderatorId,
                                           @RequestParam UUID communityId,
                                           @RequestParam UUID userId) {
-        UUID moderatorId = moderatorService.parseModeratorIDFromHeader(userHeaderId);
         moderatorService.unbanUser(moderatorId, communityId, userId);
         return ResponseEntity.noContent().build();
     }
