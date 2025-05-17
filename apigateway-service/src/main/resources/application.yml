@@ -30,6 +30,20 @@ spring:
             - Path=/api/notification/**
           filters:
             - JwtClaims
+        - id: community-service
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/community/**
+          filters:
+            - StripPrefix=2
+            - JwtClaims
+        - id: thread-service
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/thread/**
+          filters:
+            - StripPrefix=2
+            - JwtClaims
 
 server:
   error:
