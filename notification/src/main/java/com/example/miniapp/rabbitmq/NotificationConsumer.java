@@ -17,7 +17,7 @@ public class NotificationConsumer {
     @RabbitListener(queues = RabbitMQConfig.MULTI_QUEUE)
     public void onNotificationRequest(NotificationRequest request) {
         // simple console output instead of a logger
-        System.out.println("Received notification request: " + request.getSenderName());
+        System.out.println("Received notification request: " + request.getRawMessage());
         notificationService.process(request);
 
     }

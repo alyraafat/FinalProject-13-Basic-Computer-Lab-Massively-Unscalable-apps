@@ -4,7 +4,6 @@ import com.example.reddit.CommunitiesService.events.CommunityMemberAddedEvent;
 import com.example.reddit.CommunitiesService.publishers.Subject;
 import com.example.reddit.CommunitiesService.rabbitmq.CommunityProducer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,8 +23,9 @@ public class NotificationListener implements Observer {
     @Override
     public void update(CommunityMemberAddedEvent evt) {
         System.out.println("Observer notified of member added: " + evt.getUserId());
-        producer.sendMessageInQueue(
-                evt.getUserId()
+        producer.notifyNewMember(
+                evt.getUserId(),
+                evt.getCommunity()
         );
     }
 }

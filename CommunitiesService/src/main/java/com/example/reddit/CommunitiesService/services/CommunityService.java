@@ -139,7 +139,7 @@ public class CommunityService {
         community.getMemberIds().add(userId);
         Community saved = communityRepository.save(community);
 
-        CommunityMemberAddedEvent memberAdded = new CommunityMemberAddedEvent(userId);
+        CommunityMemberAddedEvent memberAdded = new CommunityMemberAddedEvent(userId, community);
 
         communityPublisher.setMember(memberAdded);
 
