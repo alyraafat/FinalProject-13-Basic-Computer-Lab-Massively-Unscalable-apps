@@ -24,6 +24,12 @@ spring:
           filters:
             - StripPrefix=1
             - JwtClaims
+        - id: notification-service
+          uri: http://localhost:9090
+          predicates:
+            - Path=/api/notification/**
+          filters:
+            - JwtClaims
 
 server:
   error:

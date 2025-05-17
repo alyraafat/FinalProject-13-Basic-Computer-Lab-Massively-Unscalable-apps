@@ -4,6 +4,7 @@ import com.example.reddit.ThreadsService.models.Log;
 import com.example.reddit.ThreadsService.models.ActionType;
 import com.example.reddit.ThreadsService.repositories.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
