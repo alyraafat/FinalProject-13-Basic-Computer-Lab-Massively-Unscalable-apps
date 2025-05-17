@@ -23,7 +23,7 @@ public class LogReflectionFactory{
             }
             Method ManufactureLogMethod = clazz.getMethod("manufactureLog", UUID.class, UUID.class);
             Log log = (Log) ManufactureLogMethod.invoke(createdLog, userId, threadId);
-            logService.createLog(createdLog);
+            logService.createLog(log);
             return log ;
         } catch (Exception e) {
             throw new RuntimeException("Failed to create log for " + actionType, e);
