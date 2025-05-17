@@ -12,7 +12,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="apigateway-service" target="23" />
       <module name="miniapp" target="23" />
+      <module name="user-service" target="23" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
