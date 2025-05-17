@@ -7,6 +7,7 @@ public class CommentManufacturer extends Log{
     public CommentManufacturer(UUID userId, ActionType actionType, UUID threadId) {
         super(userId, actionType, threadId);
     }
+    @Override
     public Log manufactureLog(UUID userId, UUID threadId){
         return new CommentLog(userId, threadId);
     }
