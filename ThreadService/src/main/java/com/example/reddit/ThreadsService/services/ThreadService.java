@@ -81,8 +81,6 @@ public class ThreadService {
 
         logReflectionFactory.createLog(ActionType.POST, thread.getAuthorId(), saved.getId());
 
-        threadProducer.sendThreadNotificationRequest(saved.getId());
-
         communityClient.addThread(saved.getCommunityId(), saved.getId());
 
         return saved;
@@ -137,7 +135,7 @@ public class ThreadService {
 
         logReflectionFactory.createLog(ActionType.COMMENT, thread.getAuthorId(), saved.getId());
 
-        threadProducer.sendThreadNotificationRequest(threadId);
+        threadProducer.sendThreadNotificationRequest(saved, "comment");
 
         return saved;
     }
@@ -216,7 +214,7 @@ public class ThreadService {
 
         logReflectionFactory.createLog(ActionType.UPVOTE, thread.getAuthorId(), saved.getId());
 
-        threadProducer.sendThreadNotificationRequest(threadId);
+        threadProducer.sendThreadNotificationRequest(saved, "up");
 
         return saved;
     }
@@ -247,7 +245,7 @@ public class ThreadService {
 
         logReflectionFactory.createLog(ActionType.DOWNVOTE, thread.getAuthorId(), saved.getId());
 
-        threadProducer.sendThreadNotificationRequest(threadId);
+        threadProducer.sendThreadNotificationRequest(saved, "down");
 
         return saved;
     }
