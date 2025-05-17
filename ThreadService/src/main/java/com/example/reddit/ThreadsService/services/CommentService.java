@@ -12,12 +12,12 @@ import java.util.UUID;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final ThreadService threadService;
+
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, ThreadService threadService) {
+    public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
-        this.threadService = threadService;
+
     }
 
     public List<Comment> getAllComments() {
@@ -33,15 +33,12 @@ public class CommentService {
     }
 
     public Comment createComment(Comment comment) {
-        Comment savedComment = commentRepository.save(comment);
-        threadService.addComment(comment.getThreadId(), savedComment);
-        return savedComment;
+        return commentRepository.save(comment);
     }
 
     public void deleteComment(UUID id) {
         Comment comment = commentRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Comment not found"));
-        threadService.removeComment(comment.getThreadId(), id);
         commentRepository.deleteById(id);
     }
 

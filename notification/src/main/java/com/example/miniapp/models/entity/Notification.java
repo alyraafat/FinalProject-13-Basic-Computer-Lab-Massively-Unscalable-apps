@@ -1,22 +1,44 @@
 package com.example.miniapp.models.entity;
 
+import com.example.miniapp.models.enums.NotificationType;
+import com.example.miniapp.services.Factory.impl.CommunityNotifier;
+import com.example.miniapp.services.Factory.impl.ThreadNotifier;
+import com.example.miniapp.services.Factory.impl.UserNotifier;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "notifications")
-public class Notification {
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = CommunityNotifier.class, name = "COMMUNITY"),
+        @JsonSubTypes.Type(value = ThreadNotifier.class,    name = "THREAD"),
+        @JsonSubTypes.Type(value = UserNotifier.class,      name = "USER_SPECIFIC")
+})
+public abstract class Notification {
 
     @Id
-    private UUID id;
+    private String id;
 
-    private String type;
+    private NotificationType type;
     private String senderId;
     private String title;
     private String message;
@@ -25,78 +47,15 @@ public class Notification {
     @Field("receivers_id")
     private List<UUID> receiversId;
 
-    // Getters and Setters
 
-    public Notification()
-    {
-        this.id=UUID.randomUUID();
-        this.receiversId= new ArrayList<>();
-
-    }
-
-
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
+    public Notification(NotificationType type, String senderId, String title, String message, String senderName, List<UUID> receiversId) {
         this.type = type;
-    }
-
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
         this.senderId = senderId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
         this.message = message;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public List<UUID> getReceiversId() {
-        return receiversId;
-    }
-
-    public void setReceiversId(List<UUID> receiversId) {
+        this.senderName = senderName;
         this.receiversId = receiversId;
+        this.createdAt = Instant.now();
     }
+
 }

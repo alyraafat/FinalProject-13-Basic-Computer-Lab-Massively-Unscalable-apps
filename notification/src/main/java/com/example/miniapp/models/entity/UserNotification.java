@@ -1,19 +1,27 @@
 package com.example.miniapp.models.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.Instant;
 import java.util.UUID;
 
+@Setter
+@Getter
+@AllArgsConstructor
 @Document(collection = "user_notifications")
 public class UserNotification {
 
     @Id
-    private UUID id;
+    private String id;
 
-    private UUID notificationId;
+    @DocumentReference
+    private Notification notification;
 
     private UUID userId;
     private String status;
@@ -23,52 +31,11 @@ public class UserNotification {
         // Default constructor
     }
 
-    public UserNotification(UUID userId, Notification notification) {
-        this.id = UUID.randomUUID();
+    public UserNotification(Notification notification, UUID userId, String status) {
+        this.notification = notification;
         this.userId = userId;
-        this.notificationId = notification.getId(); // use the ID only
-        this.status = "unread";
-        this.readAt = null;
-    }
-
-    // Getters and setters
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getNotificationId() {
-        return notificationId;
-    }
-
-    public void setNotificationId(UUID notificationId) {
-        this.notificationId = notificationId;
-    }
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
         this.status = status;
+        this.readAt = null; // Default value for readAt
     }
 
-    public Instant getReadAt() {
-        return readAt;
-    }
-
-    public void setReadAt(Instant readAt) {
-        this.readAt = readAt;
-    }
 }

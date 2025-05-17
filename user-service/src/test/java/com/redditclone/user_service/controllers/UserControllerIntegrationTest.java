@@ -36,16 +36,16 @@ class UserControllerIntegrationTest {
 
         // Seed two users for tests
         alice = userRepo.save(User.builder()
-                .username("alice")
-                .email("alice@example.com")
+                .username("aliceUser")
+                .email("aliceUser@example.com")
                 .password("pwd")
                 .fullName("Alice A")
                 .bio("Bio A")
                 .activated(true)
                 .build());
         bob = userRepo.save(User.builder()
-                .username("bob")
-                .email("bob@example.com")
+                .username("bobUser")
+                .email("bobUser@example.com")
                 .password("pwd")
                 .fullName("Bob B")
                 .bio("Bio B")
@@ -64,7 +64,7 @@ class UserControllerIntegrationTest {
                 .then()
                 .statusCode(200)
                 .body("size()", is(2))
-                .body("username", hasItems("alice", "bob"));
+                .body("username", hasItems("aliceUser", "bobUser"));
     }
 
     /**
@@ -78,7 +78,7 @@ class UserControllerIntegrationTest {
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(alice.getId().toString()))
-                .body("username", equalTo("alice"));
+                .body("username", equalTo("aliceUser"));
     }
 
     /**
@@ -128,8 +128,8 @@ class UserControllerIntegrationTest {
     void updateUser_thenBioUpdated() {
         var update = """
             {
-              "username":"alice",
-              "email":"alice@example.com",
+              "username":"aliceUser",
+              "email":"aliceUser@example.com",
               "password":"pwd",
               "fullName":"Alice A",
               "bio":"New Bio",
@@ -185,7 +185,7 @@ class UserControllerIntegrationTest {
                 .then()
                 .statusCode(200)
                 .body("size()", is(1))
-                .body("[0].username", equalTo("alice"));
+                .body("[0].username", equalTo("aliceUser"));
     }
 
     /**
@@ -204,7 +204,7 @@ class UserControllerIntegrationTest {
                 .then()
                 .statusCode(200)
                 .body("size()", is(2))
-                .body("email", hasItems("alice@example.com", "bob@example.com"));
+                .body("email", hasItems("aliceUser@example.com", "bobUser@example.com"));
     }
 
     /**
@@ -256,7 +256,7 @@ class UserControllerIntegrationTest {
                 .then()
                 .statusCode(200)
                 .body("size()", is(1))
-                .body("[0].username", equalTo("alice"));
+                .body("[0].username", equalTo("aliceUser"));
     }
 
     /**

@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.UUID;
 
-public interface PushReceivedRepository  extends MongoRepository<PushReceived, UUID> {
+public interface PushReceivedRepository  extends MongoRepository<PushReceived, String> {
 }

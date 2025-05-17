@@ -8,21 +8,24 @@ import com.example.miniapp.services.strategy.DeliveryStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("pushStrategy")
 public class PushStrategy implements DeliveryStrategy {
-    @Autowired
-    private PushReceivedRepository pushReceivedRepository;
+    private final PushReceivedRepository pushReceivedRepository;
+
+    public PushStrategy(PushReceivedRepository pushReceivedRepository) {
+        this.pushReceivedRepository = pushReceivedRepository;
+    }
 
 
     @Override
-    public void deliver(UserNotification userNotification, Notification notification) {
+    public void deliver(UserNotification userNotification) {
         try {
+            Notification notification = userNotification.getNotification();
             System.out.println("Delivering notification: " + notification.getId());
             boolean delivered = sendPush(userNotification, notification);
             if (!delivered) {
                 System.err.println("Push delivery failed for notification: " + notification.getId());
             }else{
-
                 System.out.println("Notification delivered for notification: " + notification.getId());
             }
         } catch (Exception e) {
@@ -49,6 +52,7 @@ public class PushStrategy implements DeliveryStrategy {
                     userNotification.getUserId()
             );
             pushReceivedRepository.save(pushReceived);
+            System.out.println("Push saved to repository: " + pushReceived);
             return true; // Simulate successful send
         } catch (Exception e) {
             System.err.println("Failed to send push: " + e.getMessage());

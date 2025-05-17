@@ -3,13 +3,14 @@ package com.example.reddit.CommunitiesService.services;
 import com.example.reddit.CommunitiesService.clients.ModeratorClient;
 import com.example.reddit.CommunitiesService.clients.ThreadClient;
 import com.example.reddit.CommunitiesService.events.CommunityMemberAddedEvent;
+import com.example.reddit.CommunitiesService.listeners.NotificationListener;
+import com.example.reddit.CommunitiesService.publishers.CommunityPublisher;
 import com.example.reddit.CommunitiesService.models.Community;
 import com.example.reddit.CommunitiesService.models.CommunityThread;
 import com.example.reddit.CommunitiesService.repositories.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,15 +19,15 @@ import java.util.stream.Collectors;
 public class CommunityService {
     private final CommunityRepository communityRepository;
     private final ThreadClient threadClient;
-    private final ApplicationEventPublisher events;
+    private final CommunityPublisher communityPublisher;
     private final ModeratorClient moderatorClient;
 
     @Autowired
     public CommunityService(CommunityRepository communityRepository, ThreadClient threadClient,
-            ApplicationEventPublisher events, ModeratorClient moderatorClient) {
+            CommunityPublisher communityPublisher, ModeratorClient moderatorClient) {
         this.communityRepository = communityRepository;
         this.threadClient = threadClient;
-        this.events = events;
+        this.communityPublisher = communityPublisher;
         this.moderatorClient = moderatorClient;
     }
 
@@ -138,8 +139,9 @@ public class CommunityService {
         community.getMemberIds().add(userId);
         Community saved = communityRepository.save(community);
 
-        // fire the event *after* save
-        events.publishEvent(new CommunityMemberAddedEvent(userId));
+        CommunityMemberAddedEvent memberAdded = new CommunityMemberAddedEvent(userId);
+
+        communityPublisher.setMember(memberAdded);
 
         return saved;
     }

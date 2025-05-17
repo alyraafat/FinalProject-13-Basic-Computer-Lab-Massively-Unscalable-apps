@@ -9,7 +9,5 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface NotificationRepository  extends MongoRepository<Notification, UUID> {
-
-
+public interface NotificationRepository  extends MongoRepository<Notification, String> {
 }
