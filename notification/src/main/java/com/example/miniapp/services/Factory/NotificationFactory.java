@@ -23,13 +23,13 @@ import java.util.UUID;
  * It uses the NotificationRequest object to determine the type and other parameters needed to create the appropriate Notification instance.
  */
 public abstract class NotificationFactory {
-    private final UserNotifyRepository userNotificationRepository;
-    private final SendNotificationStrategyService notifier;
-    private final PreferenceRepository preferenceRepository;
-    private final UserClient userClient;
-    private final EmailStrategy emailStrategy;
-    private final PushStrategy pushStrategy;
-    private final NotificationRepository notificationRepository;
+    protected final UserNotifyRepository userNotificationRepository;
+    protected final SendNotificationStrategyService notifier;
+    protected final PreferenceRepository preferenceRepository;
+    protected final UserClient userClient;
+    protected final EmailStrategy emailStrategy;
+    protected final PushStrategy pushStrategy;
+    protected final NotificationRepository notificationRepository;
 
     public NotificationFactory(UserNotifyRepository userNotificationRepository, SendNotificationStrategyService notifier, PreferenceRepository preferenceRepository, UserClient userClient, EmailStrategy emailStrategy, PushStrategy pushStrategy, NotificationRepository notificationRepository) {
         this.userNotificationRepository = userNotificationRepository;
@@ -49,27 +49,5 @@ public abstract class NotificationFactory {
      */
     public abstract Notification create(NotificationRequest request);
 
-    public Notification notify(NotificationRequest request) {
-        Notification notification = create(request);
-        notificationRepository.save(notification);
-        List<UUID> receiversId = notification.getReceiversId();
-        System.out.println(receiversId);
-        List<String> emails = userClient.getEmailsByIds(receiversId);
-        for (int i = 0; i < receiversId.size(); i++) {
-            UUID receiverId = receiversId.get(i);
-            String email = emails.get(i);
-            Optional<UserPreference> optional = preferenceRepository.findByUserId(receiverId);
-            UserPreference pref = optional.orElse(null);
-            if (optional.isEmpty()){
-                pref = new UserPreference(receiverId, email);
-                preferenceRepository.save(pref);
-            }
-            notifier.setDeliveryStrategy(pref.getPreference() == NotificationPreference.PUSH ? pushStrategy : emailStrategy);
-            String statusString = pref.getPreference() == NotificationPreference.PUSH ? "unread" : "email";
-            UserNotification userNotification = new UserNotification(notification, receiverId, statusString);
-            userNotificationRepository.save(userNotification);
-            notifier.deliver(userNotification);
-        }
-        return notification;
-    }
+    public abstract Notification notify(NotificationRequest request);
 }

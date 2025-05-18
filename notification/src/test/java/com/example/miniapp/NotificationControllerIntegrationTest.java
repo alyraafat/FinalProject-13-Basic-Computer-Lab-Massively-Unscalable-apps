@@ -118,6 +118,8 @@ class NotificationControllerIntegrationTest {
         baseReq.setCreatedAt(Instant.now());
     }
 
+    //Tests the full notification lifecycle: create a notification, retrieve it as unread, mark it as read, and then retrieve it as read.
+
     @Test
     void create_then_get_unread_then_mark_read_then_get_read() {
         // POST → create
@@ -163,6 +165,7 @@ class NotificationControllerIntegrationTest {
         assertThat(getRead.getBody()[0].getReadAt()).isNotNull();
     }
 
+    //    Tests updating notification preferences: happy path for PUSH and bad path for invalid preference.
     @Test
     void update_preferences_happy_and_bad_path() {
         // happy path
@@ -191,4 +194,113 @@ class NotificationControllerIntegrationTest {
         );
         assertThat(bad.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
+
+    // Tests the USER_SPECIFIC notification flow: creation, unread retrieval, correct deliveredMessage, and marking as read.
+    @Test
+    void userSpecificNotificationFlow() {
+        // arrange: a single receiver (alice)
+        baseReq.setType(NotificationType.USER_SPECIFIC);
+        baseReq.setReceiversId(List.of(testUserId));
+
+        // POST → create
+        ResponseEntity<String> post = rest.postForEntity(
+                "/api/notification/", baseReq, String.class
+        );
+        assertThat(post.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(post.getBody()).isEqualTo("Sent!");
+
+        // GET unread for that user
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-User-Id", testUserId.toString());
+        HttpEntity<Void> getReq = new HttpEntity<>(headers);
+
+        ResponseEntity<UserNotification[]> getUnread = rest.exchange(
+                "/api/notification",
+                HttpMethod.GET,
+                getReq,
+                UserNotification[].class
+        );
+        assertThat(getUnread.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getUnread.getBody()).hasSize(1);
+        UserNotification un = getUnread.getBody()[0];
+        // should carry exactly the original message
+        assertThat(un.getNotification().getType()).isEqualTo(NotificationType.USER_SPECIFIC);
+        assertThat(un.getDeliveredMessage()).isEqualTo(baseReq.getRawMessage());
+        assertThat(un.getStatus()).isEqualTo("unread");
+
+        // PUT → mark read
+        String notificationId = un.getNotification().getId();
+        ResponseEntity<String> readResp = rest.exchange(
+                "/api/notification/read?notificationId={nid}",
+                HttpMethod.PUT,
+                getReq,
+                String.class,
+                notificationId
+        );
+        assertThat(readResp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(readResp.getBody()).isEqualTo("Read!");
+
+        // GET read
+        ResponseEntity<UserNotification[]> getRead = rest.exchange(
+                "/api/notification?status=read",
+                HttpMethod.GET,
+                getReq,
+                UserNotification[].class
+        );
+        assertThat(getRead.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(getRead.getBody()).hasSize(1);
+        assertThat(getRead.getBody()[0].getStatus()).isEqualTo("read");
+    }
+
+    // Tests the THREAD notification flow: verifies the thread owner receives the owner-specific message and a follower receives the original message.
+    @Test
+    void threadNotificationFlow() {
+        // arrange: two receivers (thread owner = alice, plus bob)
+        UUID bobId = UUID.fromString(userClient.getIdByUsername("bob"));
+        baseReq.setType(NotificationType.THREAD);
+        baseReq.setReceiversId(List.of(testUserId, bobId));
+
+        // POST → create
+        ResponseEntity<String> post = rest.postForEntity(
+                "/api/notification/", baseReq, String.class
+        );
+        assertThat(post.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(post.getBody()).isEqualTo("Sent!");
+
+        // --- verify thread‐owner (alice) sees the owner‐specific message  ---
+        HttpHeaders ownerHeaders = new HttpHeaders();
+        ownerHeaders.set("X-User-Id", testUserId.toString());
+        HttpEntity<Void> ownerReq = new HttpEntity<>(ownerHeaders);
+        ResponseEntity<UserNotification[]> ownerNotifs = rest.exchange(
+                "/api/notification",
+                HttpMethod.GET,
+                ownerReq,
+                UserNotification[].class
+        );
+        assertThat(ownerNotifs.getBody()).hasSize(1);
+        UserNotification ownerUn = ownerNotifs.getBody()[0];
+        assertThat(ownerUn.getNotification().getType()).isEqualTo(NotificationType.THREAD);
+        // ThreadNotifier sets a custom owner message
+        assertThat(ownerUn.getDeliveredMessage())
+                .isEqualTo("Hello thread owner, you have a new notification!");
+        assertThat(ownerUn.getStatus()).isEqualTo("unread");
+
+        // --- verify follower (bob) sees the original thread message ---
+        HttpHeaders bobHeaders = new HttpHeaders();
+        bobHeaders.set("X-User-Id", bobId.toString());
+        HttpEntity<Void> bobReq = new HttpEntity<>(bobHeaders);
+        ResponseEntity<UserNotification[]> bobNotifs = rest.exchange(
+                "/api/notification",
+                HttpMethod.GET,
+                bobReq,
+                UserNotification[].class
+        );
+        assertThat(bobNotifs.getBody()).hasSize(1);
+        UserNotification bobUn = bobNotifs.getBody()[0];
+        assertThat(bobUn.getNotification().getType()).isEqualTo(NotificationType.THREAD);
+        // the “regular” thread‐update message should be the rawMessage
+        assertThat(bobUn.getDeliveredMessage()).isEqualTo(baseReq.getRawMessage());
+        assertThat(bobUn.getStatus()).isEqualTo("unread");
+    }
+
 }

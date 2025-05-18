@@ -10,6 +10,7 @@ import com.sendgrid.*;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +60,7 @@ public class EmailStrategy implements DeliveryStrategy {
                 // Fetch the email using the UserClient if preference email is empty
                 List<String> emails = userClient.getEmailsByIds(List.of(userId));
                 if (emails != null && !emails.isEmpty()) {
-                    email = emails.get(0); // Assuming you get the email from the list
+                    email = emails.getFirst(); // Assuming you get the email from the list
                     userPreference.setUserEmail(email);
                     preferenceRepository.save(userPreference); // Save the email in preferences
                     System.out.println("Using email from UserClient: " + email);
@@ -70,7 +71,7 @@ public class EmailStrategy implements DeliveryStrategy {
 
             // Proceed with delivering the email
             System.out.println("Delivering mail");
-            String emailContent = formatEmail(notification);
+            String emailContent = formatEmail(userNotification);
             boolean delivered = sendEmail(email, emailContent);
 
             if (!delivered) {
@@ -85,16 +86,16 @@ public class EmailStrategy implements DeliveryStrategy {
         }
     }
 
-    private String formatEmail(Notification notification) {
+    private String formatEmail(UserNotification userNotification) {
         return String.format(
                 "Subject: Notification - %s\n" +
                         "Body: %s\n" +
                         "Timestamp: %s\n" +
                         "Type: %s",
-                notification.getType(),
-                notification.getMessage(),
-                notification.getCreatedAt(),
-                notification.getType()
+                userNotification.getNotification().getType(),
+                userNotification.getDeliveredMessage(),
+                userNotification.getNotification().getCreatedAt(),
+                userNotification.getNotification().getType()
         );
     }
 
