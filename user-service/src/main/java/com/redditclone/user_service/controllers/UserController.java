@@ -25,7 +25,7 @@ public class UserController {
     private final UsernameSearchStrategy usernameSearchStrategy;
     private final EmailSearchStrategy emailSearchStrategy;
 
-    @GetMapping
+    @GetMapping("/get_all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers()
                 .stream()
@@ -34,9 +34,9 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {
-        User user = userService.getUserById(id);
+    @GetMapping
+    public ResponseEntity<UserDTO> getUserById(@RequestHeader(value = "X-User-Id", required = false) UUID userId) {
+        User user = userService.getUserById(userId);
         return ResponseEntity.ok(UserDTO.fromEntity(user));
     }
 
@@ -46,9 +46,9 @@ public class UserController {
         return ResponseEntity.ok(UserDTO.fromEntity(created));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody User user) {
-        User updated = userService.updateUser(id, user);
+    @PutMapping
+    public ResponseEntity<UserDTO> updateUser(@RequestHeader(value = "X-User-Id", required = false) UUID userId, @RequestBody User user) {
+        User updated = userService.updateUser(userId, user);
         return ResponseEntity.ok(UserDTO.fromEntity(updated));
     }
 
@@ -61,7 +61,7 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<List<UserDTO>> searchUsers(
             @RequestParam String keyword,
-            @RequestParam UUID currentUserId,
+            @RequestHeader(value = "X-User-Id", required = false) UUID currentUserId,
             @RequestParam(defaultValue = "username") String strategyType
     ) {
         UserSearchStrategy userSearchStrategy = null;

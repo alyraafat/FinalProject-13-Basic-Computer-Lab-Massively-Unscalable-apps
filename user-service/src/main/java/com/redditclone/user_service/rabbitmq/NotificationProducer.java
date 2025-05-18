@@ -32,6 +32,6 @@ public class NotificationProducer {
                 notificationRequest
         );
 
-        System.out.println("Notified Community with ID: " + rawMessage);
+        System.out.println("Notified user with ID: " + receiverID);
     }
 }

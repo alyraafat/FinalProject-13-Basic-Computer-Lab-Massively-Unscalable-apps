@@ -21,10 +21,12 @@ public class ModeratorConsumer {
     @RabbitHandler
     public void banUser(BanRequest banRequest) {
         System.out.println("User: " + banRequest.getUserID() + "is banned from Community: " + banRequest.getCommunityID());
+        communityService.banUser(banRequest.getCommunityID(), banRequest.getUserID());
     }
 
     @RabbitHandler
     public void unbanUser(UnbanRequest unbanRequest) {
         System.out.println("User: " + unbanRequest.getUserID() + "is unbanned from Community: " + unbanRequest.getCommunityID());
+        communityService.unbanUser(unbanRequest.getCommunityID(), unbanRequest.getUserID());
     }
 }

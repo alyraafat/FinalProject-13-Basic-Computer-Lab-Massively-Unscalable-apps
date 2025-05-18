@@ -25,7 +25,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE:       communitiesDb
     ports:
-      - "27017:27017"
+      - "27018:27018"
     networks:
       - my_shared_net
 

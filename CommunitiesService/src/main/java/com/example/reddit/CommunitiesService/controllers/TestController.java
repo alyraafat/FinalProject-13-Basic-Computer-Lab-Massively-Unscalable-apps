@@ -30,6 +30,21 @@ public class TestController {
                 .topicId(topicId)
                 .id(id)
                 .build();
-        communityProducer.notifyCommunity(community);
+        communityProducer.notifyNewThread(community);
+    }
+
+    @GetMapping("/test2")
+    public void test2() {
+        UUID id = UUID.randomUUID();
+        String name = "kimo";
+        UUID topicId = UUID.randomUUID();
+        String description = "This is a test";
+        Community community = Community.builder()
+                .name(name)
+                .description(description)
+                .topicId(topicId)
+                .id(id)
+                .build();
+        communityProducer.notifyNewMember(topicId, community );
     }
 }

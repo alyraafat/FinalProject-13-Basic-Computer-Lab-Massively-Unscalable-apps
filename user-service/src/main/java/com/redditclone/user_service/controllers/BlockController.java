@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/block/{userId}")
+@RequestMapping("/block")
 public class BlockController {
     private final BlockService blockService;
 
@@ -24,7 +24,7 @@ public class BlockController {
 
     @PostMapping("/{blockedId}")
     public ResponseEntity<Void> blockUser(
-            @PathVariable UUID userId,
+            @RequestHeader(value = "X-User-Id", required = false) UUID userId,
             @PathVariable UUID blockedId
     ) {
         try {
@@ -37,7 +37,7 @@ public class BlockController {
 
     @DeleteMapping("/{blockedId}")
     public ResponseEntity<Void> unblockUser(
-            @PathVariable UUID userId,
+            @RequestHeader(value = "X-User-Id", required = false) UUID userId,
             @PathVariable UUID blockedId
     ) {
         try {
@@ -50,7 +50,7 @@ public class BlockController {
 
     @GetMapping("/{blockedId}")
     public ResponseEntity<Boolean> isBlocked(
-            @PathVariable UUID userId,
+            @RequestHeader(value = "X-User-Id", required = false) UUID userId,
             @PathVariable UUID blockedId
     ) {
         try {
@@ -63,7 +63,7 @@ public class BlockController {
 
     @GetMapping
     public ResponseEntity<List<User>> getBlockedUsers(
-            @PathVariable UUID userId
+            @RequestHeader(value = "X-User-Id", required = false) UUID userId
     ) {
         try {
             List<User> blocked = blockService.getBlockedUsers(userId);
@@ -73,7 +73,7 @@ public class BlockController {
         }
     }
 
-    @GetMapping("/allblocks")
+    @GetMapping("/allblocks/{userId}")
     public ResponseEntity<List<String>> getAllBlockedOrBlockedByUsers(@PathVariable UUID userId) {
         try{
             List<String> blocksUUID = new ArrayList<>();
