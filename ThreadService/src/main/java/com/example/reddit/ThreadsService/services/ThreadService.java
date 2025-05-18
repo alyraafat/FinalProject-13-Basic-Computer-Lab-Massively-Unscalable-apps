@@ -60,7 +60,7 @@ public class ThreadService {
 
     public Thread createThread(Thread thread, UUID userId) {
 
-        // Check if the user is banned from the community
+//        // Check if the user is banned from the community
         if (isUserBanned(thread.getCommunityId(), userId)) {
             throw new RuntimeException("User is banned from this community");
         }
@@ -193,7 +193,7 @@ public class ThreadService {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
 
-        // Check if the user is banned from the community
+//        // Check if the user is banned from the community
         if (isUserBanned(thread.getCommunityId(), userId)) {
             throw new RuntimeException("User is banned from this community");
         }
