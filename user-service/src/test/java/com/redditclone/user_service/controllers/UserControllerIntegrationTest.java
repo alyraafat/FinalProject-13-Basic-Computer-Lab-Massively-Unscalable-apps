@@ -74,8 +74,7 @@ class UserControllerIntegrationTest {
     void getUserById_existing_thenOk() {
         given()
                 .when()
-                .header("X-User-Id", alice.getId().toString())
-                .get("")
+                .get("/{id}", alice.getId())
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(alice.getId().toString()))
@@ -90,8 +89,7 @@ class UserControllerIntegrationTest {
         UUID fake = UUID.randomUUID();
         given()
                 .when()
-                .header("X-User-Id", fake)
-                .get("")
+                .get("/{id}", fake)
                 .then()
                 .statusCode(404);
     }
@@ -167,8 +165,7 @@ class UserControllerIntegrationTest {
         // Subsequent GET should 404
         given()
                 .when()
-                .header("X-User-Id", alice.getId().toString())
-                .get("")
+                .get("/{id}", alice.getId())
                 .then()
                 .statusCode(404);
     }
