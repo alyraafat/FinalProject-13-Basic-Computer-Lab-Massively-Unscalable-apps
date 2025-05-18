@@ -2,6 +2,7 @@ package com.redditclone.user_service.validation;
 
 
 import com.redditclone.user_service.dtos.RegisterObject;
+import com.redditclone.user_service.exceptions.RedditAppArgumentException;
 import com.redditclone.user_service.exceptions.RedditAppException;
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.repositories.UserRepository;
@@ -40,9 +41,9 @@ public class UserValidation {
             handleExistingUser(existingUserByEmail.get(), email, "email");
             return true;
         }else if (emailExists) {
-            throw new RedditAppException("Email already in use");
+            throw new RedditAppArgumentException("Email already in use");
         } else if (usernameExists) {
-            throw new RedditAppException("Username already in use");
+            throw new RedditAppArgumentException("Username already in use");
         }
 
         return false;
@@ -70,7 +71,7 @@ public class UserValidation {
         verificationTokenRepository
                 .findFirstByUserAndExpiryDateAfterOrderByExpiryDateDesc(existingUser, Instant.now())
                 .ifPresent(t -> {
-                    throw new RedditAppException(
+                    throw new RedditAppArgumentException(
                             "A verification link was already sent. Please check your email."
                     );
                 });
