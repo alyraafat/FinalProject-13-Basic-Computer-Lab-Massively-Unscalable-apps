@@ -81,6 +81,8 @@ public class ThreadService {
 
         logReflectionFactory.createLog(ActionType.POST, thread.getAuthorId(), saved.getId());
 
+        communityClient.addThread(saved.getCommunityId(), saved.getId());
+
         return saved;
     }
     @CacheEvict(value = "trending_cache", key = "#communityId")
