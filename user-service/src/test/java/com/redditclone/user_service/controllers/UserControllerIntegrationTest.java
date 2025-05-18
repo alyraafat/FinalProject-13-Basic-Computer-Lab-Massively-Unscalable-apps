@@ -60,7 +60,7 @@ class UserControllerIntegrationTest {
     void getAllUsers_returnsSeededUsers() {
         given()
                 .when()
-                .get("")
+                .get("/get_all")
                 .then()
                 .statusCode(200)
                 .body("size()", is(2))
@@ -74,7 +74,8 @@ class UserControllerIntegrationTest {
     void getUserById_existing_thenOk() {
         given()
                 .when()
-                .get("/{id}", alice.getId())
+                .header("X-User-Id", alice.getId().toString())
+                .get("")
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(alice.getId().toString()))
@@ -89,7 +90,8 @@ class UserControllerIntegrationTest {
         UUID fake = UUID.randomUUID();
         given()
                 .when()
-                .get("/{id}", fake)
+                .header("X-User-Id", fake)
+                .get("")
                 .then()
                 .statusCode(404);
     }
@@ -140,8 +142,9 @@ class UserControllerIntegrationTest {
         given()
                 .contentType(ContentType.JSON)
                 .body(update)
+                .header("X-User-Id", alice.getId().toString())
                 .when()
-                .put("/{id}", alice.getId())
+                .put("")
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(alice.getId().toString()))
@@ -164,7 +167,8 @@ class UserControllerIntegrationTest {
         // Subsequent GET should 404
         given()
                 .when()
-                .get("/{id}", alice.getId())
+                .header("X-User-Id", alice.getId().toString())
+                .get("")
                 .then()
                 .statusCode(404);
     }
@@ -177,8 +181,8 @@ class UserControllerIntegrationTest {
     void searchUsers_byUsernameKeyword_returnsMatches() {
         // keyword "ali" should match "alice" but not "bob"
         given()
+                .header("X-User-Id", alice.getId().toString())
                 .queryParam("keyword", "ali")
-                .queryParam("currentUserId", alice.getId())
                 .queryParam("strategyType", "username")
                 .when()
                 .get("/search")
@@ -196,8 +200,8 @@ class UserControllerIntegrationTest {
     @Test
     void searchUsers_byEmailKeyword_returnsBoth() {
         given()
+                .header("X-User-Id", alice.getId().toString())
                 .queryParam("keyword", "example.com")
-                .queryParam("currentUserId", alice.getId())
                 .queryParam("strategyType", "email")
                 .when()
                 .get("/search")
@@ -214,8 +218,8 @@ class UserControllerIntegrationTest {
     @Test
     void searchUsers_noMatches_returnsEmptyList() {
         given()
+                .header("X-User-Id", alice.getId().toString())
                 .queryParam("keyword", "nomatch")
-                .queryParam("currentUserId", alice.getId())
                 .queryParam("strategyType", "username")
                 .when()
                 .get("/search")
@@ -248,8 +252,8 @@ class UserControllerIntegrationTest {
     @Test
     void searchUsers_caseInsensitiveUsername() {
         given()
-                .queryParam("keyword", "ALICE")
-                .queryParam("currentUserId", bob.getId())  // search performed by Bob
+                .header("X-User-Id", bob.getId().toString())
+                .queryParam("keyword", "ALICE")// search performed by Bob
                 .queryParam("strategyType", "username")
                 .when()
                 .get("/search")
