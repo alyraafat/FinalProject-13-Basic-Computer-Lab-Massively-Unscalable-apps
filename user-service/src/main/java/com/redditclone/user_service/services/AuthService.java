@@ -76,6 +76,7 @@ public class AuthService {
 //        User user = new User(registerObject.getUsername(), encodedPassword, registerObject.getEmail(), Instant.now(), false);
         User user;
         String token;
+
         if (!userExists) {
             user = User.builder()
                     .username(registerObject.getUsername())
@@ -88,19 +89,24 @@ public class AuthService {
                     .build();
             userRepository.save(user);
             token = generateVerificationToken(user);
+            log.info("New user registered: {}", user.getUsername());
         } else {
-            user = userRepository.findByUsername(registerObject.getUsername()).orElseThrow(() -> new RedditAppException("User Not Found with name: " + registerObject.getUsername()));
+            user = userRepository.findByUsername(registerObject.getUsername())
+                    .orElseThrow(() -> new RedditAppException("User Not Found with name: " + registerObject.getUsername()));
             if (registerObject.getBio() != null) {
                 user.setBio(registerObject.getBio());
                 userRepository.save(user);
             }
             token = updateVerificationToken(user);
+            log.info("Existing user re-requested activation: {}", user.getUsername());
         }
+
         mailService.sendMail(new NotificationEmail(
                 "Reddit App Account Activation",
                 user.getEmail(),
                 new RegistrationMessage(serviceUrl, token).toString()
         ));
+        log.info("Verification email sent to {}", user.getEmail());
     }
 
     private String generateVerificationToken(User user) {
@@ -122,7 +128,6 @@ public class AuthService {
         return token;
     }
 
-
     @Transactional
     public void activateAccount(String token) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
@@ -132,28 +137,31 @@ public class AuthService {
         }
         verificationTokenRepository.deleteByToken(token);
         fetchUserAndActivate(verificationToken.get().getUser());
+        log.info("Account activated for user: {}", verificationToken.get().getUser().getUsername());
     }
 
-    //    Fetch user by username and activate the user
-    //    and save the user to the database
     private void fetchUserAndActivate(User user) {
         String userName = user.getUsername();
-        User updatedUser = userRepository.findByUsername(userName).orElseThrow(() -> new RedditAppException("User Not Found with name: " + userName));
+        User updatedUser = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new RedditAppException("User Not Found with name: " + userName));
         updatedUser.setActivated(true);
         userRepository.save(updatedUser);
     }
 
-    //    Authenticate user using authentication manager and DAOProvider
-    //    and generate JWT token for the user
     public JwtAuthenticationResponse login(LoginObject loginObject) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginObject.getUsername(), loginObject.getPassword()));
-        User user = userRepository.findByUsername(loginObject.getUsername()).orElseThrow(() -> new RedditAppException("User Not Found with name: " + loginObject.getUsername()));
+        User user = userRepository.findByUsername(loginObject.getUsername())
+                .orElseThrow(() -> new RedditAppException("User Not Found with name: " + loginObject.getUsername()));
         user.setLastLogin(Instant.now());
         userRepository.save(user);
+
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, refreshToken);
+
+        log.info("User logged in: {}", user.getUsername());
+
         return JwtAuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -199,6 +207,7 @@ public class AuthService {
             if (storedToken.isRevoked()) {
                 throw new RedditAppException("Refresh token has been revoked – please log in again");
             }
+
             if (jwtService.isTokenValid(refreshToken, user, "refresh")) {
                 var accessToken = jwtService.generateToken(user);
                 var authResponse = JwtAuthenticationResponse.builder()
@@ -206,6 +215,7 @@ public class AuthService {
                         .refreshToken(refreshToken)
                         .build();
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                log.info("Refresh token successful for user: {}", username);
             } else if (jwtService.isTokenExpired(refreshToken, "refresh")) {
                 expireToken(storedToken);
                 throw new RedditAppException("Refresh token expired – please log in again");
@@ -222,7 +232,7 @@ public class AuthService {
                     token.setRevoked(true);
                     refreshTokenRepository.save(token);
                 });
-        log.info("Logged out successfully");
+        log.info("User logged out (token revoked)");
     }
 
 }
