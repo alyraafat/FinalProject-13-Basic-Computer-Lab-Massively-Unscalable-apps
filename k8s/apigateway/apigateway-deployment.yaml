@@ -55,8 +55,6 @@ spec:
             - name: SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0
               value: Path=/api/notification/**
             - name: SPRING_CLOUD_GATEWAY_ROUTES_2_FILTERS_0
-              value: StripPrefix=1
-            - name: SPRING_CLOUD_GATEWAY_ROUTES_2_FILTERS_1
               value: JwtClaims
 
             # Route 3 — community-service

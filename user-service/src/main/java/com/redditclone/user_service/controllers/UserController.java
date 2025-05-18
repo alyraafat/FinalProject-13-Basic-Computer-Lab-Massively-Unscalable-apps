@@ -34,9 +34,9 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping
-    public ResponseEntity<UserDTO> getUserById(@RequestHeader(value = "X-User-Id", required = false) UUID userId) {
-        User user = userService.getUserById(userId);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {
+        User user = userService.getUserById(id);
         return ResponseEntity.ok(UserDTO.fromEntity(user));
     }
 
