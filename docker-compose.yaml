@@ -10,6 +10,45 @@ services:
     networks:
       - my_shared_net
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./volumes/grafana_data:/var/lib/grafana
+    networks:
+      - my_shared_net
+
+  loki:
+    image: grafana/loki:2.9.3
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - my_shared_net
+
+  promtail:
+    image: grafana/promtail:2.9.3
+    container_name: promtail
+    volumes:
+      - ./promtail-config.yml:/etc/promtail/promtail.yaml:ro
+      - ./volumes/logs:/etc/logs:ro
+    command: -config.file=/etc/promtail/promtail.yaml
+    networks:
+      - my_shared_net
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9092:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - my_shared_net
+
 networks:
   my_shared_net:
     external: true
