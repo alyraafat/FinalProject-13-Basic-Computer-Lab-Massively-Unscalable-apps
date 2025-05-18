@@ -194,9 +194,9 @@ public class ThreadService {
             .orElseThrow(() -> new RuntimeException("Thread not found"));
 
         // Check if the user is banned from the community
-        if (isUserBanned(thread.getCommunityId(), userId)) {
-            throw new RuntimeException("User is banned from this community");
-        }
+//        if (isUserBanned(thread.getCommunityId(), userId)) {
+//            throw new RuntimeException("User is banned from this community");
+//        }
 
         thread = new Thread.Builder()
                 .id(thread.getId())
