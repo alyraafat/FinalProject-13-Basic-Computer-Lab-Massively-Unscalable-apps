@@ -1,6 +1,7 @@
 package com.example.reddit.ThreadsService.controllers;
 
 
+import com.example.reddit.ThreadsService.models.Thread;
 import com.example.reddit.ThreadsService.rabbitmq.ThreadProducer;
 import com.example.reddit.ThreadsService.services.ThreadService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,10 @@ public class TestContoller {
     @GetMapping
     public void getAllThreads() {
         UUID uuid = UUID.randomUUID();
-        threadProducer.sendThreadNotificationRequest(uuid);
+        Thread thread = new Thread.Builder()
+                .id(UUID.randomUUID()).title("Hellooooo").build();
+        threadProducer.sendThreadNotificationRequest(thread, "comment");
+        threadProducer.sendThreadNotificationRequest(thread, "up");
+        threadProducer.sendThreadNotificationRequest(thread, "down");
     }
 }
