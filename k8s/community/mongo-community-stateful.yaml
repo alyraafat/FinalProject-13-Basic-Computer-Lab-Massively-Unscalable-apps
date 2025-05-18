@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mongo-notification
+  name: mongo-community
 spec:
-  serviceName: mongo-notification
+  serviceName: mongo-community
   replicas: 1
   selector:
     matchLabels:
-      app: mongo-notification
+      app: mongo-community
   template:
     metadata:
       labels:
-        app: mongo-notification
+        app: mongo-community
     spec:
       containers:
         - name: mongo
