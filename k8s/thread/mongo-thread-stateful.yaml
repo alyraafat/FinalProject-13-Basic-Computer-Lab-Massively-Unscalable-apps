@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mongo-notification
+  name: mongo-thread
 spec:
-  serviceName: mongo-notification
+  serviceName: mongo-thread
   replicas: 1
   selector:
     matchLabels:
-      app: mongo-notification
+      app: mongo-thread
   template:
     metadata:
       labels:
-        app: mongo-notification
+        app: mongo-thread
     spec:
       containers:
         - name: mongo

@@ -31,9 +31,9 @@ public class NotificationController {
         return ResponseEntity.ok("welcome");
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<UserNotification>> getUserNotifications(
-            @RequestParam UUID userId,
+            @RequestHeader(value = "X-User-Id", required = false) UUID userId,
             @RequestParam(required = false) String status
     ) {
         List<UserNotification> notifications = notificationService.getUserNotifications(userId, status);

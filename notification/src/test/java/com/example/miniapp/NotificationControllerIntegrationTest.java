@@ -128,8 +128,14 @@ class NotificationControllerIntegrationTest {
         assertThat(post.getBody()).isEqualTo("Sent!");
 
         // GET unread
-        ResponseEntity<UserNotification[]> getUnread = rest.getForEntity(
-                "/api/notification/?userId={uid}", UserNotification[].class, testUserId
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-User-Id", testUserId.toString());
+        HttpEntity<UUID> readReq = new HttpEntity<>(headers);
+        ResponseEntity<UserNotification[]> getUnread = rest.exchange(
+                "/api/notification",
+                HttpMethod.GET,
+                readReq,
+                UserNotification[].class
         );
         assertThat(getUnread.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getUnread.getBody()).hasSize(1);
@@ -137,9 +143,6 @@ class NotificationControllerIntegrationTest {
         assertThat(getUnread.getBody()[0].getStatus()).isEqualTo("unread");
 
         // PUT → mark read
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-User-Id", testUserId.toString());
-        HttpEntity<UUID> readReq = new HttpEntity<>(headers);
         ResponseEntity<String> readResp = rest.exchange(
                 "/api/notification/read?notificationId={nid}",
                 HttpMethod.PUT, readReq, String.class, notificationId
@@ -148,9 +151,11 @@ class NotificationControllerIntegrationTest {
         assertThat(readResp.getBody()).isEqualTo("Read!");
 
         // GET read
-        ResponseEntity<UserNotification[]> getRead = rest.getForEntity(
-                "/api/notification/?userId={uid}&status=read",
-                UserNotification[].class, testUserId
+        ResponseEntity<UserNotification[]> getRead = rest.exchange(
+                "/api/notification?status=read",
+                HttpMethod.GET,
+                readReq,
+                UserNotification[].class
         );
         assertThat(getRead.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getRead.getBody()).hasSize(1);

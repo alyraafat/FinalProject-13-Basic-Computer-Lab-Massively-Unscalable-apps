@@ -1,31 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: notification-service
+  name: thread-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: notification-service
+      app: thread-service
   template:
     metadata:
       labels:
-        app: notification-service
+        app: thread-service
     spec:
       containers:
-        - name: notification-service
-          image: redditclone/notification-service:latest
+        - name: thread-service
+          image: redditclone/thread-service:latest
           ports:
-            - containerPort: 9090
+            # must match server.port in your Spring config
+            - containerPort: 8090
           env:
+            # Mongo
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: "threadDb"
             - name: SPRING_DATA_MONGODB_URI
               valueFrom:
                 secretKeyRef:
-                  name: notification-secrets
-                  key: MONGODB_URI
-            - name: SPRING_DATA_MONGODB_DATABASE
-              value: "notification_service_mongo"
-
+                  name: thread-secrets
+                  key: SPRING_DATA_MONGODB_URI
+            # RabbitMQ
             - name: SPRING_RABBITMQ_HOST
               value: "rabbitmq"
             - name: SPRING_RABBITMQ_PORT
@@ -40,14 +42,14 @@ spec:
                 secretKeyRef:
                   name: rabbitmq-secret
                   key: RABBITMQ_DEFAULT_PASS
-
-            - name: SENDGRID_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: notification-secrets
-                  key: SENDGRID_API_KEY
-            - name: SENDGRID_SENDER_EMAIL
-              value: "emailnotificationsapp@gmail.com"
+            # Redis
+            - name: SPRING_DATA_REDIS_HOST
+              value: "redis-cache"
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
 
             - name: USER_SERVICE_URL
               value: "http://user-service:8080"
+          envFrom:
+            - secretRef:
+                name: thread-secrets
