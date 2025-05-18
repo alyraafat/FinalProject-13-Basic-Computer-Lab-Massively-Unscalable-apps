@@ -42,7 +42,9 @@ public class DataSeeder {
             @Transactional
             public void run(String... args) {
                 seedFixedNotificationUsers();
+                seedTestApiUsers();
                 seedFakeUsers();
+                seedTestBlockRelation();
                 seedBlocks();
             }
         };
@@ -130,4 +132,61 @@ public class DataSeeder {
             System.out.println("[DataSeeder] Blocks already seeded");
         }
     }
+    private void seedTestApiUsers() {
+        if (userRepository.findByUsername("apitest_active").isEmpty()) {
+            User activeUser = User.builder()
+                    .username("apitest_active")
+                    .password(passwordEncoder.encode("pass123"))
+                    .email("apitest_active@example.com")
+                    .fullName("Active API Test")
+                    .createdAt(Instant.now())
+                    .activated(true)
+                    .lastLogin(Instant.now())
+                    .build();
+            userRepository.save(activeUser);
+            System.out.println("[DataSeeder] Created user: apitest_active");
+        }
+
+        if (userRepository.findByUsername("apitest_blocked").isEmpty()) {
+            User blockedUser = User.builder()
+                    .username("apitest_blocked")
+                    .password(passwordEncoder.encode("pass123"))
+                    .email("apitest_blocked@example.com")
+                    .fullName("Blocked API Test")
+                    .createdAt(Instant.now())
+                    .activated(true)
+                    .lastLogin(Instant.now())
+                    .build();
+            userRepository.save(blockedUser);
+            System.out.println("[DataSeeder] Created user: apitest_blocked");
+        }
+        if (userRepository.findByUsername("apitest_blockedE2E").isEmpty()) {
+            User blockedUser = User.builder()
+                    .username("apitest_blockedE2E")
+                    .password(passwordEncoder.encode("pass123"))
+                    .email("apitest_blockedE2E@example.com")
+                    .fullName("Blocked API Test")
+                    .createdAt(Instant.now())
+                    .activated(true)
+                    .lastLogin(Instant.now())
+                    .build();
+            userRepository.save(blockedUser);
+            System.out.println("[DataSeeder] Created user: apitest_blockedE2E");
+        }
+    }
+
+    private void seedTestBlockRelation() {
+        User blocker = userRepository.findByUsername("apitest_active").orElse(null);
+        User blocked = userRepository.findByUsername("apitest_blocked").orElse(null);
+
+        if (blocker != null && blocked != null) {
+            Block b = Block.builder()
+                    .blocker(blocker)
+                    .blocked(blocked)
+                    .build();
+            blockRepository.save(b);
+            System.out.println("[DataSeeder] Blocked apitest_blocked by apitest_active");
+        }
+    }
+
 }
