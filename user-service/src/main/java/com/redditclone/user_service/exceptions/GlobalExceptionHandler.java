@@ -35,5 +35,10 @@ public class GlobalExceptionHandler {
         return ResponseHandler.generateResponse(exception.getMessage(), HttpStatus.BAD_REQUEST, null);
     }
 
+    @ExceptionHandler({RedditAppArgumentException.class})
+    public ResponseEntity<Object> handleRedditAppArgumentException(RedditAppArgumentException exception) {
+        return ResponseHandler.generateResponse(exception.getMessage(), HttpStatus.BAD_REQUEST, null);
+    }
+
 
 }
