@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: notification-service
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: notification-service
@@ -40,7 +40,7 @@ spec:
                 secretKeyRef:
                   name: rabbitmq-secret
                   key: RABBITMQ_DEFAULT_PASS
-                  
+
             - name: SENDGRID_API_KEY
               valueFrom:
                 secretKeyRef:
