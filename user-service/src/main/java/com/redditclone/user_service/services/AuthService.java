@@ -6,6 +6,7 @@ import com.redditclone.user_service.exceptions.RedditAppException;
 import com.redditclone.user_service.models.RefreshToken;
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.models.VerificationToken;
+import com.redditclone.user_service.rabbitmq.NotificationProducer;
 import com.redditclone.user_service.repositories.RefreshTokenRepository;
 import com.redditclone.user_service.repositories.UserRepository;
 import com.redditclone.user_service.repositories.VerificationTokenRepository;
@@ -23,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,6 +54,7 @@ public class AuthService {
     private final UserValidation userValidation;
     private final RefreshTokenRepository refreshTokenRepository;
     private JwtService jwtService;
+    private final NotificationProducer notificationProducer;
 
     @PostConstruct
     private void initJwtService() {
@@ -138,6 +139,7 @@ public class AuthService {
         User updatedUser = userRepository.findByUsername(userName).orElseThrow(() -> new RedditAppException("User Not Found with name: " + userName));
         updatedUser.setActivated(true);
         userRepository.save(updatedUser);
+        notificationProducer.notifyUser(updatedUser);
     }
 
     //    Authenticate user using authentication manager and DAOProvider
