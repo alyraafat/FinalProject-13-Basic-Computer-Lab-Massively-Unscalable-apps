@@ -16,6 +16,8 @@ services:
       SPRING_RABBITMQ_PASSWORD: guest
     ports:
       - "8086:8086"
+    volumes:
+      - ../volumes/logs/moderator-service:/app/logs
     depends_on:
       - db
       # - rabbitmq

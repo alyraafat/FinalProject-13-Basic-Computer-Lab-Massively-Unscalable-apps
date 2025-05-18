@@ -14,6 +14,8 @@ services:
     depends_on:
       - mongo
       - mongo-express
+    volumes:
+      - ../volumes/logs/community-service:/app/logs
     networks:
       - my_shared_net
 

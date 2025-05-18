@@ -7,6 +7,8 @@ services:
     environment:
       spring.data.mongodb.uri: mongodb://root:example@mongo:27017/threadDb?authSource=admin
       spring.data.mongodb.database: threadDb
+    volumes:
+      - ../volumes/logs/thread-service:/app/logs
     depends_on:
       - mongo
       - mongo-express
