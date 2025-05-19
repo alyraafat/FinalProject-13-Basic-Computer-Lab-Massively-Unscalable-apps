@@ -107,5 +107,28 @@ public class NotificationService {
     }
 
 
+    public Notification getNotificationById(String id) {
+        return notificationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Notification not found with id: " + id));
+    }
 
+    public Notification updateNotification(UUID id, NotificationRequest request) {
+        Notification notification = notificationRepository.findById(id.toString())
+                .orElseThrow(() -> new IllegalArgumentException("Notification not found with id: " + id));
+        notification.setMessage(request.getRawMessage());
+        notification.setType(request.getType());
+        notification.setCreatedAt(Instant.now());
+        notification.setReceiversId(request.getReceiversId());
+        notification.setSenderId(String.valueOf(request.getSenderId()));
+        notification.setSenderName(request.getSenderName());
+        return notificationRepository.save(notification);
+
+    }
+
+    public void deleteNotification(String id) {
+        if (!notificationRepository.existsById(id)) {
+            throw new IllegalArgumentException("Notification not found with id: " + id);
+        }
+        notificationRepository.deleteById(id);
+    }
 }

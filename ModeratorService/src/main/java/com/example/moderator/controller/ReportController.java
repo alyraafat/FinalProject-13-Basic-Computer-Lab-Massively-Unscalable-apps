@@ -65,4 +65,13 @@ public class ReportController {
         reportService.deleteReportById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{reportId}/description")
+    public ResponseEntity<Report> updateReportDescription(
+            @PathVariable UUID reportId,
+            @RequestParam String description) {
+        Report updatedReport = reportService.updateReportDescription(reportId, description);
+        return ResponseEntity.ok(updatedReport);
+    }
+
 }

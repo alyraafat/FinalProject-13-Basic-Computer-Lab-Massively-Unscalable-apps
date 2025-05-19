@@ -2,6 +2,7 @@ package com.example.miniapp.controllers;
 
 import com.example.miniapp.models.dto.NotificationRequest;
 import com.example.miniapp.models.dto.PreferenceUpdateRequest;
+import com.example.miniapp.models.entity.Notification;
 import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.enums.NotificationPreference;
 import com.example.miniapp.services.NotificationService;
@@ -61,5 +62,35 @@ public class NotificationController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    /**
+     * Read a single notification by its ID.
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Notification> getNotificationById(@PathVariable String id) {
+        Notification notification = notificationService.getNotificationById(id);
+        return ResponseEntity.ok(notification);
+    }
+
+    /**
+     * Update an existing notification’s content.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Notification> updateNotification(
+            @PathVariable UUID id,
+            @RequestBody NotificationRequest request
+    ) {
+        Notification updated = notificationService.updateNotification(id, request);
+        return ResponseEntity.ok(updated);
+    }
+
+    /**
+     * Delete a notification.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable String id) {
+        notificationService.deleteNotification(id);
+        return ResponseEntity.noContent().build();
     }
 }
