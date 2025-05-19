@@ -76,6 +76,9 @@ public class ReportService {
 
     @Transactional
     public void markReportAsHandledMultiple(List<UUID> reportId) {
+        if (reportId.isEmpty()) {
+            return;
+        }
         int updatedCount = reportRepository.markReportsAsHandledMultiple(reportId);
         if (updatedCount == 0) {
             throw new ReportNotFoundException(reportId.get(0));
