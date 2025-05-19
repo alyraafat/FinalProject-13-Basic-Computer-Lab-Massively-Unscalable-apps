@@ -78,7 +78,7 @@ public class NotificationController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Notification> updateNotification(
-            @PathVariable UUID id,
+            @PathVariable String id,
             @RequestBody NotificationRequest request
     ) {
         Notification updated = notificationService.updateNotification(id, request);

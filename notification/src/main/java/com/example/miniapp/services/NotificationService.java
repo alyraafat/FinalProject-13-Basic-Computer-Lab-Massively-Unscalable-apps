@@ -112,12 +112,11 @@ public class NotificationService {
                 .orElseThrow(() -> new IllegalArgumentException("Notification not found with id: " + id));
     }
 
-    public Notification updateNotification(UUID id, NotificationRequest request) {
-        Notification notification = notificationRepository.findById(id.toString())
+    public Notification updateNotification(String id, NotificationRequest request) {
+        Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Notification not found with id: " + id));
         notification.setMessage(request.getRawMessage());
         notification.setType(request.getType());
-        notification.setCreatedAt(Instant.now());
         notification.setReceiversId(request.getReceiversId());
         notification.setSenderId(String.valueOf(request.getSenderId()));
         notification.setSenderName(request.getSenderName());
