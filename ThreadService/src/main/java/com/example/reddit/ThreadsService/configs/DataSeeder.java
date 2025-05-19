@@ -71,7 +71,6 @@ public class DataSeeder {
         UUID topic1 = UUID.fromString("88888888-8888-8888-8888-888888888888");
         UUID topic2 = UUID.fromString("99999999-9999-9999-9999-999999999999");
 
-        System.out.print("Seeding1 fixed threads...");
         Thread thread1 = new Thread.Builder()
                 .id(UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"))
                 .title("Welcome to Java Community")
@@ -84,12 +83,10 @@ public class DataSeeder {
                 .downVotes(0)
                 .comments(List.of())
                 .build();
-        System.out.print("Seeding2 fixed threads...");
 
         logReflectionFactory.createLog(ActionType.POST, charlie, UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
         threadRepository.save(thread1);
 
-        System.out.print("Seeding3 fixed threads...");
 
 
         Thread thread2 = new Thread.Builder()

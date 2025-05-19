@@ -97,7 +97,7 @@ public class DataSeeder {
 
         System.out.println("Java topic ID: " + javaTopic.getId());
 
-        UUID fixedJavaId   = UUID.fromString("22222222-2222-2222-2222-222222222222");
+        UUID fixedJavaId   = UUID.fromString("44444444-4444-4444-4444-444444444444");
         UUID topic1Id   = UUID.fromString("88888888-8888-8888-8888-888888888888");
 
 
