@@ -1,5 +1,6 @@
 package com.example.reddit.ThreadsService.models;
 
+import com.example.reddit.ThreadsService.repositories.ThreadRepository;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -24,17 +25,22 @@ public abstract class Log {
     @Field(name = "timestamp")
     private LocalDateTime timestamp;
 
+    private Integer voteCount=0 ;
+
     // Default constructor
-    public Log(UUID userId, ActionType actionType, UUID threadId) {
+    public Log(UUID userId, ActionType actionType, UUID threadId,Integer voteCount) {
+
         this.id = UUID.randomUUID();
         this.timestamp = LocalDateTime.now();
         this.userId = userId;
         this.actionType = actionType;
         this.threadId = threadId;
+        this.voteCount=voteCount;
     }
 
     public abstract String getLogType();
-    public abstract Log manufactureLog(UUID userId, UUID threadId);
+
+    public abstract Log createLog(UUID userId, UUID threadId);
 
     // Getters and Setters
     public UUID getId() {
@@ -75,5 +81,13 @@ public abstract class Log {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
     }
 }

@@ -2,17 +2,17 @@ package com.example.reddit.ThreadsService.models;
 
 import java.util.UUID;
 
-public class CommentManufacturer extends Log{
+public class CommentManufacturer extends LogManufacturer{
 //concrete factories
+
+    CommentLog commentLog;
     public CommentManufacturer(UUID userId, ActionType actionType, UUID threadId) {
-        super(userId, actionType, threadId);
+         this.commentLog = new CommentLog(userId, threadId);
     }
+    @Override
     public Log manufactureLog(UUID userId, UUID threadId){
-        return new CommentLog(userId, threadId);
+        return commentLog.createLog(userId, threadId);
     }
 
-    @Override
-    public String getLogType() {
-        return null;
-    }
+
 }

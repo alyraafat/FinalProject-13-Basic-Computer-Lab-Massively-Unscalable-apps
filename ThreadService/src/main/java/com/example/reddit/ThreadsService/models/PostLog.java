@@ -2,10 +2,10 @@ package com.example.reddit.ThreadsService.models;
 
 import java.util.UUID;
 
-public class PostLog extends Log implements LogInterface{
+public class PostLog extends Log{
     //concrete product
     public PostLog(UUID userId,UUID threadId) {
-        super(userId, ActionType.POST, threadId);
+        super(userId, ActionType.POST, threadId,0);
     }
 
 
@@ -19,8 +19,4 @@ public class PostLog extends Log implements LogInterface{
         return "PostLog";
     }
 
-    @Override
-    public Log manufactureLog(UUID userId, UUID threadId) {
-        return null;
-    }
 }

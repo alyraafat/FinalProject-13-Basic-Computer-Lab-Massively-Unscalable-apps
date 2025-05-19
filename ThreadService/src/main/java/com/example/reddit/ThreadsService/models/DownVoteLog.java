@@ -1,14 +1,20 @@
 package com.example.reddit.ThreadsService.models;
 
+import com.example.reddit.ThreadsService.repositories.ThreadRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 import java.util.UUID;
 
-public class DownVoteLog extends Log implements LogInterface
+public class DownVoteLog extends Log
 {
     //concrete product
-    int downVoteCount;
-    public DownVoteLog(UUID userId, UUID threadId, int downVoteCount) {
-        super(userId, ActionType.DOWNVOTE, threadId);
-        this.downVoteCount = downVoteCount;
+    Integer downVoteCount;
+
+    public DownVoteLog(UUID userId, UUID threadId, Integer downVoteCount) {
+        super(userId, ActionType.DOWNVOTE, threadId,downVoteCount);
+        this.downVoteCount=downVoteCount;
+
     }
 
     @Override
@@ -17,12 +23,11 @@ public class DownVoteLog extends Log implements LogInterface
     }
 
     @Override
-    public Log manufactureLog(UUID userId, UUID threadId) {
-        return null;
+    public Log createLog(UUID userId, UUID threadId) {
+//
+
+        return new DownVoteLog(userId, threadId,this.downVoteCount );
     }
 
-    @Override
-    public Log createLog(UUID userId, UUID threadId) {
-        return new DownVoteLog(userId, threadId, downVoteCount);
-    }
+
 }
