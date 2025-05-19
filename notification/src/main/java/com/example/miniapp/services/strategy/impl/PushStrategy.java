@@ -34,16 +34,16 @@ public class PushStrategy implements DeliveryStrategy {
         }
     }
 
-    private String formatPushNotification(Notification notification) {
+    private String formatPushNotification(UserNotification userNotification) {
         return String.format("%s|%s|%s",
-                notification.getType(),
-                notification.getMessage(),
-                notification.getCreatedAt());
+                userNotification.getNotification().getType(),
+                userNotification.getDeliveredMessage(),
+                userNotification.getNotification().getCreatedAt());
     }
 
     private boolean sendPush(UserNotification userNotification, Notification notification) {
         try {
-            String formattedPayload = formatPushNotification(notification);
+            String formattedPayload = formatPushNotification(userNotification);
             System.out.println("[PUSH] Simulation - would send: " + formattedPayload);
             PushReceived pushReceived = new PushReceived(
                     notification.getTitle(),

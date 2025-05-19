@@ -12,8 +12,10 @@ import java.util.UUID;
 @Getter
 @Setter
 public class UserNotifier extends Notification {
+    private UUID receiverId;
     public UserNotifier() { super(); }
-    public UserNotifier(String senderId, String title, String message, String senderName, List<UUID> receiversId) {
-        super(NotificationType.USER_SPECIFIC, senderId, title, message, senderName, receiversId);
+    public UserNotifier(String senderId, String title, String message, String senderName, UUID receiverId) {
+        super(NotificationType.USER_SPECIFIC, senderId, title, message, senderName, null);
+        this.receiverId = receiverId;
     }
 }

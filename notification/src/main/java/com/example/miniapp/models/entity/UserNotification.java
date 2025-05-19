@@ -23,6 +23,7 @@ public class UserNotification {
     @DocumentReference
     private Notification notification;
 
+    private String deliveredMessage;
     private UUID userId;
     private String status;
     private Instant readAt;
@@ -31,11 +32,12 @@ public class UserNotification {
         // Default constructor
     }
 
-    public UserNotification(Notification notification, UUID userId, String status) {
+    public UserNotification(Notification notification, UUID userId, String status, String deliveredMessage) {
         this.notification = notification;
         this.userId = userId;
         this.status = status;
         this.readAt = null; // Default value for readAt
+        this.deliveredMessage = deliveredMessage;
     }
 
 }

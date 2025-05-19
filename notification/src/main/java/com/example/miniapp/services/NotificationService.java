@@ -103,7 +103,6 @@ public class NotificationService {
                 .orElse(new UserPreference(userId, email));
         pref.setUserEmail(email);
         pref.setPreference(preference);
-
         preferenceRepository.save(pref);
     }
 
