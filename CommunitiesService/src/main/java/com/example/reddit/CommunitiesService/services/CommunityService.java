@@ -163,16 +163,20 @@ public class CommunityService {
     public Community banUser(UUID communityId, UUID userId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
-        community.getBannedUserIds().add(userId);
-        community.getMemberIds().remove(userId);
+        if(community.getMemberIds().contains(userId)) {
+            community.getBannedUserIds().add(userId);
+            community.getMemberIds().remove(userId);
+        }
         return communityRepository.save(community);
     }
 
     public Community unbanUser(UUID communityId, UUID userId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
-        community.getBannedUserIds().remove(userId);
-        community.getMemberIds().add(userId);
+        if(community.getBannedUserIds().contains(userId)) {
+            community.getBannedUserIds().remove(userId);
+            community.getMemberIds().add(userId);
+        }
         return communityRepository.save(community);
     }
 
