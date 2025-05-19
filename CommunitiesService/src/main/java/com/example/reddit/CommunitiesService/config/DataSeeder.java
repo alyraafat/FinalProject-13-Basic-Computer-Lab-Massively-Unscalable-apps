@@ -34,15 +34,20 @@ public class DataSeeder {
     @Autowired
     private final CommunityRepository communityRepo;
 
+    @Autowired
+    private final SubTopicRepository subTopicRepository;
+
 //    @Autowired
 //    private final ModeratorClient moderatorClient;
 
     public DataSeeder(TopicService topicService,
                       SubTopicService subTopicService,
-                      CommunityRepository communityRepo) {
+                      CommunityRepository communityRepo,
+                      SubTopicRepository subTopicRepository) {
         this.topicService      = topicService;
         this.subTopicService   = subTopicService;
         this.communityRepo     = communityRepo;
+        this.subTopicRepository = subTopicRepository;
     }
 
     /**
@@ -78,27 +83,35 @@ public class DataSeeder {
 
         // ————— Community #1: Java Backend —————
         // 1) sub-topics
-        SubTopic springBoot = subTopicService.addSubTopic("Spring Boot");
+        UUID subtopic1Id = UUID.fromString("22222222-2222-2222-2222-111111111111");
+        SubTopic springBoot = SubTopic.builder()
+                .id(subtopic1Id)
+                .name("Spring Boot")
+                .build();
+
+        subTopicRepository.save(springBoot);
+
         SubTopic hibernate  = subTopicService.addSubTopic("Hibernate");
         List<UUID> javaSubIds = Arrays.asList(
                 springBoot.getId(),
                 hibernate.getId()
         );
 
-        System.out.println("Java subtopic IDs: " + javaSubIds);
+//        System.out.println("Java subtopic IDs: " + javaSubIds);
+
+        UUID topic1Id   = UUID.fromString("88888888-8888-8888-8888-888888888888");
 
         // 2) topic
         Topic javaTopic = Topic.builder()
-                .id(UUID.randomUUID())
+                .id(topic1Id)
                 .name("Java Backend")
                 .subtopicIds(javaSubIds)
                 .build();
         javaTopic = topicService.createTopic(javaTopic);
 
-        System.out.println("Java topic ID: " + javaTopic.getId());
+//        System.out.println("Java topic ID: " + javaTopic.getId());
 
         UUID fixedJavaId   = UUID.fromString("44444444-4444-4444-4444-444444444444");
-        UUID topic1Id   = UUID.fromString("88888888-8888-8888-8888-888888888888");
 
 
         Community javaCommunity = Community.builder()
@@ -149,15 +162,16 @@ public class DataSeeder {
                 vue.getId()
         );
 
+        UUID topic2Id   = UUID.fromString("99999999-9999-9999-9999-999999999999");
+
         Topic frontTopic = Topic.builder()
-                .id(UUID.randomUUID())
+                .id(topic2Id)
                 .name("Frontend Frameworks")
                 .subtopicIds(frontSubIds)
                 .build();
         frontTopic = topicService.createTopic(frontTopic);
 
         UUID fixedFrontId  = UUID.fromString("33333333-3333-3333-3333-333333333333");
-        UUID topic2Id   = UUID.fromString("99999999-9999-9999-9999-999999999999");
 
         Community frontCommunity = Community.builder()
                 .id(fixedFrontId)                         // <— hard-code the ID
