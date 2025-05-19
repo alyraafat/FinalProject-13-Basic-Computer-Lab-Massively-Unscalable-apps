@@ -34,7 +34,8 @@ public abstract class Log {
     }
 
     public abstract String getLogType();
-    public abstract Log manufactureLog(UUID userId, UUID threadId);
+
+    public abstract Log createLog(UUID userId, UUID threadId);
 
     // Getters and Setters
     public UUID getId() {

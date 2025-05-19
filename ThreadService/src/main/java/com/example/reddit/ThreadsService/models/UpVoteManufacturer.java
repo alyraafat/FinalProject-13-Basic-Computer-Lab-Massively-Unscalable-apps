@@ -5,27 +5,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
-public class UpVoteManufacturer extends Log{
+public class UpVoteManufacturer extends LogManufacturer{
     //concrete factories
+    UpVoteLog upVoteLog;
     @Autowired
-private ThreadRepository threadRepository;
+    private ThreadRepository threadRepository;
     public UpVoteManufacturer(UUID userId, ActionType actionType, UUID threadId,
                               ThreadRepository threadRepository) {
-        super(userId, actionType, threadId);
         this.threadRepository = threadRepository;
+        upVoteLog = new UpVoteLog(userId, threadId, 0, threadRepository);
     }
 
     public Log UpVoteManufacturer(UUID userId, UUID threadId, int upVoteCount) {
-        return new UpVoteLog(userId, threadId, upVoteCount);
+        return upVoteLog.createLog(userId, threadId);
     }
 
-    @Override
-    public String getLogType() {
-        return "UpVoteLog";
-    }
 
     @Override
     public Log manufactureLog(UUID userId, UUID threadId) {
-        return new UpVoteLog(userId, threadId, threadRepository.findById(threadId).get().getUpVotes());
+        return upVoteLog.createLog(userId, threadId);
     }
 }
