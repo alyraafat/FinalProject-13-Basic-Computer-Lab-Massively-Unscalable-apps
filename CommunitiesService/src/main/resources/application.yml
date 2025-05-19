@@ -6,6 +6,8 @@ server:
 spring:
   application:
     name: CommunitiesService
+  profiles:
+    active: dev
 
   rabbitmq:
     host: localhost

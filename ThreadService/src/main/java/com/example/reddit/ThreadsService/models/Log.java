@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Document(collection = "logs")
-public class Log {
+public abstract class Log {
     @Id
     private UUID id;
 
@@ -33,9 +33,8 @@ public class Log {
         this.threadId = threadId;
     }
 
-    public String getLogType() {
-        return "";
-    }
+    public abstract String getLogType();
+    public abstract Log manufactureLog(UUID userId, UUID threadId);
 
     // Getters and Setters
     public UUID getId() {
