@@ -133,7 +133,7 @@ public class ThreadService {
 
         Thread saved = threadRepository.save(thread);
 
-        logReflectionFactory.createLog(ActionType.COMMENT, thread.getAuthorId(), saved.getId());
+        logReflectionFactory.createLog(ActionType.COMMENT, userId, saved.getId());
 
         threadProducer.sendThreadNotificationRequest(saved, "comment");
 
@@ -212,7 +212,7 @@ public class ThreadService {
                 .build();
         Thread saved = threadRepository.save(thread);
 
-        logReflectionFactory.createLog(ActionType.UPVOTE, thread.getAuthorId(), saved.getId());
+        logReflectionFactory.createLog(ActionType.UPVOTE, userId, saved.getId());
 
         threadProducer.sendThreadNotificationRequest(saved, "up");
 
@@ -243,7 +243,7 @@ public class ThreadService {
 
         Thread saved = threadRepository.save(thread);
 
-        logReflectionFactory.createLog(ActionType.DOWNVOTE, thread.getAuthorId(), saved.getId());
+        logReflectionFactory.createLog(ActionType.DOWNVOTE, userId, saved.getId());
 
         threadProducer.sendThreadNotificationRequest(saved, "down");
 
