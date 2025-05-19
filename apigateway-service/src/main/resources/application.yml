@@ -1,0 +1,55 @@
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: apigateway-service
+  profiles:
+    active: dev
+  config:
+    import: optional:dev.yml
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - StripPrefix=2
+            - JwtClaims
+        - id: moderator-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/moderator/**
+          filters:
+            - StripPrefix=1
+            - JwtClaims
+        - id: notification-service
+          uri: http://localhost:9090
+          predicates:
+            - Path=/api/notification/**
+          filters:
+            - JwtClaims
+        - id: community-service
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/community/**
+          filters:
+            - StripPrefix=2
+            - JwtClaims
+        - id: thread-service
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/thread/**
+          filters:
+            - StripPrefix=2
+            - JwtClaims
+
+server:
+  error:
+    include-message: always
+  port: 8081
+
+jwt:
+  secret: "6d6a69b6c8ec760a83fe1296a593233e2a25f1ae04b1b59b4e401069ce1607697a7804fd1fa1ff0129a2964614645fdde4118a49d1b1d751e909583fe099c4f2fb41abccfab44a5d9b876984401682d606a4a9cc13d4329fb1bec25cf3f83fa46817f8f3e7610c00e1c277993f3151c9bdd8a003d2c01bdd5dd205941ac0b8f9cbcaf99affa88c982caaa4c417bcc9355c981e50d7b6d5ed0efca8c8a116e08ccc0de3907aa62b36e2a5929e6430b2d568f5be6a2172b7caf4628877fca133c9a1064c159e32c6563914dc1c23fa5146de84aa9eb575ac5f620da7132946245481a11893bd387a3cc7425623f1ab381f09c6e06111da757a9869545f79a94c54"
+  expirationms: 60000 # 1 minute

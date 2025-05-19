@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moderator-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moderator-service
+  template:
+    metadata:
+      labels:
+        app: moderator-service
+    spec:
+      containers:
+        - name: moderator-service
+          image: redditclone/moderator-service:latest
+          ports:
+            - containerPort: 8086
+          env:
+            # Point at your Postgres headless Service:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres-moderator:5432/moderator_service
+            # Pull username & password from the Secret:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            # RabbitMQ connection
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: SPRING_RABBITMQ_PORT
+              value: "5672"
+            - name: SPRING_RABBITMQ_USERNAME
+              value: "guest"
+            - name: SPRING_RABBITMQ_PASSWORD
+              value: "guest"
+

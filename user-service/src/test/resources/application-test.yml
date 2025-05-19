@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    # Use H2’s in-memory driver
+    driver-class-name: org.h2.Driver
+    # “testdb” can be any name; DB_CLOSE_DELAY=-1 keeps it alive for the VM lifetime
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      # Let Hibernate create/update the schema for you
+      ddl-auto: update
+    show-sql: true
+    # Use H2’s dialect
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  # Optional: enable the H2 web console at /h2-console
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.boot.web.servlet.error: DEBUG

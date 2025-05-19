@@ -1,0 +1,16 @@
+server:
+  port: 8091
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: CommunitiesService
+  profiles:
+    active: dev
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest

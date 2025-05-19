@@ -1,0 +1,31 @@
+
+server:
+  port: 8090
+  error:
+    include-message: always
+
+user:
+  service:
+    url: http://localhost:8080
+
+spring:
+  application:
+    name: ThreadService
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    redis:
+      host: redis_cache
+      port: 6379
+    mongodb:
+      uri: mongodb://root:example@mongodb:27017/threadDb?authSource=admin
+      database: threadDb
+  profiles:
+    active: dev
+
+  cache:
+    type: redis
+

@@ -1,0 +1,33 @@
+server:
+  error:
+    include-message: always
+  port: 8086
+
+spring:
+  application:
+    name: moderator-service
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  # This will need to be changed, was written for testing purposes, not final config
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/moderator_service
+    username: postgres
+    password: 1234
+
+  # ORM configuration
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    generate-ddl: true

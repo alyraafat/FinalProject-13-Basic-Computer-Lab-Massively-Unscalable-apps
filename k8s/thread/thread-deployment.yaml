@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thread-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thread-service
+  template:
+    metadata:
+      labels:
+        app: thread-service
+    spec:
+      containers:
+        - name: thread-service
+          image: redditclone/thread-service:latest
+          ports:
+            # must match server.port in your Spring config
+            - containerPort: 8090
+          env:
+            # Mongo
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: "threadDb"
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: thread-secrets
+                  key: SPRING_DATA_MONGODB_URI
+            # RabbitMQ
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: SPRING_RABBITMQ_PORT
+              value: "5672"
+            - name: SPRING_RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: RABBITMQ_DEFAULT_USER
+            - name: SPRING_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: RABBITMQ_DEFAULT_PASS
+            # Redis
+            - name: SPRING_DATA_REDIS_HOST
+              value: "redis"
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
+
+            - name: USER_SERVICE_URL
+              value: "http://user-service:8080"
+          envFrom:
+            - secretRef:
+                name: thread-secrets
