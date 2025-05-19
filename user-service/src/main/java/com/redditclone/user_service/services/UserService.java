@@ -24,6 +24,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BlockService blockService;
     private final SearchStrategyService searchStrategyService;
+    private final UsernameSearchStrategy usernameSearchStrategy;
+    private final EmailSearchStrategy emailSearchStrategy;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -60,7 +62,15 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public List<User> searchUsers(String keyword, UUID currentUserId, UserSearchStrategy userSearchStrategy) {
+    public List<User> searchUsers(String keyword, UUID currentUserId, String strategyType) {
+        UserSearchStrategy userSearchStrategy = null;
+        if (strategyType.equalsIgnoreCase("username")) {
+            userSearchStrategy = usernameSearchStrategy;
+        } else if (strategyType.equalsIgnoreCase("email")) {
+            userSearchStrategy = emailSearchStrategy;
+        } else {
+            throw new IllegalArgumentException("Unknown strategy type: " + strategyType);
+        }
         searchStrategyService.setSearchStrategy(userSearchStrategy);
         return searchStrategyService.searchUser(keyword, currentUserId);
     }

@@ -22,8 +22,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
-    private final UsernameSearchStrategy usernameSearchStrategy;
-    private final EmailSearchStrategy emailSearchStrategy;
+
 
     @GetMapping("/get_all")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -64,15 +63,7 @@ public class UserController {
             @RequestHeader(value = "X-User-Id", required = false) UUID currentUserId,
             @RequestParam(defaultValue = "username") String strategyType
     ) {
-        UserSearchStrategy userSearchStrategy = null;
-        if (strategyType.equalsIgnoreCase("username")) {
-            userSearchStrategy = usernameSearchStrategy;
-        } else if (strategyType.equalsIgnoreCase("email")) {
-            userSearchStrategy = emailSearchStrategy;
-        } else {
-            throw new IllegalArgumentException("Unknown strategy type: " + strategyType);
-        }
-        List<UserDTO> results = userService.searchUsers(keyword, currentUserId, userSearchStrategy)
+        List<UserDTO> results = userService.searchUsers(keyword, currentUserId, strategyType)
                 .stream().map(UserDTO::fromEntity).toList();
         return ResponseEntity.ok(results);
     }
