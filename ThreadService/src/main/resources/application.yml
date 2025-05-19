@@ -21,6 +21,8 @@ spring:
     mongodb:
       uri: mongodb://root:example@mongodb:27017/threadDb?authSource=admin
       database: threadDb
+  profiles:
+    active: dev
 
   cache:
     type: redis
