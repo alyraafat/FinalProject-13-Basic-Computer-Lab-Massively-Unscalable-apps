@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'user-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['user-service:8080']
+
+  - job_name: 'thread-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['thread-service:8090']
+
+  - job_name: 'notification-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['notification-service:9090']
+
+  - job_name: 'moderator-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['moderator-service:8086']
+
+  - job_name: 'community-service'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['community-service:8091']

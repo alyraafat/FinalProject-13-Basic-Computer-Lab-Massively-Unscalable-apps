@@ -10,6 +10,8 @@ services:
       SPRING_DATA_MONGODB_DATABASE: notification_service_mongo
     depends_on:
       - mongodb
+    volumes:
+      - ../volumes/logs/notification-service:/app/logs
     networks:
       - my_shared_net
 
