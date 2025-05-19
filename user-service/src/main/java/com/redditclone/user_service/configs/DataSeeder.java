@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 /**
@@ -55,6 +56,7 @@ public class DataSeeder {
         String ALICE_USERNAME = "alice";
         String ALICE_EMAIL = "alice@example.com";
         User alice = User.builder()
+                .id(UUID.fromString("11111111-1111-1111-1111-111111111111"))
                 .username(ALICE_USERNAME)
                 .password(passwordEncoder.encode("password"))
                 .email(ALICE_EMAIL)
@@ -63,13 +65,24 @@ public class DataSeeder {
                 .activated(true)
                 .lastLogin(Instant.now())
                 .build();
-        userRepository.save(alice);
+        userRepository.insertUser(
+                alice.getId(),
+                alice.getUsername(),
+                alice.getPassword(),
+                alice.getEmail(),
+                alice.getCreatedAt(),
+                alice.isActivated(),
+                alice.getFullName(),
+                alice.getLastLogin(),
+                alice.getBio()
+        );
         System.out.println("[DataSeeder] Created user: alice");
 
         // Bob
         String BOB_USERNAME = "bob";
         String BOB_EMAIL = "bob@example.com";
         User bob = User.builder()
+                .id(UUID.fromString("22222222-2222-2222-2222-222222222222"))
                 .username(BOB_USERNAME)
                 .password(passwordEncoder.encode("password"))
                 .email(BOB_EMAIL)
@@ -78,8 +91,44 @@ public class DataSeeder {
                 .activated(true)
                 .lastLogin(Instant.now())
                 .build();
-        userRepository.save(bob);
+        userRepository.insertUser(
+                bob.getId(),
+                bob.getUsername(),
+                bob.getPassword(),
+                bob.getEmail(),
+                bob.getCreatedAt(),
+                bob.isActivated(),
+                bob.getFullName(),
+                bob.getLastLogin(),
+                bob.getBio()
+        );
         System.out.println("[DataSeeder] Created user: bob");
+
+        // Charlie
+        String CHARLIE_USERNAME = "charlie";
+        String CHARLIE_EMAIL = "spotifyps4ps@gmail.com";
+        User charlie = User.builder()
+                .id(UUID.fromString("55555555-5555-5555-5555-555555555555"))
+                .username(CHARLIE_USERNAME)
+                .password(passwordEncoder.encode("password"))
+                .email(CHARLIE_EMAIL)
+                .fullName("Charlie Notification")
+                .createdAt(Instant.now())
+                .activated(true)
+                .lastLogin(Instant.now())
+                .build();
+        userRepository.insertUser(
+                charlie.getId(),
+                charlie.getUsername(),
+                charlie.getPassword(),
+                charlie.getEmail(),
+                charlie.getCreatedAt(),
+                charlie.isActivated(),
+                charlie.getFullName(),
+                charlie.getLastLogin(),
+                charlie.getBio()
+        );
+        System.out.println("[DataSeeder] Created user: charlie");
     }
 
     private void seedFakeUsers() {
@@ -132,6 +181,7 @@ public class DataSeeder {
             System.out.println("[DataSeeder] Blocks already seeded");
         }
     }
+
     private void seedTestApiUsers() {
         if (userRepository.findByUsername("apitest_active").isEmpty()) {
             User activeUser = User.builder()
