@@ -69,13 +69,21 @@ public class ModeratorService {
     @Transactional
     public void removeComment(UUID moderatorId, UUID communityId, UUID threadId, UUID commentId) {
         verifyModerator(moderatorId, communityId);
+
         Command<Void> command = new RemoveCommentCommand(commentId, threadId, moderatorProducer);
         commandController = new CommandController<>();
         commandController.setCommand(command);
-        commandController.executeCommand();
-        List<UUID> reports = reportService.getReportsForItem(commentId);
-        reportService.markReportAsHandledMultiple(reports);
+        commandController.executeCommand(); // Deletes the comment
+
+        try {
+            List<UUID> reports = reportService.getReportsForItem(commentId);
+            reportService.markReportAsHandledMultiple(reports);
+        } catch (Exception e) {
+            // Optionally log the error, but don't prevent deletion
+            System.out.println("No reports found or error while marking reports as handled: " + e.getMessage());
+        }
     }
+
 
     @Transactional
     public void banUser(UUID moderatorId, UUID communityId, UUID userId) {
