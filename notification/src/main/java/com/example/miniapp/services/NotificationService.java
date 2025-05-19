@@ -2,7 +2,6 @@ package com.example.miniapp.services;
 
 import com.example.miniapp.clients.UserClient;
 import com.example.miniapp.models.dto.NotificationRequest;
-import com.example.miniapp.models.dto.PreferenceUpdateRequest;
 import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.entity.UserPreference;
 import com.example.miniapp.models.enums.NotificationPreference;
@@ -73,7 +72,7 @@ public class NotificationService {
                     notificationFactory = new ThreadNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
             case COMMUNITY ->
                     notificationFactory = new CommunityNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
-        };
+        }
     }
 
     public void process(NotificationRequest request) {
