@@ -49,3 +49,4 @@ build/
 # Ignore all dev.yml config files
 **/dev.yml
 
+**/volumes
