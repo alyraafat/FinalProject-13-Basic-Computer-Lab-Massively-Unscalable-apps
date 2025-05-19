@@ -1,7 +1,10 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redisinsight
+  labels:
+    app: redisinsight
 spec:
   replicas: 1
   selector:
@@ -13,13 +16,16 @@ spec:
         app: redisinsight
     spec:
       containers:
-        - name: redisinsight
-          image: redislabs/redisinsight:latest
+
+        - name:  redisinsight
+          image: redislabs/redisinsight:1.7.0
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: db
+              mountPath: /db
           ports:
             - containerPort: 8001
-          volumeMounts:
-            - name: data
-              mountPath: /db
+              protocol: TCP
       volumes:
-        - name: data
-          emptyDir: {} # Replace with PVC for persistence
+        - name: db
+          emptyDir: {}
