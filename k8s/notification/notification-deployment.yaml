@@ -41,11 +41,6 @@ spec:
                   name: rabbitmq-secret
                   key: RABBITMQ_DEFAULT_PASS
 
-            - name: SENDGRID_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: notification-secrets
-                  key: SENDGRID_API_KEY
             - name: SENDGRID_SENDER_EMAIL
               value: "emailnotificationsapp@gmail.com"
 
