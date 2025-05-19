@@ -70,7 +70,7 @@ public class ThreadService {
                 .topic(thread.getTopic())
                 .title(thread.getTitle())
                 .content(thread.getContent())
-                .authorId(thread.getAuthorId())
+                .authorId(userId)
                 .createdAt(thread.getCreatedAt())
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes())
