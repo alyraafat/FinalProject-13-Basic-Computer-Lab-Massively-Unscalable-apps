@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.example.reddit.ThreadsService.repositories.ThreadRepository;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.UUID;
 @Component
@@ -19,16 +20,29 @@ public class LogReflectionFactory{
     public Log createLog(ActionType actionType, UUID userId, UUID threadId) {
         try {
             Class<?> clazz = Class.forName(actionType.getClassName());
-            Log createdLog;
+            LogManufacturer createdLog;
+            System.out.println("class name " + clazz.getName());
 
             try {
                 // Try to instantiate with three parameters first
-                createdLog = (Log) clazz.getDeclaredConstructor(UUID.class, ActionType.class, UUID.class)
-                        .newInstance(userId, actionType, threadId);
-            } catch (NoSuchMethodException e) {
+                Constructor<?> constructor=  clazz.getDeclaredConstructor(UUID.class, ActionType.class, UUID.class);
+                constructor.setAccessible(true);
+                createdLog= (LogManufacturer) constructor.newInstance(userId, actionType, threadId);
+            } catch (Exception e) {
+                int count =0;
+                if(clazz.getName().equals("com.example.reddit.ThreadsService.models.UpVoteManufacturer"))
+                {
+                    count=threadRepository.findById(threadId).get().getUpVotes();
+                }
+                else if (clazz.getName().equals("com.example.reddit.ThreadsService.models.DownVoteManufacturer"))
+                {
+                    count=threadRepository.findById(threadId).get().getDownVotes();
+                }
+
                 // If that fails, try with four parameters including ThreadRepository
-                createdLog = (Log) clazz.getDeclaredConstructor(UUID.class, ActionType.class, UUID.class, ThreadRepository.class)
-                        .newInstance(userId, actionType, threadId, threadRepository);
+                Constructor<?> constructor=  clazz.getDeclaredConstructor(UUID.class, ActionType.class, UUID.class,Integer.class);
+                constructor.setAccessible(true);
+                createdLog= (LogManufacturer) constructor.newInstance(userId, actionType, threadId ,count);
             }
 
             // Debug code to print available methods
@@ -39,7 +53,9 @@ public class LogReflectionFactory{
             }
 
             Method manufactureLogMethod = clazz.getDeclaredMethod("manufactureLog", UUID.class, UUID.class);
+            manufactureLogMethod.setAccessible(true);
             Log log = (Log) manufactureLogMethod.invoke(createdLog, userId, threadId);
+
             logService.createLog(log);
             return log;
         } catch (Exception e) {
@@ -48,13 +64,13 @@ public class LogReflectionFactory{
         }
     }
 
-   /* public static void main(String[] args) {
+    public static void main(String[] args) {
         // Example usage
         UUID userId = UUID.randomUUID();
         UUID threadId = UUID.randomUUID();
 
         // Using reflection-based factory method
-        Log commentLog =
+        Log commentLog =  new LogReflectionFactory().createLog(ActionType.COMMENT,userId,threadId);
         System.out.println("Created log of type: " + commentLog.getLogType());
-    }*/
+    }
 }
