@@ -37,17 +37,19 @@ public class DataSeeder {
     @Autowired
     private final SubTopicRepository subTopicRepository;
 
-//    @Autowired
-//    private final ModeratorClient moderatorClient;
+    @Autowired
+    private final CommunityService communityService;
 
     public DataSeeder(TopicService topicService,
                       SubTopicService subTopicService,
                       CommunityRepository communityRepo,
-                      SubTopicRepository subTopicRepository) {
+                      SubTopicRepository subTopicRepository,
+                      CommunityService communityService) {
         this.topicService      = topicService;
         this.subTopicService   = subTopicService;
         this.communityRepo     = communityRepo;
         this.subTopicRepository = subTopicRepository;
+        this.communityService  = communityService;
     }
 
     /**
@@ -122,7 +124,13 @@ public class DataSeeder {
                 .createdBy(adminId)
                 .build();
 
-//        moderatorClient.addModerator(adminId, fixedJavaId, adminId.toString());
+
+        // add charlie as a member
+        UUID charlie = UUID.fromString("55555555-5555-5555-5555-555555555555");
+
+        javaCommunity.getMemberIds().add(charlie);
+        javaCommunity.getModeratorIds().add(adminId);
+        communityRepo.save(javaCommunity);
 
         // Add the 6 fixed Java thread UUIDs
         javaCommunity.getThreadIds().addAll(List.of(
@@ -181,8 +189,15 @@ public class DataSeeder {
                 .createdBy(adminId)
                 .build();
 
-//        moderatorClient.addModerator(adminId, fixedJavaId, adminId.toString());
 
+        // add bob as a member
+        UUID bob = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        frontCommunity.getMemberIds().add(bob);
+        frontCommunity.getModeratorIds().add(adminId);
+        communityRepo.save(frontCommunity);
+
+        // Add the 6 fixed Frontend thread UUIDs
         frontCommunity.getThreadIds().addAll(List.of(
                 UUID.fromString("ffffffff-ffff-ffff-ffff-aaaaaaaaaaaa"),
                 UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
@@ -191,7 +206,6 @@ public class DataSeeder {
                 UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaae"),
                 UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaf")
         ));
-
 
         communityRepo.save(frontCommunity);
 
