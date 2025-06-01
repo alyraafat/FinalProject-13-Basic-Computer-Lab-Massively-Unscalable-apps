@@ -9,7 +9,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -72,8 +71,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> searchUsers(String keyword, UUID currentUserId, String strategyType) {
-        log.info("Searching users with keyword: '{}' using strategy: {}", keyword, userSearchStrategy.getClass().getSimpleName());
-        UserSearchStrategy userSearchStrategy = null;
+        UserSearchStrategy userSearchStrategy;
         if (strategyType.equalsIgnoreCase("username")) {
             userSearchStrategy = usernameSearchStrategy;
         } else if (strategyType.equalsIgnoreCase("email")) {
@@ -81,6 +79,7 @@ public class UserService implements UserDetailsService {
         } else {
             throw new IllegalArgumentException("Unknown strategy type: " + strategyType);
         }
+        log.info("Searching users with keyword: '{}' using strategy: {}", keyword, userSearchStrategy.getClass().getSimpleName());
         searchStrategyService.setSearchStrategy(userSearchStrategy);
         return searchStrategyService.searchUser(keyword, currentUserId);
     }
