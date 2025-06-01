@@ -7,6 +7,8 @@ services:
     environment:
       server.error.include-message: always
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_service
+    volumes:
+        - ../volumes/logs/user-service:/app/logs
     restart:
       on-failure
     depends_on:
@@ -27,7 +29,8 @@ services:
       - ./volumes/postgres_data:/var/lib/postgresql/data
     networks:
       - my_shared_net
-  # pgAdmin
+
+#   pgAdmin
   pgadmin:
     image: dpage/pgadmin4
     environment:

@@ -29,3 +29,12 @@ spring:
   cache:
     type: redis
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true

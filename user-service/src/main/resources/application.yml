@@ -53,7 +53,7 @@ service_url: "http://localhost:${server.port}"
 
 jwt:
   secret: "6d6a69b6c8ec760a83fe1296a593233e2a25f1ae04b1b59b4e401069ce1607697a7804fd1fa1ff0129a2964614645fdde4118a49d1b1d751e909583fe099c4f2fb41abccfab44a5d9b876984401682d606a4a9cc13d4329fb1bec25cf3f83fa46817f8f3e7610c00e1c277993f3151c9bdd8a003d2c01bdd5dd205941ac0b8f9cbcaf99affa88c982caaa4c417bcc9355c981e50d7b6d5ed0efca8c8a116e08ccc0de3907aa62b36e2a5929e6430b2d568f5be6a2172b7caf4628877fca133c9a1064c159e32c6563914dc1c23fa5146de84aa9eb575ac5f620da7132946245481a11893bd387a3cc7425623f1ab381f09c6e06111da757a9869545f79a94c54"
-  expirationms: 600000000 # 1 minute
+  expirationms: 60000 # 1 minute
   refresh-token:
     secret: "6d6a69b6c8ec760a83fe1296a593233e2a25f1ae04b1b59b4e401069ce1607697a7804fd1fa1ff0129a2964614645fdde4118a49d1b1d751e909583fe099c4f2fb41abccfab44a5d9b876984401682d606a4a9cc13d4329fb1bec25cf3f83fa46817f8f3e7610c00e1c277993f3151c9bdd8a003d2c01bdd5dd205941ac0b8f9cbcaf99affa88c982caaa4c417bcc9355c981e50d7b6d5ed0efca8c8a116e08ccc0de3907aa62b36e2a5929e6430b2d568f5be6a2172b7caf4628877fca133c9a1064c159e32c6563914dc1c23fa5146de84aa9eb575ac5f620da7132946245481a11893bd387a3cc7425623f1ab381f09c6e06111da757a9869545f79a94c54"
     expirationms: 600000 # 10 minutes
@@ -63,3 +63,13 @@ sendgrid:
     key: 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
   sender:
     email: emailnotificationsapp@gmail.com
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
