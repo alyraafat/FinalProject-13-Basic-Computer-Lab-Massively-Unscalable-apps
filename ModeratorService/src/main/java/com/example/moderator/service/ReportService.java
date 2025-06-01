@@ -27,6 +27,15 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
+    @Transactional
+    public Report updateReportDescription(UUID reportId, String newDescription) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new ReportNotFoundException(reportId));
+
+        report.setReportDescription(newDescription);
+        return reportRepository.save(report);
+    }
+
     // Get a single report by ID
     public Report getReportById(UUID reportId) {
         return reportRepository.findById(reportId)
@@ -67,6 +76,9 @@ public class ReportService {
 
     @Transactional
     public void markReportAsHandledMultiple(List<UUID> reportId) {
+        if (reportId.isEmpty()) {
+            return;
+        }
         int updatedCount = reportRepository.markReportsAsHandledMultiple(reportId);
         if (updatedCount == 0) {
             throw new ReportNotFoundException(reportId.get(0));

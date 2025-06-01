@@ -34,11 +34,11 @@ spec:
                   key: POSTGRES_PASSWORD
             # RabbitMQ connection
             - name: SPRING_RABBITMQ_HOST
-              value: rabbitmq
+              value: "rabbitmq"
             - name: SPRING_RABBITMQ_PORT
               value: "5672"
             - name: SPRING_RABBITMQ_USERNAME
-              value: guest
+              value: "guest"
             - name: SPRING_RABBITMQ_PASSWORD
-              value: guest
+              value: "guest"
 

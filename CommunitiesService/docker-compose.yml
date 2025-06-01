@@ -6,10 +6,6 @@ services:
     environment:
       spring.data.mongodb.uri:      mongodb://root:example@mongo:27017/communitiesDb?authSource=admin
       spring.data.mongodb.database: communitiesDb
-      SPRING_RABBITMQ_HOST:         rabbitmq
-      SPRING_RABBITMQ_PORT:         5672
-      SPRING_RABBITMQ_USERNAME:     guest
-      SPRING_RABBITMQ_PASSWORD:     guest
       thread-service.url: http://app:8090/threads
     depends_on:
       - mongo

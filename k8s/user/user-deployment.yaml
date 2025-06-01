@@ -42,3 +42,9 @@ spec:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
 
+            # JWT Configuration
+            - name: JWT_EXPIRATION_MS
+              value: "6000000000"
+
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"

@@ -12,6 +12,7 @@ import com.example.reddit.CommunitiesService.repositories.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ public class CommunityService {
 
     @Autowired
     public CommunityService(CommunityRepository communityRepository, ThreadClient threadClient,
-            CommunityPublisher communityPublisher, ModeratorClient moderatorClient, CommunityProducer communityProducer) {
+                            CommunityPublisher communityPublisher, ModeratorClient moderatorClient, CommunityProducer communityProducer) {
         this.communityRepository = communityRepository;
         this.threadClient = threadClient;
         this.communityPublisher = communityPublisher;
@@ -142,15 +143,12 @@ public class CommunityService {
     public Community addMember(UUID communityId, UUID userId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
-
-        community.getMemberIds().add(userId);
-        Community saved = communityRepository.save(community);
-
-        CommunityMemberAddedEvent memberAdded = new CommunityMemberAddedEvent(userId, community);
-
-        communityPublisher.setMember(memberAdded);
-
-        return saved;
+        if (!community.getMemberIds().contains(userId)) {
+            community.getMemberIds().add(userId);
+            CommunityMemberAddedEvent memberAdded = new CommunityMemberAddedEvent(userId, community);
+            communityPublisher.setMember(memberAdded);
+        }
+        return communityRepository.save(community);
     }
 
     public Community removeMember(UUID communityId, UUID userId) {
@@ -163,6 +161,9 @@ public class CommunityService {
     public Community banUser(UUID communityId, UUID userId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
+        if (!community.getMemberIds().contains(userId)) {
+            throw new IllegalArgumentException("User is not a member of the community and cannot be banned.");
+        }
         community.getBannedUserIds().add(userId);
         community.getMemberIds().remove(userId);
         return communityRepository.save(community);
@@ -171,6 +172,9 @@ public class CommunityService {
     public Community unbanUser(UUID communityId, UUID userId) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
+        if (!community.getBannedUserIds().contains(userId)) {
+            throw new IllegalStateException("User with ID " + userId + " is not banned in community with ID " + communityId);
+        }
         community.getBannedUserIds().remove(userId);
         community.getMemberIds().add(userId);
         return communityRepository.save(community);
@@ -247,7 +251,7 @@ public class CommunityService {
         return threads.stream()
                 .sorted(Comparator
                         .comparingInt((CommunityThread t) ->
-                                (t.getUpVotes()   != null ? t.getUpVotes()   : 0)
+                                (t.getUpVotes() != null ? t.getUpVotes() : 0)
                                         - (t.getDownVotes() != null ? t.getDownVotes() : 0)
                         )
                         .reversed()

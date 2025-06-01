@@ -44,7 +44,7 @@ spec:
                   key: RABBITMQ_DEFAULT_PASS
             # Redis
             - name: SPRING_DATA_REDIS_HOST
-              value: "redis-cache"
+              value: "redis"
             - name: SPRING_DATA_REDIS_PORT
               value: "6379"
 

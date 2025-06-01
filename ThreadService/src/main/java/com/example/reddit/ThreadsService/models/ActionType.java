@@ -1,10 +1,10 @@
 package com.example.reddit.ThreadsService.models;
 
 public enum ActionType {
-    POST("com.example.reddit.ThreadsService.models.PostLog"),
-    UPVOTE("com.example.reddit.ThreadsService.models.UpVoteLog"),
-    DOWNVOTE("com.example.reddit.ThreadsService.models.DownVoteLog"),
-    COMMENT("com.example.reddit.ThreadsService.models.CommentLog");
+    POST("com.example.reddit.ThreadsService.models.PostManufacturer"),
+    UPVOTE("com.example.reddit.ThreadsService.models.UpVoteManufacturer"),
+    DOWNVOTE("com.example.reddit.ThreadsService.models.DownVoteManufacturer"),
+    COMMENT("com.example.reddit.ThreadsService.models.CommentManufacturer");
 
     private final String className;
 

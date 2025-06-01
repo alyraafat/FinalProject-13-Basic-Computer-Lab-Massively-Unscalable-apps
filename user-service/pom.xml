@@ -172,7 +172,13 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
-    </dependencies>
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>4.10.3</version>
+		</dependency>
+
+	</dependencies>
 
     <build>
         <plugins>

@@ -60,7 +60,7 @@ public class ThreadService {
 
     public Thread createThread(Thread thread, UUID userId) {
 
-        // Check if the user is banned from the community
+//        // Check if the user is banned from the community
         if (isUserBanned(thread.getCommunityId(), userId)) {
             throw new RuntimeException("User is banned from this community");
         }
@@ -70,7 +70,7 @@ public class ThreadService {
                 .topic(thread.getTopic())
                 .title(thread.getTitle())
                 .content(thread.getContent())
-                .authorId(thread.getAuthorId())
+                .authorId(userId)
                 .createdAt(thread.getCreatedAt())
                 .upVotes(thread.getUpVotes() )
                 .downVotes(thread.getDownVotes())
@@ -133,7 +133,7 @@ public class ThreadService {
 
         Thread saved = threadRepository.save(thread);
 
-        logReflectionFactory.createLog(ActionType.COMMENT, thread.getAuthorId(), saved.getId());
+        logReflectionFactory.createLog(ActionType.COMMENT, userId, saved.getId());
 
         threadProducer.sendThreadNotificationRequest(saved, "comment");
 
@@ -193,7 +193,7 @@ public class ThreadService {
         Thread thread = threadRepository.findById(threadId)
             .orElseThrow(() -> new RuntimeException("Thread not found"));
 
-        // Check if the user is banned from the community
+//        // Check if the user is banned from the community
         if (isUserBanned(thread.getCommunityId(), userId)) {
             throw new RuntimeException("User is banned from this community");
         }
@@ -212,7 +212,7 @@ public class ThreadService {
                 .build();
         Thread saved = threadRepository.save(thread);
 
-        logReflectionFactory.createLog(ActionType.UPVOTE, thread.getAuthorId(), saved.getId());
+        logReflectionFactory.createLog(ActionType.UPVOTE, userId, saved.getId());
 
         threadProducer.sendThreadNotificationRequest(saved, "up");
 
@@ -243,7 +243,7 @@ public class ThreadService {
 
         Thread saved = threadRepository.save(thread);
 
-        logReflectionFactory.createLog(ActionType.DOWNVOTE, thread.getAuthorId(), saved.getId());
+        logReflectionFactory.createLog(ActionType.DOWNVOTE, userId, saved.getId());
 
         threadProducer.sendThreadNotificationRequest(saved, "down");
 

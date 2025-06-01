@@ -30,9 +30,15 @@ public class ModeratorController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> removeModerator(@RequestParam UUID userId, @RequestParam UUID communityId, @RequestHeader(value = "X-User-Id", required = false) UUID moderatorId) {
+    public ResponseEntity<String> removeModerator(
+            @RequestParam UUID userId,
+            @RequestParam UUID communityId,
+            @RequestHeader(value = "X-User-Id", required = false) UUID moderatorId) {
+
         moderatorService.removeModerator(userId, communityId, moderatorId);
-        return ResponseEntity.noContent().build();
+
+        String message = String.format("Removed moderator with id: %s from community with id: %s", userId, communityId);
+        return ResponseEntity.ok(message);
     }
 
     @GetMapping("/community/{communityId}")
@@ -78,7 +84,7 @@ public class ModeratorController {
     @PostMapping("/user/unban")
     public ResponseEntity<Void> unbanUser(@RequestHeader(value = "X-User-Id", required = false) UUID moderatorId,
                                           @RequestParam UUID communityId,
-                                          @RequestParam UUID userId) {
+                                              @RequestParam UUID userId) {
         moderatorService.unbanUser(moderatorId, communityId, userId);
         return ResponseEntity.noContent().build();
     }

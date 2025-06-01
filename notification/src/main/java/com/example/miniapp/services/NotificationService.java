@@ -2,7 +2,6 @@ package com.example.miniapp.services;
 
 import com.example.miniapp.clients.UserClient;
 import com.example.miniapp.models.dto.NotificationRequest;
-import com.example.miniapp.models.dto.PreferenceUpdateRequest;
 import com.example.miniapp.models.entity.UserNotification;
 import com.example.miniapp.models.entity.UserPreference;
 import com.example.miniapp.models.enums.NotificationPreference;
@@ -36,6 +35,7 @@ public class NotificationService {
     private final UserClient userClient;
     private final EmailStrategy emailStrategy;
     private final PushStrategy pushStrategy;
+    private NotificationFactory notificationFactory;
 
     @Autowired
     public NotificationService(
@@ -64,20 +64,20 @@ public class NotificationService {
         }
     }
 
-    private NotificationFactory createNotificationFactory(NotificationType type){
-        return switch (type) {
+    private void createNotificationFactory(NotificationType type){
+        switch (type) {
             case USER_SPECIFIC ->
-                    new UserNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
+                    notificationFactory = new UserNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
             case THREAD ->
-                    new ThreadNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
+                    notificationFactory = new ThreadNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
             case COMMUNITY ->
-                    new CommunityNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
-        };
+                    notificationFactory = new CommunityNotificationFactory(userNotificationRepository, notifier, preferenceRepository, userClient, emailStrategy, pushStrategy, notificationRepository);
+        }
     }
 
     public void process(NotificationRequest request) {
-        NotificationFactory notifierFactory = createNotificationFactory(request.getType());
-        Notification notification = notifierFactory.notify(request);
+        createNotificationFactory(request.getType());
+        Notification notification = notificationFactory.notify(request);
         
     }
 
@@ -103,10 +103,31 @@ public class NotificationService {
                 .orElse(new UserPreference(userId, email));
         pref.setUserEmail(email);
         pref.setPreference(preference);
-
         preferenceRepository.save(pref);
     }
 
 
+    public Notification getNotificationById(String id) {
+        return notificationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Notification not found with id: " + id));
+    }
 
+    public Notification updateNotification(String id, NotificationRequest request) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Notification not found with id: " + id));
+        notification.setMessage(request.getRawMessage());
+        notification.setType(request.getType());
+        notification.setReceiversId(request.getReceiversId());
+        notification.setSenderId(String.valueOf(request.getSenderId()));
+        notification.setSenderName(request.getSenderName());
+        return notificationRepository.save(notification);
+
+    }
+
+    public void deleteNotification(String id) {
+        if (!notificationRepository.existsById(id)) {
+            throw new IllegalArgumentException("Notification not found with id: " + id);
+        }
+        notificationRepository.deleteById(id);
+    }
 }

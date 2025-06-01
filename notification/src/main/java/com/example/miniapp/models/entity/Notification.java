@@ -56,6 +56,7 @@ public abstract class Notification {
         this.senderName = senderName;
         this.receiversId = receiversId;
         this.createdAt = Instant.now();
+
     }
 
 }

@@ -1,6 +1,8 @@
 
 server:
   port: 8090
+  error:
+    include-message: always
 
 user:
   service:
@@ -21,6 +23,8 @@ spring:
     mongodb:
       uri: mongodb://root:example@mongodb:27017/threadDb?authSource=admin
       database: threadDb
+  profiles:
+    active: dev
 
   cache:
     type: redis
