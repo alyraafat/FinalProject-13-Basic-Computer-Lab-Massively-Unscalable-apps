@@ -1,5 +1,6 @@
 package com.redditclone.user_service.controllers;
 
+import com.redditclone.user_service.UserServiceApplicationTests;
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.models.VerificationToken;
 import com.redditclone.user_service.repositories.RefreshTokenRepository;
@@ -53,7 +54,7 @@ class NoMailConfig {
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "spring.profiles.active=test")
 @ActiveProfiles("test")
-class AuthControllerIntegrationTest {
+class AuthControllerIntegrationTest extends UserServiceApplicationTests {
 
     @LocalServerPort
     int port;
@@ -76,20 +77,14 @@ class AuthControllerIntegrationTest {
     @Autowired
     private RBloomFilter<String> userCredentialsBloomFilter;
 
-    private static RedisServer redisServer;
-
     @BeforeAll
     static void setUpParser() throws IOException {
         // Tell RestAssured to treat any response body as JSON, even if Content-Type header is missing
         RestAssured.defaultParser = Parser.JSON;
-        redisServer = new RedisServer(6379);
-        redisServer.start();
     }
 
     @AfterAll
     static void tearDown() throws IOException {
-        // Stop the embedded Redis server after all tests
-        redisServer.stop();
     }
 
     @BeforeEach

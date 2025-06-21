@@ -1,17 +1,22 @@
 package com.redditclone.user_service.controllers;
 
+import com.redditclone.user_service.UserServiceApplicationTests;
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.repositories.BlockRepository;
 import com.redditclone.user_service.repositories.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
+import redis.embedded.RedisServer;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -19,7 +24,7 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class BlockControllerIntegrationTest {
+class BlockControllerIntegrationTest extends UserServiceApplicationTests {
 
     @LocalServerPort
     int port;
