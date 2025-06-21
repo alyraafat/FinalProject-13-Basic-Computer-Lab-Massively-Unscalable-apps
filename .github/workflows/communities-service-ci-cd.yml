@@ -5,12 +5,12 @@ on:
   push:
     branches: ["main", "dev"]
     paths:
-      - 'CommunitiesService/**'
+      - 'communities-service/**'
       - '.github/workflows/communities-service-ci-cd.yml'
   pull_request:
     branches: ["**"]
     paths:
-      - 'CommunitiesService/**'
+      - 'communities-service/**'
       - '.github/workflows/communities-service-ci-cd.yml'
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/ci-java-maven.yml
     with:
       branch: ${{ github.ref }}
-      service-dir: 'CommunitiesService'
+      service-dir: 'communities-service'
     secrets: inherit
 
   docker:
@@ -26,6 +26,6 @@ jobs:
     uses: ./.github/workflows/cd-docker-push.yml
     with:
       artifact-name: 'packaged-artifact'
-      service-dir: 'CommunitiesService'
+      service-dir: 'communities-service'
       image-name: 'communities-service'
     secrets: inherit
