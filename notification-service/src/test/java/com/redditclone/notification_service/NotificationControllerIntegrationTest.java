@@ -45,7 +45,12 @@ class NotificationControllerIntegrationTest {
     static MongoDBContainer mongo = new MongoDBContainer("mongo:5.0.8")
             .withNetwork(network)
             .withNetworkAliases("mongo");
-    ;
+
+    @Container
+    static GenericContainer<?> redis = new GenericContainer<>("redis:7.0.11-alpine")
+            .withNetwork(network)
+            .withNetworkAliases("redis_cache")
+            .withExposedPorts(6379);
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
