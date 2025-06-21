@@ -49,7 +49,7 @@ class NotificationControllerIntegrationTest {
     @Container
     static GenericContainer<?> redis = new GenericContainer<>("redis:7.0.11-alpine")
             .withNetwork(network)
-            .withNetworkAliases("redis_cache")
+            .withNetworkAliases("redis")
             .withExposedPorts(6379);
 
     @Container
