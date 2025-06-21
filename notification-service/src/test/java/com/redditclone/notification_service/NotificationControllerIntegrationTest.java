@@ -47,7 +47,7 @@ class NotificationControllerIntegrationTest {
             .withNetworkAliases("mongo");
 
     @Container
-    static GenericContainer<?> redis = new GenericContainer<>("redis:7.0.11-alpine")
+    static GenericContainer<?> redis = new GenericContainer<>("redis:latest")
             .withNetwork(network)
             .withNetworkAliases("redis")
             .withExposedPorts(6379);
@@ -65,10 +65,13 @@ class NotificationControllerIntegrationTest {
             .withImagePullPolicy(PullPolicy.alwaysPull())
             .withNetwork(network)
             .dependsOn(postgres)
+            .dependsOn(redis)
             .withNetworkAliases("user-service")
             .withEnv("SPRING_DATASOURCE_URL", "jdbc:postgresql://postgres:5432/user_service")
             .withEnv("SPRING_DATASOURCE_USERNAME", "postgres")
             .withEnv("SPRING_DATASOURCE_PASSWORD", "1234")
+            .withEnv("SPRING_REDIS_HOST", "redis")
+            .withEnv("SPRING_REDIS_PORT", "6379")
             .withExposedPorts(8080)
             .withEnv("SPRING_PROFILES_ACTIVE", "dev");
 
