@@ -1,16 +1,21 @@
 package com.redditclone.user_service.controllers;
 
+import com.redditclone.user_service.UserServiceApplicationTests;
 import com.redditclone.user_service.models.User;
+import com.redditclone.user_service.models.VerificationToken;
 import com.redditclone.user_service.repositories.RefreshTokenRepository;
 import com.redditclone.user_service.repositories.UserRepository;
+import com.redditclone.user_service.repositories.VerificationTokenRepository;
 import com.redditclone.user_service.services.MailService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.redisson.api.RBloomFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
@@ -24,9 +29,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import redis.embedded.RedisServer;
+
+import java.io.IOException;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @TestConfiguration
 @ImportAutoConfiguration(MailSenderAutoConfiguration.class)
@@ -44,13 +54,16 @@ class NoMailConfig {
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "spring.profiles.active=test")
 @ActiveProfiles("test")
-class AuthControllerIntegrationTest {
+class AuthControllerIntegrationTest extends UserServiceApplicationTests {
 
     @LocalServerPort
     int port;
 
     @Autowired
     UserRepository userRepo;
+
+    @Autowired
+    VerificationTokenRepository verificationTokenRepo;
 
     @Autowired
     RefreshTokenRepository refreshTokenRepo;
@@ -61,10 +74,17 @@ class AuthControllerIntegrationTest {
     @MockitoBean
     private MailService mailService;  // Stub out your own MailService to prevent real email sending
 
+    @Autowired
+    private RBloomFilter<String> userCredentialsBloomFilter;
+
     @BeforeAll
-    static void setUpParser() {
+    static void setUpParser() throws IOException {
         // Tell RestAssured to treat any response body as JSON, even if Content-Type header is missing
         RestAssured.defaultParser = Parser.JSON;
+    }
+
+    @AfterAll
+    static void tearDown() throws IOException {
     }
 
     @BeforeEach
@@ -83,14 +103,14 @@ class AuthControllerIntegrationTest {
     void signup_newUser_then201() {
         // Test that signing up with a fresh email/username returns success
         var body = """
-            {
-              "email": "a@example.com",
-              "username": "alice",
-              "password": "P@ssw0rd",
-              "fullName": "Alice",
-              "bio": "Hello!"
-            }
-            """;
+                {
+                  "email": "a@example.com",
+                  "username": "alice",
+                  "password": "P@ssw0rd",
+                  "fullName": "Alice",
+                  "bio": "Hello!"
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -107,24 +127,34 @@ class AuthControllerIntegrationTest {
      * 2) Attempt to sign up with the same email/username → expect HTTP 500 error.
      */
     @Test
-    void signup_existingUser_then500() {
+    void signup_existingUser_then400() {
         // Pre-create a user in the DB to trigger the "already exists" error path
-        userRepo.save(User.builder()
+        User existingUser = User.builder()
                 .email("b@example.com")
                 .username("bob")
                 .password(passwordEncoder.encode("secret"))
                 .fullName("Bob")
-                .build());
+                .build();
+
+        userRepo.save(existingUser);
+
+        // add verification token for the user
+        verificationTokenRepo.save(new VerificationToken(
+                UUID.randomUUID().toString(), existingUser));
+
+        // save to bloom filter as well
+        userCredentialsBloomFilter.add("bob");
+        userCredentialsBloomFilter.add("b@example.com");
 
         var body = """
-            {
-              "email": "b@example.com",
-              "username": "bob",
-              "password": "secret",
-              "fullName": "Bob",
-              "bio": ""
-            }
-            """;
+                {
+                  "email": "b@example.com",
+                  "username": "bob",
+                  "password": "secret",
+                  "fullName": "Bob",
+                  "bio": ""
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -132,7 +162,7 @@ class AuthControllerIntegrationTest {
                 .when()
                 .post("/public/signup")
                 .then()
-                .statusCode(500);  // Expecting server error on duplicate signup
+                .statusCode(400);  // Expecting server error on duplicate signup
     }
 
     /**
@@ -143,11 +173,11 @@ class AuthControllerIntegrationTest {
     void login_unknownUser_then500() {
         // Attempt to log in when no user exists should fail
         var body = """
-            {
-              "username": "noone",
-              "password": "whatever"
-            }
-            """;
+                {
+                  "username": "noone",
+                  "password": "whatever"
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -173,11 +203,11 @@ class AuthControllerIntegrationTest {
                 .build());
 
         var body = """
-            {
-              "username": "charlie",
-              "password": "wrongpass"
-            }
-            """;
+                {
+                  "username": "charlie",
+                  "password": "wrongpass"
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -205,11 +235,11 @@ class AuthControllerIntegrationTest {
                 .build());
 
         var body = """
-            {
-              "username": "dave",
-              "password": "letmein"
-            }
-            """;
+                {
+                  "username": "dave",
+                  "password": "letmein"
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -228,20 +258,20 @@ class AuthControllerIntegrationTest {
      * 3) Log in as "eve" → extract refreshToken from response.
      * 4) Call POST /public/refreshToken with that token → expect HTTP 200 OK.
      * 5) Call POST /public/logout with same token → expect HTTP 200 OK
-     *    and message "User Logged Out Successfully".
+     * and message "User Logged Out Successfully".
      */
     @Test
     void refresh_and_logout_cycle() {
         // 1) Sign up a new user
         var signup = """
-            {
-                "email":"e@ex.com",
-                "username":"eve",
-                "password":"1234",
-                "fullName":"Eve",
-                "bio":""
-            }
-            """;
+                {
+                    "email":"e@ex.com",
+                    "username":"eve",
+                    "password":"1234",
+                    "fullName":"Eve",
+                    "bio":""
+                }
+                """;
         given()
                 .contentType(ContentType.JSON)
                 .body(signup)
@@ -260,8 +290,8 @@ class AuthControllerIntegrationTest {
                 given()
                         .contentType(ContentType.JSON)
                         .body("""
-                    {"username":"eve","password":"1234"}
-                    """)
+                                {"username":"eve","password":"1234"}
+                                """)
                         .when()
                         .post("/public/login")
                         .then()
@@ -296,13 +326,13 @@ class AuthControllerIntegrationTest {
     @Test
     void signup_missingEmail_thenBadRequest() {
         var body = """
-            {
-              "username": "noemail",
-              "password": "SomePass123!",
-              "fullName": "No Email",
-              "bio": ""
-            }
-            """;
+                {
+                  "username": "noemail",
+                  "password": "SomePass123!",
+                  "fullName": "No Email",
+                  "bio": ""
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -319,14 +349,14 @@ class AuthControllerIntegrationTest {
     @Test
     void signup_invalidEmail_thenBadRequest() {
         var body = """
-            {
-              "email": "not-an-email",
-              "username": "bademail",
-              "password": "SomePass123!",
-              "fullName": "Bad Email",
-              "bio": ""
-            }
-            """;
+                {
+                  "email": "not-an-email",
+                  "username": "bademail",
+                  "password": "SomePass123!",
+                  "fullName": "Bad Email",
+                  "bio": ""
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -376,11 +406,11 @@ class AuthControllerIntegrationTest {
                 .build());
 
         var body = """
-            {
-              "username": "inactive",
-              "password": "Password1!"
-            }
-            """;
+                {
+                  "username": "inactive",
+                  "password": "Password1!"
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -397,10 +427,10 @@ class AuthControllerIntegrationTest {
     @Test
     void login_missingPassword_thenBadRequest() {
         var body = """
-            {
-              "username": "someuser"
-            }
-            """;
+                {
+                  "username": "someuser"
+                }
+                """;
 
         given()
                 .contentType(ContentType.JSON)
@@ -417,8 +447,8 @@ class AuthControllerIntegrationTest {
     @Test
     void refresh_invalidToken_thenUnauthorized() {
         var body = """
-            { "refreshToken": "this-is-not-a-jwt" }
-            """;
+                { "refreshToken": "this-is-not-a-jwt" }
+                """;
 
         given()
                 .contentType(ContentType.JSON)

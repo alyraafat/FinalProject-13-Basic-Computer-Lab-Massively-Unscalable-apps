@@ -1,5 +1,6 @@
 package com.redditclone.user_service.controllers;
 
+import com.redditclone.user_service.UserServiceApplicationTests;
 import com.redditclone.user_service.models.User;
 import com.redditclone.user_service.repositories.UserRepository;
 import io.restassured.RestAssured;
@@ -18,7 +19,7 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class UserControllerIntegrationTest {
+class UserControllerIntegrationTest extends UserServiceApplicationTests {
 
     @LocalServerPort
     int port;
