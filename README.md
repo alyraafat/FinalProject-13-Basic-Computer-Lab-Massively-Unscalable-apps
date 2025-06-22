@@ -9,6 +9,7 @@ This project is a backend application that emulates the core functionalities of 
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Authentication Flow](#authentication-flow)
+- [Bloom Filter for User Validation](#bloom-filter-for-user-validation)
 - [Design Patterns Used](#design-patterns-used)
 - [Microservices Communication](#microservices-communication)
 - [CI/CD Pipeline](#cicd-pipeline)
@@ -99,6 +100,23 @@ Authentication is handled centrally at the API Gateway to secure the microservic
     * **Short-Lived Access Tokens:** These tokens are sent with each request to the API Gateway to access protected resources. Their short lifespan minimizes the risk of token hijacking.
     * **Refresh Tokens:** A long-lived refresh token is used to obtain a new access token without requiring the user to log in again.
 4.  **Gateway Authentication:** The **API Gateway** acts as the central entry point. It intercepts all incoming requests and validates the JWT access token before forwarding the request to the appropriate downstream microservice.
+
+## Bloom Filter for User Validation
+
+To optimize performance during user registration, the application employs a **Redis Bloom filter**. This is a probabilistic data structure that provides an extremely fast, memory-efficient way to test whether an element is a member of a set.
+
+**How it Works:**
+1.  **Purpose:** Its primary role is to serve as a "gatekeeper" to the main user database. It helps to quickly reject registration attempts with usernames or emails that are almost certainly not in the database, avoiding an expensive database query.
+2.  **Implementation:** We use the Redisson client to interact with a centralized Bloom filter stored in Redis. This ensures that all instances of the `user-service` share the same filter, maintaining data consistency across the distributed system.
+3.  **Startup Population:** On application startup, a runner first checks if the database has been seeded with initial data. It then populates the Bloom filter with all existing usernames and emails from the user database. This process is ordered to ensure the database seeder runs first.
+4.  **Validation Flow:** When a new user tries to register:
+    * The system first checks if the new username and email `mightContain` in the Bloom filter.
+    * If the filter returns `false`, we know with 100% certainty that the credentials are not in use, and we can proceed without querying the database.
+    * If the filter returns `true`, it means the credentials *might* exist (due to the small probability of false positives). In this case, we proceed with a database query to get a definitive answer.
+5.  **Updating the Filter:** After a new user is successfully created and saved to the database, their new username and email are added to the Bloom filter to keep it up-to-date.
+
+This approach significantly reduces database load for registration attempts with new credentials, enhancing the scalability and responsiveness of the user service.
+
 
 ## Design Patterns Used
 
