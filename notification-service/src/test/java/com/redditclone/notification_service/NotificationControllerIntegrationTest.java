@@ -62,7 +62,7 @@ class NotificationControllerIntegrationTest {
 
     @Container
     static GenericContainer<?> userService = new GenericContainer<>("redditclone/user-service:latest")
-//            .withImagePullPolicy(PullPolicy.alwaysPull())
+            .withImagePullPolicy(PullPolicy.alwaysPull())
             .withNetwork(network)
             .dependsOn(postgres)
             .dependsOn(redis)
