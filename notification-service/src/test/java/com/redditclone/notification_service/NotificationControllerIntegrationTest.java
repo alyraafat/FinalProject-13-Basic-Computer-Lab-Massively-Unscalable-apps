@@ -60,6 +60,15 @@ class NotificationControllerIntegrationTest {
             .withUsername("postgres")
             .withPassword("1234");
 
+//    add rabbitmq container
+    @Container
+    static GenericContainer<?> rabbitMQ = new GenericContainer<>("rabbitmq:3.11-management")
+            .withNetwork(network)
+            .withNetworkAliases("rabbitmq")
+            .withExposedPorts(5672, 15672)
+            .withEnv("RABBITMQ_DEFAULT_USER", "guest")
+            .withEnv("RABBITMQ_DEFAULT_PASS", "guest");
+
     @Container
     static GenericContainer<?> userService = new GenericContainer<>("redditclone/user-service:latest")
             .withImagePullPolicy(PullPolicy.alwaysPull())
@@ -72,6 +81,8 @@ class NotificationControllerIntegrationTest {
             .withEnv("SPRING_DATASOURCE_PASSWORD", "1234")
             .withEnv("SPRING_REDIS_HOST", "redis")
             .withEnv("SPRING_REDIS_PORT", "6379")
+            .withEnv("RABBITMQ_HOST", "rabbitmq")
+            .withEnv("RABBITMQ_PORT", "5672")
             .withExposedPorts(8080)
             .withEnv("SPRING_PROFILES_ACTIVE", "dev");
 
