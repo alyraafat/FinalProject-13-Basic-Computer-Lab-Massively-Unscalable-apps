@@ -48,3 +48,9 @@ spec:
 
             - name: SPRING_RABBITMQ_HOST
               value: "rabbitmq"
+
+            # Redis
+            - name: SPRING_DATA_REDIS_HOST
+              value: "redis"
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
