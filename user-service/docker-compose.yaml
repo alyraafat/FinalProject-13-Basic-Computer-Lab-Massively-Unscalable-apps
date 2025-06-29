@@ -7,6 +7,8 @@ services:
     environment:
       server.error.include-message: always
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_service
+      SPRING_DATA_REDIS_HOST: redis_cache
+      SPRING_DATA_REDIS_PORT: 6379
     restart:
       on-failure
     depends_on:
@@ -27,6 +29,7 @@ services:
       - ./volumes/postgres_data:/var/lib/postgresql/data
     networks:
       - my_shared_net
+
   # pgAdmin
   pgadmin:
     image: dpage/pgadmin4
@@ -40,6 +43,15 @@ services:
     restart: on-failure
     volumes:
       - ./volumes/pgadmin_data:/var/lib/pgadmin
+    networks:
+      - my_shared_net
+
+    # Redis
+  redis_cache:
+    image: redis:latest
+    container_name: redisCache
+    ports:
+      - "6379:6379"
     networks:
       - my_shared_net
 

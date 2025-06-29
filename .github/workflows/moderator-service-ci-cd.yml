@@ -5,12 +5,12 @@ on:
   push:
     branches: ["main", "dev"]
     paths:
-      - 'ModeratorService/**'
+      - 'moderator-service/**'
       - '.github/workflows/moderator-service-ci-cd.yml'
   pull_request:
     branches: ["**"]
     paths:
-      - 'ModeratorService/**'
+      - 'moderator-service/**'
       - '.github/workflows/moderator-service-ci-cd.yml'
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/ci-java-maven.yml
     with:
       branch: ${{ github.ref }}
-      service-dir: 'ModeratorService'
+      service-dir: 'moderator-service'
     secrets: inherit
 
   docker:
@@ -26,6 +26,6 @@ jobs:
     uses: ./.github/workflows/cd-docker-push.yml
     with:
       artifact-name: 'packaged-artifact'
-      service-dir: 'ModeratorService'
+      service-dir: 'moderator-service'
       image-name: 'moderator-service'
     secrets: inherit

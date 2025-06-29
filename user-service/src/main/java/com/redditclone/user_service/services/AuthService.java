@@ -15,6 +15,7 @@ import com.redditclone.user_service.validation.UserValidation;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RBloomFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -55,6 +56,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private JwtService jwtService;
     private final NotificationProducer notificationProducer;
+    private final RBloomFilter<String> userCredentialsBloomFilter;
 
     @PostConstruct
     private void initJwtService() {
@@ -75,6 +77,7 @@ public class AuthService {
         User user;
         String token;
         if (!userExists) {
+            // If user does not exist, create a new user and generate a verification token
             user = User.builder()
                     .username(registerObject.getUsername())
                     .password(encodedPassword)
@@ -85,8 +88,11 @@ public class AuthService {
                     .fullName(registerObject.getFullName())
                     .build();
             userRepository.save(user);
+            userCredentialsBloomFilter.add(user.getUsername());
+            userCredentialsBloomFilter.add(user.getEmail());
             token = generateVerificationToken(user);
         } else {
+//            if user exists we will update the user details and generate a new verification token if the token is expired
             user = userRepository.findByUsername(registerObject.getUsername()).orElseThrow(() -> new RedditAppException("User Not Found with name: " + registerObject.getUsername()));
             if (registerObject.getBio() != null) {
                 user.setBio(registerObject.getBio());

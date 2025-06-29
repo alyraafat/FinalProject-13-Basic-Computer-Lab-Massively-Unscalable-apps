@@ -18,6 +18,12 @@ spring:
     username: postgres
     password: 1234
 
+# Redis configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 # ORM configuration
   jpa:
     properties:
